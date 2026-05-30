@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="format-detection" content="telephone=no">
+<meta name="theme-color" content="#1a3a5c">
+<title>2026 여름 청소년 수련회 비교 분석</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Serif+KR:wght@600;700&display=swap');
+
+  :root {
+    --primary: #1a3a5c;
+    --primary-light: #e8f0f8;
+    --accent: #2d6a9f;
+    --accent2: #e67e22;
+    --accent3: #27ae60;
+    --accent4: #8e44ad;
+    --text: #1a1a2e;
+    --text-muted: #5a6170;
+    --border: #d8e2ec;
+    --bg: #f4f7fa;
+    --white: #ffffff;
+    --warn: #e74c3c;
+    --warn-bg: #fdf0ef;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* HEADER */
+  .doc-header {
+    background: var(--primary);
+    color: white;
+    padding: 36px 40px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .doc-header::before {
+    content: '✝';
+    position: absolute;
+    right: 40px; top: 20px;
+    font-size: 80px;
+    opacity: 0.06;
+    font-family: serif;
+  }
+  .doc-meta { font-size: 12px; opacity: 0.7; margin-bottom: 8px; letter-spacing: 1px; text-transform: uppercase; }
+  .doc-title { font-family: 'Noto Serif KR', serif; font-size: 26px; font-weight: 700; line-height: 1.3; margin-bottom: 6px; }
+  .doc-sub { font-size: 14px; opacity: 0.75; }
+  .church-tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    margin-top: 14px;
+  }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
+
+  /* NOTICE BOX */
+  .notice {
+    background: var(--warn-bg);
+    border-left: 4px solid var(--warn);
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 28px;
+    font-size: 13px;
+    color: #7b2d2d;
+  }
+  .notice strong { color: var(--warn); }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--primary);
+    border-bottom: 2px solid var(--primary);
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+  }
+
+  /* CAMP CARDS TOP */
+  .camp-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  .camp-card {
+    background: var(--white);
+    border-radius: 12px;
+    border: 1.5px solid var(--border);
+    overflow: hidden;
+  }
+  .camp-card-header {
+    padding: 14px 16px 10px;
+    color: white;
+    position: relative;
+  }
+  .camp-card-header.c1 { background: var(--accent); }
+  .camp-card-header.c2 { background: #1e8449; }
+  .camp-card-header.c3 { background: #6c3483; }
+  .camp-card-header.c4 { background: #b7490a; }
+
+  .camp-num {
+    font-size: 11px;
+    opacity: 0.8;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .camp-name { font-size: 15px; font-weight: 700; line-height: 1.3; }
+  .camp-org { font-size: 11px; opacity: 0.8; margin-top: 3px; }
+  .camp-link {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 4px 10px;
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 12px;
+    color: white;
+    font-size: 11px;
+    font-weight: 500;
+    text-decoration: none;
+    letter-spacing: 0.3px;
+    transition: background 0.15s;
+  }
+  .camp-link:hover { background: rgba(255,255,255,0.35); }
+  .camp-card-body { padding: 14px 16px; }
+  .camp-info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 5px 0;
+    border-bottom: 0.5px solid var(--border);
+    font-size: 12.5px;
+  }
+  .camp-info-row:last-child { border-bottom: none; }
+  .info-label {
+    color: var(--text-muted);
+    font-size: 11px;
+    min-width: 52px;
+    padding-top: 1px;
+  }
+  .info-value { font-weight: 500; text-align: right; font-size: 12.5px; line-height: 1.4; }
+  .price-badge {
+    display: inline-block;
+    background: #fff3cd;
+    color: #856404;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 2px 8px;
+    border-radius: 6px;
+    border: 1px solid #ffc107;
+  }
+
+  /* TAGS */
+  .tag {
+    display: inline-block;
+    font-size: 10.5px;
+    padding: 2px 7px;
+    border-radius: 10px;
+    margin: 2px 2px 0 0;
+  }
+  .tag-blue { background: #e3f2fd; color: #1565c0; }
+  .tag-green { background: #e8f5e9; color: #2e7d32; }
+  .tag-purple { background: #f3e5f5; color: #6a1b9a; }
+  .tag-orange { background: #fff3e0; color: #e65100; }
+  .tag-red { background: #ffebee; color: #b71c1c; }
+  .tag-gray { background: #f5f5f5; color: #424242; }
+
+  /* BIG COMPARISON TABLE */
+  .compare-wrap {
+    background: var(--white);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    margin-bottom: 28px;
+  }
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
+    color: white;
+  }
+  .compare-table th.row-head {
+    background: var(--primary);
+    text-align: left;
+    width: 120px;
+  }
+  .compare-table th.c1h { background: var(--accent); }
+  .compare-table th.c2h { background: #1e8449; }
+  .compare-table th.c3h { background: #6c3483; }
+  .compare-table th.c4h { background: #b7490a; }
+
+  .compare-table td {
+    padding: 9px 13px;
+    border-bottom: 0.5px solid var(--border);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table td.row-cat {
+    background: var(--primary-light);
+    font-weight: 700;
+    color: var(--primary);
+    font-size: 12px;
+    text-align: left;
+  }
+  .compare-table tr:nth-child(even) td:not(.row-cat) {
+    background: #fafbfc;
+  }
+  .compare-table td { text-align: center; }
+
+  /* SCORE TABLE */
+  .score-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+  .score-table th {
+    background: var(--primary);
+    color: white;
+    padding: 9px 14px;
+    font-size: 12px;
+  }
+  .score-table th:first-child { text-align: left; }
+  .score-table td {
+    padding: 8px 14px;
+    border-bottom: 0.5px solid var(--border);
+    text-align: center;
+  }
+  .score-table td:first-child { text-align: left; font-weight: 500; }
+  .score-table tr:last-child td { border-bottom: none; font-weight: 700; background: #f0f7ff; }
+
+  .score-bar {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .dot-fill { background: var(--accent); }
+  .dot-empty { background: #d0d7e0; }
+
+  /* TRAVEL INFO */
+  .travel-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .travel-card {
+    background: var(--white);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .travel-card-header {
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    color: white;
+  }
+  .travel-card-body { padding: 12px 14px; font-size: 12.5px; }
+  .travel-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .travel-row:last-child { border-bottom: none; }
+  .travel-label { color: var(--text-muted); font-size: 12px; }
+  .travel-value { font-weight: 500; }
+
+  /* PROS/CONS */
+  .pros-cons-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .pros-cons-card {
+    background: var(--white);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .pros-cons-header {
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    color: white;
+  }
+  .pros-cons-body { padding: 12px 16px; }
+  .pros-list, .cons-list { list-style: none; }
+  .pros-list li, .cons-list li {
+    padding: 5px 0 5px 20px;
+    position: relative;
+    font-size: 12.5px;
+    border-bottom: 0.5px solid var(--border);
+    line-height: 1.45;
+  }
+  .pros-list li:last-child, .cons-list li:last-child { border-bottom: none; }
+  .pros-list li::before { content: '✓'; position: absolute; left: 0; color: var(--accent3); font-weight: 700; }
+  .cons-list li::before { content: '△'; position: absolute; left: 0; color: var(--accent2); font-weight: 700; }
+
+  /* RECOMMENDATION */
+  .recommendation {
+    background: linear-gradient(135deg, #1a3a5c 0%, #2d6a9f 100%);
+    color: white;
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 28px;
+  }
+  .rec-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    padding-bottom: 10px;
+  }
+  .rec-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  .rec-item {
+    background: rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .rec-condition { font-size: 12px; opacity: 0.8; margin-bottom: 4px; }
+  .rec-pick { font-size: 14px; font-weight: 700; }
+  .rec-reason { font-size: 11.5px; opacity: 0.75; margin-top: 4px; }
+
+  /* QUESTION LIST */
+  .question-box {
+    background: var(--white);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    padding: 18px 22px;
+    margin-bottom: 28px;
+  }
+  .q-list { list-style: none; }
+  .q-list li {
+    padding: 7px 0 7px 24px;
+    position: relative;
+    font-size: 13px;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .q-list li:last-child { border-bottom: none; }
+  .q-list li::before {
+    content: 'Q.';
+    position: absolute; left: 0;
+    font-weight: 700;
+    color: var(--accent);
+    font-size: 12px;
+  }
+
+  /* FOOTER */
+  .doc-footer {
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-muted);
+    padding: 20px;
+    border-top: 1px solid var(--border);
+    background: var(--white);
+  }
+
+  /* UNKNOWN BADGE */
+  .unknown { color: #9e9e9e; font-style: italic; font-size: 12px; }
+
+  /* HIGHLIGHT BEST */
+  .best-val { color: var(--accent3); font-weight: 700; }
+  .worst-val { color: var(--warn); font-weight: 600; }
+
+  @media print {
+    body { background: white; }
+    .container { padding: 10px; }
+    .doc-header { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    .camp-card-header, .compare-table th, .pros-cons-header, .travel-card-header { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  }
+
+  /* =====================
+     모바일 최적화 (≤768px)
+     iOS Safari / Android Chrome
+  ===================== */
+  @media (max-width: 768px) {
+
+    /* 기본 */
+    body { font-size: 13px; }
+
+    /* 헤더 */
+    .doc-header { padding: 24px 20px 20px; }
+    .doc-header::before { font-size: 50px; right: 16px; }
+    .doc-title { font-size: 20px; }
+    .doc-sub { font-size: 13px; }
+
+    /* 컨테이너 */
+    .container { padding: 20px 14px; }
+
+    /* 섹션 타이틀 */
+    .section-title { font-size: 15px; }
+
+    /* 캠프 카드 그리드: 4열 → 1열 */
+    .camp-grid {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    /* 이동 정보 그리드: 2열 → 1열 */
+    .travel-grid {
+      grid-template-columns: 1fr;
+    }
+
+    /* 장단점 그리드: 2열 → 1열 */
+    .pros-cons-grid {
+      grid-template-columns: 1fr;
+    }
+
+    /* 추천 그리드: 2열 → 1열 */
+    .rec-grid {
+      grid-template-columns: 1fr;
+    }
+    .recommendation { padding: 20px 16px; }
+
+    /* 비교표: 가로 스크롤 처리 */
+    .compare-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 8px;
+    }
+    .compare-wrap::before {
+      content: '← 좌우로 스크롤하세요 →';
+      display: block;
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      padding: 6px 0 4px;
+      background: #f8f9fa;
+      border-bottom: 1px solid var(--border);
+    }
+    .compare-table {
+      font-size: 11.5px;
+      min-width: 600px;
+    }
+    .compare-table th { padding: 8px 10px; font-size: 11px; }
+    .compare-table td { padding: 7px 10px; }
+    .compare-table th.row-head { width: 80px; }
+
+    /* 점수 테이블도 가로 스크롤 */
+    .score-table {
+      font-size: 11.5px;
+      min-width: 480px;
+    }
+    .score-table th, .score-table td { padding: 7px 10px; font-size: 11px; }
+
+    /* 캠프 카드 링크 버튼 — 터치 영역 확보 */
+    .camp-link {
+      display: block;
+      text-align: center;
+      padding: 8px 12px;
+      margin-top: 10px;
+      font-size: 12px;
+      border-radius: 8px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* 태그 줄바꿈 허용 */
+    .tag { font-size: 10px; padding: 2px 6px; }
+
+    /* info-row 가독성 */
+    .camp-info-row { font-size: 12px; }
+    .info-label { min-width: 44px; font-size: 10.5px; }
+    .info-value { font-size: 12px; }
+
+    /* travel-card */
+    .travel-card-body { font-size: 12px; }
+    .travel-label { font-size: 11px; }
+
+    /* pros/cons */
+    .pros-list li, .cons-list li { font-size: 12px; }
+    .pros-cons-header { font-size: 12px; padding: 10px 14px; }
+  }
+
+  /* 초소형 (≤380px, iPhone SE 등) */
+  @media (max-width: 380px) {
+    .doc-title { font-size: 18px; }
+    .container { padding: 16px 12px; }
+    .compare-table { min-width: 520px; }
+    .score-table { min-width: 420px; }
+    .rec-pick { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="doc-header">
+  <div class="doc-meta">연천장로교회 중고등부 사역 · 교사 회의 자료</div>
+  <div class="doc-title">2026 여름 청소년 수련회 비교 분석</div>
+  <div class="doc-sub">4개 캠프 세부 비교 · 강사진 · 장소 · 비용 · 이동 · 프로그램</div>
+  <div class="church-tag">연천장로교회 중고등부 · 2026년 여름</div>
+</div>
+
+<div class="container">
+
+
+  <!-- 섹션1: 개요 카드 -->
+  <div class="section-title">① 4개 캠프 기본 개요</div>
+  <div class="camp-grid">
+
+    <!-- 조이코리아 -->
+    <div class="camp-card">
+      <div class="camp-card-header c1">
+        <div class="camp-num">Camp 01</div>
+        <div class="camp-name">조이코리아<br>복음캠프</div>
+        <div class="camp-org">조이코리아 선교회 (30주년)</div>
+        <a class="camp-link" href="https://joykorea.org/main/" target="_blank">🔗 공식 사이트 바로가기</a>
+      </div>
+      <div class="camp-card-body">
+        <div class="camp-info-row">
+          <span class="info-label">주제</span>
+          <span class="info-value" style="color:var(--accent); font-weight:700;">끝까지 (To the END)<br><span style="font-size:10px; font-weight:400;">히브리서 3:14</span></span>
+        </div>
+        <div class="camp-info-row">
+          <span class="info-label">일정</span>
+          <span class="info-value">
+            1차: 7/23(목)~25(토) <span style="font-size:11px; color:#e74c3c; font-weight:700;">⚠ 100명 남음</span><br>
+            2차: 7/27(월)~29(수) <span style="font-size:11px; color:#27ae60; font-weight:700;">✓ 신청가능</span><br>
+            <span style="font-size:11px; color:#aaa; text-decoration:line-through;">3차: 7/30(목)~8/1(토) 마감</span><br>
+            <span style="font-size:11px; color:#aaa; text-decoration:line-through;">4차: 8/6(목)~8/8(토) 마감</span>
+          </span>
+        </div>
+        <div class="camp-info-row">
+          <span class="info-label">장소</span>
+          <span class="info-value">호서대학교<br>아산캠퍼스</span>
+        </div>
+        <div class="camp-info-row">
+          <span class="info-label">숙소</span>
+          <span class="info-value">4인실<br><span style="font-size:11px; color:#888;">각 차수 1,800명 정원</span></span>
+        </div>
+        <div class="camp-info-row">
+          <span class="info-label">기간</span>
+          <span class="info-value">2박 3일</span>
+        </div>
+        <div class="camp-info-row">
+          <span class="info-label">비용</span>
+          <span class="info-value">
+            <span class="price-badge">94,000원</span><br>
+            <span style="font-size:11px; color:#888;">(일반 104,000원)</span>
+          </span>
+        </div>
+        <div style="margin-top: 10px;">
+          <span class="tag tag-blue">끝까지ToTheEnd</span>
+          <span class="tag tag-blue">30주년</span>
+          <span class="tag tag-blue">카다로스</span>
+          <span class="tag tag-red">3·4차마감</span>
+          <span class="tag" style="background:#e8f8f0; color:#1a5c38; font-weight:700;">1·2차만가능</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 월드미션 -->
+    <div class="camp-card">
+      <div class="camp-card-header c2">
+        <div class="camp-num">Camp 02</div>
+        <div class="camp-name">월드미션<br>복음캠프</div>
+        <div class="camp-org">하기오스 선교회 (2009년~)</div>
+        <a class="camp-link" href="https://www.wmcamp.net/" target="_blank">🔗 공식 사이트 바로가기</a>
+      </div>
+      <div class="camp-card-body">
+        <div class="camp-info-row">
+          <span class="info-label">주제</span>
+          <span class="info-value" style="color:#1e8449; font-weight:700; font-size:12px;">DIVE — 두려움을 넘어 은혜의 바다로 (마14:29)</span>
+        </div>
+        <div class="camp-info-row">
+          <span class="info-label">일정</span>
+          <span class="info-value">1차: 7/23(목)~25(토)<br>2차: 7/27(월)~29(수)</span>
+        </div>
+        <div class="camp-info-row">
+          <span class="info-label">장소</span>
+          <span class="info-value">백석대학교<br>천안캠퍼스</span>
+        </div>
+        <div class="camp-info-row">
+          <span class="info-label">숙소</span>
+          <span class="info-value">3인실 / 2인실 선택</span>
+        </div>
+        <div class="camp-info-row">
+          <span class="info-label">기간</span>
+          <span class="info-value">2박 3일</span>
+        </div>
+        <div class="camp-info-row">
+          <span class="info-label">비용</span>
+          <span class="info-value">
+            <span class="price-badge">3인실 93,000원</span><br>
+            <span style="font-size:11px; color:#888;">현장 98,000원<br>2인실 105,000~110,000원</span>
+          </span>
+        </div>
+        <div style="margin-top: 10px;">
+          <span class="tag tag-green">DIVE주제</span>
+          <span class="tag tag-green">2차수선택</span>
+          <span class="tag tag-green">3인실/2인실</span>
+          <span class="tag tag-green">학부모참가가능</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 전국청소년연합수련회 (SP) -->
+    <div class="camp-card">
+      <div class="camp-card-header c3">
+        <div class="camp-num">Camp 03</div>
+        <div class="camp-name">Spirit Power<br>연합수련회</div>
+        <div class="camp-org">할렐루야교회 주관 (제21회)</div>
+        <a class="camp-link" href="https://www.spiritpower.kr/" target="_blank">🔗 공식 사이트 바로가기</a>
+      </div>
+      <div class="camp-card-body">
+        <div class="camp-info-row">
+          <span class="info-label">주제</span>
+          <span class="info-value" style="color:#6c3483; font-weight:700;">다시, 일어나</span>
+        </div>
+        <div class="camp-info-row">
+          <span class="info-label">일정</span>
+          <span class="info-value">7/30(목)~8/1(토)<br><span style="font-size:11px; color:#e74c3c;">접수마감 6/22(1800명)</span></span>
+        </div>
+        <div class="camp-info-row">
+          <span class="info-label">장소</span>
+          <span class="info-value">분당할렐루야교회<br>성남시 분당구 야탑로 368</span>
+        </div>
+        <div class="camp-info-row">
+          <span class="info-label">숙소</span>
+          <span class="info-value">교회 내부<br>(숙박/무박 선택)</span>
+        </div>
+        <div class="camp-info-row">
+          <span class="info-label">기간</span>
+          <span class="info-value">2박 3일</span>
+        </div>
+        <div class="camp-info-row">
+          <span class="info-label">비용</span>
+          <span class="info-value">
+            <span class="price-badge best-val">숙박 70,000원</span><br>
+            <span style="font-size:11px; color:#888;">무박 40,000원<br>미자립교회 10,000원</span>
+          </span>
+        </div>
+        <div style="margin-top: 10px;">
+          <span class="tag tag-purple">수도권</span>
+          <span class="tag tag-purple">2005년~21회</span>
+          <span class="tag tag-purple">미자립섬김</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 빔캠프 -->
+    <div class="camp-card">
+      <div class="camp-card-header c4">
+        <div class="camp-num">Camp 04</div>
+        <div class="camp-name">빔캠프<br>(BIM Camp)</div>
+        <div class="camp-org">브리지임팩트사역원</div>
+        <a class="camp-link" href="http://www.bridgeimpact.com/" target="_blank">🔗 공식 사이트 바로가기</a>
+      </div>
+      <div class="camp-card-body">
+        <div class="camp-info-row">
+          <span class="info-label">주제</span>
+          <span class="info-value" style="color:#b7490a; font-weight:700; font-size:11.5px; white-space:nowrap;">THE HOLY SPIRIT (거룩한 영)</span>
+        </div>
+        <div class="camp-info-row">
+          <span class="info-label">일정</span>
+          <span class="info-value">116차: 7/23~25<br>117차: 7/27~29<br>118차: 7/30~8/1<br>119차: 8/3~8/5</span>
+        </div>
+        <div class="camp-info-row">
+          <span class="info-label">장소</span>
+          <span class="info-value">연세대학교<br>미래캠퍼스(원주)</span>
+        </div>
+        <div class="camp-info-row">
+          <span class="info-label">기간</span>
+          <span class="info-value">2박 3일</span>
+        </div>
+        <div class="camp-info-row">
+          <span class="info-label">비용</span>
+          <span class="info-value">
+            <span class="price-badge" style="background:#fff3cd; color:#856404;">105,000원</span>
+          </span>
+        </div>
+        <div style="margin-top: 10px;">
+          <span class="tag tag-orange">116~119차</span>
+          <span class="tag tag-orange">4차수운영</span>
+          <span class="tag tag-orange">홍민기</span>
+          <span class="tag tag-orange">Water Festival</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 섹션2: 이동 정보 -->
+  <div class="section-title">② 연천에서 이동 시간 및 교통</div>
+  <div class="travel-grid">
+
+    <div class="travel-card">
+      <div class="travel-card-header" style="background: var(--accent);">🏫 조이코리아 — 호서대 아산캠퍼스</div>
+      <div class="travel-card-body">
+        <div class="travel-row">
+          <span class="travel-label">직선거리</span>
+          <span class="travel-value">약 130km</span>
+        </div>
+        <div class="travel-row">
+          <span class="travel-label">버스 이동</span>
+          <span class="travel-value worst-val">약 2시간 30분~3시간</span>
+        </div>
+        <div class="travel-row">
+          <span class="travel-label">주요 경로</span>
+          <span class="travel-value">연천 → 전곡 → 고속도로 → 아산</span>
+        </div>
+        <div class="travel-row">
+          <span class="travel-label">지역</span>
+          <span class="travel-value">충청남도 아산시</span>
+        </div>
+        <div class="travel-row">
+          <span class="travel-label">이동 부담</span>
+          <span class="travel-value worst-val">높음 (충청권)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="travel-card">
+      <div class="travel-card-header" style="background: #1e8449;">🏫 월드미션 — 백석대 천안</div>
+      <div class="travel-card-body">
+        <div class="travel-row">
+          <span class="travel-label">직선거리</span>
+          <span class="travel-value">약 120km</span>
+        </div>
+        <div class="travel-row">
+          <span class="travel-label">버스 이동</span>
+          <span class="travel-value worst-val">약 2시간 20분~2시간 50분</span>
+        </div>
+        <div class="travel-row">
+          <span class="travel-label">주요 경로</span>
+          <span class="travel-value">연천 → 전곡 → 경부고속 → 천안</span>
+        </div>
+        <div class="travel-row">
+          <span class="travel-label">지역</span>
+          <span class="travel-value">충청남도 천안시</span>
+        </div>
+        <div class="travel-row">
+          <span class="travel-label">이동 부담</span>
+          <span class="travel-value worst-val">높음 (충청권)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="travel-card">
+      <div class="travel-card-header" style="background: #6c3483;">⛪ Spirit Power — 할렐루야교회 성남</div>
+      <div class="travel-card-body">
+        <div class="travel-row">
+          <span class="travel-label">직선거리</span>
+          <span class="travel-value">약 70km</span>
+        </div>
+        <div class="travel-row">
+          <span class="travel-label">버스 이동</span>
+          <span class="travel-value best-val">약 1시간 30분~2시간</span>
+        </div>
+        <div class="travel-row">
+          <span class="travel-label">주요 경로</span>
+          <span class="travel-value">연천 → 의정부 → 구리 → 성남</span>
+        </div>
+        <div class="travel-row">
+          <span class="travel-label">지역</span>
+          <span class="travel-value">경기도 성남시 분당구</span>
+        </div>
+        <div class="travel-row">
+          <span class="travel-label">이동 부담</span>
+          <span class="travel-value best-val">낮음 (수도권)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="travel-card">
+      <div class="travel-card-header" style="background: #b7490a;">🏫 빔캠프 — 연세대 미래캠퍼스 (원주)</div>
+      <div class="travel-card-body">
+        <div class="travel-row">
+          <span class="travel-label">직선거리</span>
+          <span class="travel-value">약 90km</span>
+        </div>
+        <div class="travel-row">
+          <span class="travel-label">버스 이동</span>
+          <span class="travel-value worst-val">약 2시간~2시간 30분</span>
+        </div>
+        <div class="travel-row">
+          <span class="travel-label">주요 경로</span>
+          <span class="travel-value">연천 → 포천 → 춘천 → 원주</span>
+        </div>
+        <div class="travel-row">
+          <span class="travel-label">지역</span>
+          <span class="travel-value">강원도 원주시</span>
+        </div>
+        <div class="travel-row">
+          <span class="travel-label">이동 부담</span>
+          <span class="travel-value worst-val">보통~높음 (강원권)</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 섹션3: 상세 비교표 -->
+  <div class="section-title">③ 항목별 상세 비교표</div>
+  <div class="compare-wrap">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th class="row-head">항목</th>
+          <th class="c1h">① 조이코리아</th>
+          <th class="c2h">② 월드미션</th>
+          <th class="c3h">③ Spirit Power</th>
+          <th class="c4h">④ 빔캠프</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr><td class="row-cat" colspan="5">📅 일정 / 장소</td></tr>
+        <tr>
+          <td class="row-cat" style="font-weight:400; font-size:12px;">날짜</td>
+          <td>1차 7/23~25 <span style="font-size:11px; color:#e74c3c;">⚠100명↓</span><br>2차 7/27~29 <span style="font-size:11px; color:#27ae60;">✓가능</span><br><span style="font-size:11px; color:#aaa; text-decoration:line-through;">3·4차 마감</span><br><span style="font-size:11px; color:#e74c3c; font-weight:700;">가능: 1·2차만</span></td>
+          <td>7/23~25, 7/27~29<br><span style="font-size:11px; color:#888;">(2개 차수 선택)</span></td>
+          <td>7/30~8/1<br><span style="font-size:11px; color:#888;">(단일 차수)</span></td>
+          <td>116차 7/23~25<br>117차 7/27~29<br>118차 7/30~8/1<br>119차 8/3~8/5<br><span style="font-size:11px; color:#888;">(4개 차수 선택)</span></td>
+        </tr>
+        <tr>
+          <td class="row-cat" style="font-weight:400; font-size:12px;">장소</td>
+          <td>호서대 아산<br><span style="font-size:11px; color:#888;">(충남 아산시)</span></td>
+          <td>백석대학교<br><span style="font-size:11px; color:#888;">천안캠퍼스 (충남 천안)</span></td>
+          <td>할렐루야교회<br><span style="font-size:11px; color:#888;">(경기 성남 분당)</span></td>
+          <td>연세대 미래캠퍼스<br><span style="font-size:11px; color:#888;">(강원 원주시)</span></td>
+        </tr>
+        <tr>
+          <td class="row-cat" style="font-weight:400; font-size:12px;">숙소</td>
+          <td>대학 기숙사<br>4인실<br><span style="font-size:11px; color:#888;">차수당 1,800명</span></td>
+          <td>대학 기숙사<br>3인실·2인실 <span class="best-val">★</span><br><span style="font-size:11px; color:#888;">(개별 화장실·샤워실)</span></td>
+          <td>교회 내부<br>(교실·복도)</td>
+          <td>대학 기숙사<br>(연세대 원주)</td>
+        </tr>
+
+        <tr><td class="row-cat" colspan="5">💰 비용</td></tr>
+        <tr>
+          <td class="row-cat" style="font-weight:400; font-size:12px;">참가비</td>
+          <td>94,000원<br><span style="font-size:11px; color:#888;">(일반 104,000원)</span></td>
+          <td>3인실 93,000원<br><span style="font-size:11px; color:#888;">현장 98,000원<br>2인실 105,000~110,000원</span></td>
+          <td class="best-val">숙박 70,000원 ★<br><span style="font-size:11px; font-weight:400; color:var(--accent3);">무박 40,000원<br>미자립 10,000원</span></td>
+          <td>105,000원</td>
+        </tr>
+        <tr>
+          <td class="row-cat" style="font-weight:400; font-size:12px;">비용 포함</td>
+          <td>숙식+교재+집회</td>
+          <td>식사 5식+숙박<br>+프로그램+행정비</td>
+          <td>숙식+집회<br><span style="font-size:11px; color:#888;">(교회 자체시설로 저렴)</span></td>
+          <td>숙식+집회</td>
+        </tr>
+        <tr>
+          <td class="row-cat" style="font-weight:400; font-size:12px;">추가 비용</td>
+          <td>교통비 별도</td>
+          <td>교통비 별도<br><span style="font-size:11px; color:#888;">침구 개인 지참</span></td>
+          <td>교통비 별도<br><span class="best-val">(이동↓ 저렴)</span></td>
+          <td>교통비 별도</td>
+        </tr>
+
+        <tr><td class="row-cat" colspan="5">👨‍🏫 강사진 및 찬양팀</td></tr>
+        <tr>
+          <td class="row-cat" style="font-weight:400; font-size:12px;">말씀 강사</td>
+          <td><b>1차:</b> 강은도·김태훈·맹승주 목사<br><b>2차:</b> 다니엘킴·마크최·맹승주·김보성 목사<br><span style="font-size:11px; color:#888;">3·4차 미공개</span></td>
+          <td><b>1차:</b> 이선·임우현·김상인·이임엘·한현탁 목사<br><b>2차:</b> 홍민기·서종현·이임엘·한현탁 목사, 김준영 대표(제이어스)<br><span style="font-size:11px; color:#888;">※2차: 청소년·청년·대학 통합</span></td>
+          <td>이중구·허진열·전혁·강은도 목사<br><span style="font-size:11px; color:#888;">+김보성·이종화 목사<br>+정재형 개그맨, 마피(워십댄스)</span></td>
+          <td><b>116차:</b> 홍민기·임형진·정명진·이동관<br><b>117차:</b> 홍민기·홍창수·정명진·이동관<br><b>118차:</b> 홍민기·양진철·정명진·이동관<br><b>119차:</b> 홍민기·김선교·정명진·이동관 목사<br><span style="font-size:11px; color:#888;">홍민기 전 차수 고정</span></td>
+        </tr>
+        <tr>
+          <td class="row-cat" style="font-weight:400; font-size:12px;">특별 게스트</td>
+          <td>양동근(영화배우·가수)<br>유은성·유효림·민호기(CCM)<br>정범균·송중근·오민우·임슬기·손민경(KBS 개그)</td>
+          <td>송지은(가수겸배우, 전 시크릿)<br>브라이언 킴(찬양사역자)</td>
+          <td>정재형 개그맨<br>마피(워십댄스크루)</td>
+          <td>갓츠이미지(116차)<br>나도움(117차)<br>헤이홈(118차)<br>헤이터치(119차)<br><span style="font-size:11px; color:#888;">+ 피피아이오 외</span></td>
+        </tr>
+        <tr>
+          <td class="row-cat" style="font-weight:400; font-size:12px;">찬양팀</td>
+          <td>카다로스<br><span style="font-size:11px; color:#888;">(조이코리아 전속팀)</span></td>
+          <td>카이노스 찬양팀<br>HAGIOS(하기오스)<br>러디케이 STAFF<br><span style="font-size:11px; color:#888;">2차: +팀룩유닛</span></td>
+          <td>홍대뉴송워십<br>예람워십<br>할렐루야워십</td>
+          <td>브리지임팩트 프레이즈<br><span style="font-size:11px; color:#888;">(전 차수 예배인도 고정)</span></td>
+        </tr>
+        <tr>
+          <td class="row-cat" style="font-weight:400; font-size:12px;">강사 안정성</td>
+          <td>1·2차 공개 확정</td>
+          <td>1·2차 모두 공개 확정<br><span class="best-val">★ 사전 공개</span></td>
+          <td>다수 공개 확정<br><span class="best-val">★ 사전 공개</span></td>
+          <td class="best-val">홍민기 전 차수 고정<br>★ 차수별 강사 전공개</td>
+        </tr>
+
+        <tr><td class="row-cat" colspan="5">📋 프로그램 구성</td></tr>
+        <tr>
+          <td class="row-cat" style="font-weight:400; font-size:12px;">집회 횟수</td>
+          <td>일 3회<br>(끝까지① ~ ⑤)</td>
+          <td>일 2~3회<br>(Revival Time)</td>
+          <td>일 2~3회<br>+ 특별집회</td>
+          <td>일 2~3회<br>(저녁집회 핵심)</td>
+        </tr>
+        <tr>
+          <td class="row-cat" style="font-weight:400; font-size:12px;">특별 프로그램</td>
+          <td>CCM/CCD대회<br>Joy Festival(놀이·푸드트럭)<br>30주년 성령 홈박쇼<br>VISION 기도회</td>
+          <td>W.M.LAND(수공간)<br>CCM Concert<br>Worship Tutorial<br>회복과 결단의 시간</td>
+          <td>SP STAR<br>성경퀴즈대회<br>연합콰이어<br>학생기도자</td>
+          <td>BIM 스페셜 GAME<br>Summer Water Festival<br>달란트쇼</td>
+        </tr>
+        <tr>
+          <td class="row-cat" style="font-weight:400; font-size:12px;">캠프 성격</td>
+          <td>복음·연예형<br>축제+집회 통합</td>
+          <td>말씀·제자훈련형<br>소그룹 강조</td>
+          <td>연합 부흥형<br>다양한 프로그램</td>
+          <td>놀이+집회형<br>청소년 친화</td>
+        </tr>
+        <tr>
+          <td class="row-cat" style="font-weight:400; font-size:12px;">소그룹</td>
+          <td>조 편성 있음</td>
+          <td class="best-val">소그룹 강조 ★</td>
+          <td>조 편성 있음</td>
+          <td>조별 운영</td>
+        </tr>
+
+        <tr><td class="row-cat" colspan="5">🏛️ 운영 신뢰도</td></tr>
+        <tr>
+          <td class="row-cat" style="font-weight:400; font-size:12px;">운영 역사</td>
+          <td class="best-val">30주년 기념 ★</td>
+          <td>2009년~ 17년+</td>
+          <td class="best-val">2005년~ 제21회 ★</td>
+          <td class="best-val">116~119차 (연속) ★</td>
+        </tr>
+        <tr>
+          <td class="row-cat" style="font-weight:400; font-size:12px;">규모 / 정원</td>
+          <td>대규모<br><span style="font-size:11px; color:#888;">차수당 1,800명</span></td>
+          <td>중규모<br>(전국 단위)</td>
+          <td>대규모<br><span style="font-size:11px; color:#e74c3c;">선착순 1800명 마감</span></td>
+          <td>중규모<br>(차수별 복수 운영)</td>
+        </tr>
+        <tr>
+          <td class="row-cat" style="font-weight:400; font-size:12px;">접수 마감</td>
+          <td><span class="unknown">미공개</span></td>
+          <td><span class="unknown">미공개</span></td>
+          <td style="color:#e74c3c; font-weight:700;">6월 22일 마감<br>⚠ 빠른 신청 필요</td>
+          <td><span class="unknown">미공개<br>(조기마감 주의)</span></td>
+        </tr>
+        <tr>
+          <td class="row-cat" style="font-weight:400; font-size:12px;">농어촌·미자립<br>교회 배려</td>
+          <td>있음</td>
+          <td>있음<br><span style="font-size:11px; color:#888;">(저렴한 비용)</span></td>
+          <td class="best-val">명시적 ★<br><span style="font-size:11px; color:var(--accent3);">미자립 10,000원</span></td>
+          <td>해당 없음</td>
+        </tr>
+        <tr>
+          <td class="row-cat" style="font-weight:400; font-size:12px;">신학적 성향</td>
+          <td>복음주의<br>(초교파)</td>
+          <td>복음주의<br>(초교파)</td>
+          <td>복음주의<br>(초교파 독립)</td>
+          <td>복음주의<br>(초교파)</td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 섹션4: 장단점 -->
+  <div class="section-title">④ 캠프별 장점 / 고려사항</div>
+  <div class="pros-cons-grid">
+
+    <div class="pros-cons-card">
+      <div class="pros-cons-header" style="background: var(--accent);">① 조이코리아 복음캠프 — 끝까지 (30주년)</div>
+      <div class="pros-cons-body">
+        <div style="font-size:12px; font-weight:700; color:#1565c0; margin-bottom:6px;">✓ 장점</div>
+        <ul class="pros-list">
+          <li>1·2차 선택 가능 — 일정 유연성 유지</li>
+          <li>양동근(영화배우·가수) + KBS 개그맨 5명 — 청소년 흡인력 최고</li>
+          <li>Joy Festival(푸드트럭·놀이), <strong>30주년 성령 홈박쇼</strong> 등 축제형 프로그램</li>
+          <li>카다로스 전속 CCM팀 + CCM/CCD 대회</li>
+          <li>VISION 기도회 — 치유·헌신 기도로 영적 집중</li>
+          <li>30주년 기념 캠프 — 특별한 의미와 규모</li>
+        </ul>
+        <div style="font-size:12px; font-weight:700; color:#e65100; margin: 10px 0 6px;">△ 고려사항</div>
+        <ul class="cons-list">
+          <li>충남 아산 — 연천에서 이동 약 2.5~3시간 (가장 멀다)</li>
+          <li>비용 94,000원 (일반 104,000원)</li>
+          <li><strong>1차 잔여 약 100명 — 빠른 결정 필요</strong></li>
+          <li><strong>3·4차 마감 — 1·2차만 신청 가능</strong></li>
+          <li>연예인·개그맨 중심 — 말씀 집중도가 낮아질 수 있음</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pros-cons-card">
+      <div class="pros-cons-header" style="background: #1e8449;">② 월드미션 복음캠프 — DIVE (하기오스 선교회)</div>
+      <div class="pros-cons-body">
+        <div style="font-size:12px; font-weight:700; color:#2e7d32; margin-bottom:6px;">✓ 장점</div>
+        <ul class="pros-list">
+          <li>3인실·2인실 선택 — 방마다 <strong>개별 화장실·샤워실</strong> (쾌적도 최상)</li>
+          <li>강사진 확정 공개: 이선·임우현·김상인·이임엘·한현탁 목사</li>
+          <li>송지은 배우(전 시크릿), 브라이언 킴 CCM — 청소년 친화 게스트</li>
+          <li>W.M.LAND(수공간 프로그램) + CCM Concert + 회복과 결단 시간</li>
+          <li>학부모도 함께 참가 가능 — 가정 연계 사역 용이</li>
+          <li>이임엘 목사(하기오스 총괄디렉터)가 주관 — 전문성 보장</li>
+        </ul>
+        <div style="font-size:12px; font-weight:700; color:#e65100; margin: 10px 0 6px;">△ 고려사항</div>
+        <ul class="cons-list">
+          <li>충남 천안 — 연천에서 이동 약 2.5시간</li>
+          <li>비용 3인실 93,000원(현장 98,000원) — 침구 개인 지참 필요</li>
+          <li>2차 강사진 미공개</li>
+          <li>4개 중 인지도·규모 상대적으로 작음</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pros-cons-card">
+      <div class="pros-cons-header" style="background: #6c3483;">③ Spirit Power — 다시, 일어나 (제21회)</div>
+      <div class="pros-cons-body">
+        <div style="font-size:12px; font-weight:700; color:#6a1b9a; margin-bottom:6px;">✓ 장점</div>
+        <ul class="pros-list">
+          <li><strong>미자립교회 10,000원</strong> — 4개 중 최저가 옵션 (연천교회 해당 가능)</li>
+          <li>수도권(성남 분당) — 연천에서 가장 가까움 (~1.5시간)</li>
+          <li>2005년부터 제21회 — 검증된 역사</li>
+          <li>강사 공개 확정: 이중구·허진열·전혁·강은도·김보성·이종화 목사</li>
+          <li>찬양팀: 홍대뉴송워십·예람워십·할렐루야워십</li>
+          <li>SP STAR, 성경퀴즈, 연합콰이어, 학생기도자 등 다양한 특별 프로그램</li>
+          <li>미자립·농어촌·디아스포라교회 섬김이 설립 목적 — 연천교회에 최적</li>
+        </ul>
+        <div style="font-size:12px; font-weight:700; color:#e65100; margin: 10px 0 6px;">△ 고려사항</div>
+        <ul class="cons-list">
+          <li>교회 내 숙박 — 기숙사보다 불편할 수 있음 (교실 등)</li>
+          <li><strong>접수 마감 6월 22일, 1800명 선착순</strong> — 빠른 결정 필요</li>
+          <li>단일 차수(7/30~8/1) — 일정 고정, 선택 불가</li>
+          <li>할렐루야교회는 초교파 독립교단 소속 (합동측과 교단 다름)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pros-cons-card">
+      <div class="pros-cons-header" style="background: #b7490a;">④ 빔캠프 (BIM Camp) — THE HOLY SPIRIT</div>
+      <div class="pros-cons-body">
+        <div style="font-size:12px; font-weight:700; color:#e65100; margin-bottom:6px;">✓ 장점</div>
+        <ul class="pros-list">
+          <li>116~119차 <strong>4개 차수</strong> — 일정 선택 폭 가장 넓음</li>
+          <li><strong>홍민기 목사 전 차수 고정</strong> + 차수별 집회강사 별도 배치 (임형진/홍창수/양진철/김선교)</li>
+          <li>정명진·이동관 목사 오프닝&뉴스타팅 전 차수 고정</li>
+          <li>브리지임팩트 프레이즈 전 차수 예배인도 고정</li>
+          <li>차수별 특별콘서트: 갓츠이미지·나도움·헤이홈·헤이터치·피피아이오 등</li>
+          <li>BIM 스페셜 GAME + Summer Water Festival — 청소년 흡인력 최상</li>
+          <li>연세대 원주 미래캠퍼스 — 대형 대학 시설, 쾌적한 환경</li>
+        </ul>
+        <div style="font-size:12px; font-weight:700; color:#e65100; margin: 10px 0 6px;">△ 고려사항</div>
+        <ul class="cons-list">
+          <li>비용 <strong>105,000원</strong> — 4개 중 최고가</li>
+          <li>강원 원주 — 연천에서 약 2~2.5시간</li>
+          <li>대규모 특성상 개인별 케어 한계</li>
+          <li>인기 차수 조기 마감 가능성 (빠른 신청 필요)</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 섹션5: 종합 점수 -->
+  <div class="section-title">⑤ 연천교회 중고등부 기준 종합 평가</div>
+  <div class="compare-wrap" style="margin-bottom:28px;">
+    <table class="score-table">
+      <thead>
+        <tr>
+          <th style="text-align:left;">평가 항목 (배점)</th>
+          <th>① 조이코리아</th>
+          <th>② 월드미션</th>
+          <th>③ Spirit Power</th>
+          <th>④ 빔캠프</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>비용 적정성 (20점)</td>
+          <td>11<br><span style="font-size:11px; color:#888;">(94,000원)</span></td>
+          <td>13<br><span style="font-size:11px; color:#888;">(3인실 93,000원)</span></td>
+          <td style="color:var(--accent3); font-weight:700;">20 ★</td>
+          <td>9<br><span style="font-size:11px; color:#888;">(105,000원)</span></td>
+        </tr>
+        <tr>
+          <td>이동 편의 (20점)</td>
+          <td>8</td>
+          <td>9</td>
+          <td style="color:var(--accent3); font-weight:700;">18 ★</td>
+          <td>11<br><span style="font-size:11px; color:#888;">(강원 원주, ~2시간)</span></td>
+        </tr>
+        <tr>
+          <td>프로그램 청소년 적합성 (20점)</td>
+          <td style="color:var(--accent3); font-weight:700;">18 ★<br><span style="font-size:11px; font-weight:400; color:#888;">(축제+집회 통합)</span></td>
+          <td>15<br><span style="font-size:11px; color:#888;">(WM LAND 수공간 등)</span></td>
+          <td>16</td>
+          <td>19</td>
+        </tr>
+        <tr>
+          <td>강사진 신뢰도 (20점)</td>
+          <td>15<br><span style="font-size:11px; color:#888;">(목사+연예인)</span></td>
+          <td>16<br><span style="font-size:11px; color:#888;">(1차 강사 공개 확정)</span></td>
+          <td>17<br><span style="font-size:11px; color:#888;">(강사 사전공개)</span></td>
+          <td style="color:var(--accent3); font-weight:700;">19 ★</td>
+        </tr>
+        <tr>
+          <td>숙소·시설 (10점)</td>
+          <td>7</td>
+          <td style="color:var(--accent3); font-weight:700;">10 ★<br><span style="font-size:11px; font-weight:400; color:#888;">(개별 화장실·샤워실)</span></td>
+          <td>5</td>
+          <td>8</td>
+        </tr>
+        <tr>
+          <td>일정 유연성 (10점)</td>
+          <td>7<br><span style="font-size:11px; color:#888;">(1·2차만 가능)</span></td>
+          <td>9</td>
+          <td>6</td>
+          <td style="color:var(--accent3); font-weight:700;">10 ★<br><span style="font-size:11px; font-weight:400; color:#888;">(4차수)</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;">합계 (100점 만점)</td>
+          <td style="font-weight:700;">66</td>
+          <td style="font-weight:700;">72</td>
+          <td style="font-weight:700; color:var(--accent3);">82 ★</td>
+          <td style="font-weight:700;">76</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="padding: 10px 16px; font-size: 11.5px; color: var(--text-muted); border-top: 0.5px solid var(--border);">
+      ※ 점수는 연천교회 중고등부 상황(거리·비용·소규모 농어촌교회 특성) 기준 주관적 평가입니다. SP 미자립교회 10,000원 적용 시 비용 점수가 더 높아질 수 있습니다.
+    </div>
+  </div>
+
+
+  <!-- 섹션6: 상황별 추천 -->
+  <div class="recommendation">
+    <div class="rec-title">⑥ 교사 회의 참고 — 상황별 추천</div>
+    <div class="rec-grid">
+      <div class="rec-item">
+        <div class="rec-condition">💰 예산이 가장 중요할 때</div>
+        <div class="rec-pick">→ Spirit Power (숙박 ₩70,000)</div>
+        <div class="rec-reason">수도권이라 교통비까지 절감. 미자립교회 해당 시 1만원 가능. 단, 6/22 마감 주의</div>
+      </div>
+      <div class="rec-item">
+        <div class="rec-condition">🚌 이동 부담을 줄이고 싶을 때</div>
+        <div class="rec-pick">→ Spirit Power (성남 분당, ~1.5시간)</div>
+        <div class="rec-reason">4개 중 유일한 수도권, 학생 피로 최소화, 당일 이슈 대응 용이</div>
+      </div>
+      <div class="rec-item">
+        <div class="rec-condition">🎉 축제·연예·청소년 참여 중시</div>
+        <div class="rec-pick">→ 조이코리아 (30주년 끝까지)</div>
+        <div class="rec-reason">양동근·KBS개그맨 5명, Joy Festival·홈박쇼, 4차수로 일정 유연. 비신자 전도용으로도 탁월</div>
+      </div>
+      <div class="rec-item">
+        <div class="rec-condition">🔥 강사진·찬양 최우선</div>
+        <div class="rec-pick">→ 빔캠프 (THE HOLY SPIRIT, ₩105,000)</div>
+        <div class="rec-reason">강사 11명+찬양팀 4팀, Water Festival·달란트쇼, 4차수 선택 가능</div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<div class="doc-footer">
+  연천장로교회 중고등부 교사 회의 자료 &nbsp;|&nbsp; 2026년 여름 수련회 비교 분석 &nbsp;|&nbsp; 작성: 2026. 5월
+  <br>
+  <span style="font-size:10px;">※ 조이코리아·월드미션·빔캠프·Spirit Power 모두 공식 포스터 및 공식 사이트 기준 확인 완료. 최종 등록 전 각 단체 직접 확인 권장.</span>
+</div>
+
+</body>
+</html>

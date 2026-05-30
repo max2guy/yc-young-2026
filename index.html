@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#154734">
+<title>2026 교회 행사 자료</title>
+<style>
+  :root {
+    --bg: #f5f7f4;
+    --text: #17241d;
+    --muted: #66756c;
+    --line: #dce7df;
+    --green: #1a6b3c;
+    --blue: #1a3a5c;
+    --amber: #f4a322;
+    --card: #fff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+  }
+  header {
+    background: linear-gradient(135deg, #154734, #1a3a5c);
+    color: white;
+    padding: 34px 20px 30px;
+  }
+  .wrap { width: min(960px, calc(100% - 32px)); margin: 0 auto; }
+  h1 { margin: 0 0 8px; font-size: clamp(26px, 5vw, 42px); letter-spacing: 0; }
+  .lead { margin: 0; color: rgba(255,255,255,.82); font-size: 15px; }
+  main { padding: 24px 0 42px; }
+  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .card {
+    display: block;
+    min-height: 210px;
+    padding: 22px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--card);
+    color: inherit;
+    text-decoration: none;
+    box-shadow: 0 1px 8px rgba(20, 50, 34, .06);
+  }
+  .card:focus-visible { outline: 3px solid rgba(244, 163, 34, .45); outline-offset: 3px; }
+  .tag { display: inline-block; margin-bottom: 18px; color: white; border-radius: 999px; padding: 5px 11px; font-size: 12px; font-weight: 800; }
+  .sports .tag { background: var(--green); }
+  .camp .tag { background: var(--blue); }
+  h2 { margin: 0 0 8px; font-size: 23px; letter-spacing: 0; }
+  p { margin: 0; color: var(--muted); font-size: 14px; }
+  .meta { margin-top: 22px; color: #31453a; font-size: 13px; font-weight: 700; }
+  .notice {
+    margin-top: 16px;
+    padding: 14px 16px;
+    border-left: 4px solid var(--amber);
+    background: #fff9ea;
+    color: #604710;
+    border-radius: 0 8px 8px 0;
+    font-size: 13px;
+  }
+  @media (max-width: 720px) {
+    .grid { grid-template-columns: 1fr; }
+    header { padding-top: 28px; }
+    .card { min-height: auto; }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>2026 교회 행사 자료</h1>
+      <p class="lead">회의자료와 수련회 비교표를 한 곳에서 바로 열람합니다.</p>
+    </div>
+  </header>
+  <main>
+    <div class="wrap">
+      <div class="grid">
+        <a class="card sports" href="sports-meeting.html">
+          <span class="tag">실시간 동기화</span>
+          <h2>체육대회 회의자료</h2>
+          <p>항목을 탭해 수정할 수 있습니다. 별도 Firebase 설정을 넣으면 연결된 기기와 실시간 동기화됩니다.</p>
+          <div class="meta">열기 →</div>
+        </a>
+        <a class="card camp" href="camp-comparison.html">
+          <span class="tag">읽기 자료</span>
+          <h2>2026 수련회 비교 분석</h2>
+          <p>기존 HTML 자료를 그대로 보존해 웹에서 빠르게 확인할 수 있게 연결했습니다.</p>
+          <div class="meta">열기 →</div>
+        </a>
+      </div>
+      <div class="notice">
+        이 페이지는 독립 자료입니다. 실시간 동기화는 별도 `sync-config.js` 설정을 연결한 뒤 활성화됩니다.
+      </div>
+    </div>
+  </main>
+</body>
+</html>

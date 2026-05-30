@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1a6b3c">
+<title>체육대회 기획안</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
+
+:root {
+  --primary: #1a6b3c;
+  --primary-light: #2d9e60;
+  --accent: #f4a322;
+  --accent2: #e84343;
+  --bg: #f2f4f0;
+  --card: #ffffff;
+  --text: #1e2620;
+  --muted: #7a8c80;
+  --border: #dce8e0;
+  --tag-bg: #e6f4ec;
+  --shadow: 0 1px 8px rgba(0,0,0,0.08);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+html { font-size: 16px; }
+
+body {
+  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding-bottom: calc(80px + var(--safe-bottom));
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── HEADER ── */
+.header {
+  background: var(--primary);
+  color: white;
+  padding: calc(16px + var(--safe-top)) 20px 20px;
+  position: sticky; top: 0; z-index: 100;
+}
+.header-inner { display: flex; align-items: center; justify-content: space-between; }
+.header-left .label {
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  color: rgba(255,255,255,0.6); margin-bottom: 2px;
+}
+.header-left .title { font-size: 20px; font-weight: 900; line-height: 1.2; }
+.header-badge {
+  background: var(--accent); color: white;
+  border-radius: 20px; padding: 4px 12px;
+  font-size: 11px; font-weight: 700;
+  white-space: nowrap; flex-shrink: 0;
+}
+.header-date {
+  font-size: 11px; color: rgba(255,255,255,0.55);
+  margin-top: 6px;
+}
+
+/* ── MAIN ── */
+.main {
+  padding: 16px 14px 0;
+  padding-left: calc(14px + var(--safe-left));
+  padding-right: calc(14px + var(--safe-right));
+}
+
+/* ── EDIT HINT ── */
+.edit-hint {
+  background: #fffce8; border: 1px solid #f0d860;
+  border-radius: 10px; padding: 10px 14px;
+  font-size: 12px; color: #7a6200;
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+
+/* ── SECTION CARD ── */
+.card {
+  background: var(--card);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  margin-bottom: 14px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.card-header {
+  background: var(--tag-bg);
+  border-bottom: 1px solid var(--border);
+  padding: 13px 16px;
+  display: flex; align-items: center; gap: 8px;
+  font-weight: 700; font-size: 14px; color: var(--primary);
+}
+.card-body { padding: 14px 16px; }
+
+/* ── INFO GRID (2-col on mobile) ── */
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.info-item {
+  border: 1px solid var(--border);
+  border-radius: 10px; padding: 11px 13px;
+  min-height: 64px;
+}
+.info-label {
+  font-size: 9px; font-weight: 700; letter-spacing: 1.5px;
+  color: var(--muted); text-transform: uppercase; margin-bottom: 4px;
+}
+.info-value { font-size: 14px; font-weight: 700; line-height: 1.4; }
+.info-sub { font-size: 10px; color: var(--muted); margin-top: 3px; line-height: 1.4; }
+
+/* ── VENUE ── */
+.venue-highlight {
+  background: linear-gradient(135deg, #e6f4ec, #fef8ec);
+  border: 1px solid var(--primary-light);
+  border-radius: 10px; padding: 13px 15px; margin-bottom: 12px;
+}
+.venue-highlight .big { font-size: 17px; font-weight: 900; color: var(--primary); }
+.venue-note { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+
+/* ── STATUS CHIPS ── */
+.status-row { display: flex; gap: 7px; flex-wrap: wrap; }
+.status-chip {
+  border: 1.5px solid var(--border);
+  border-radius: 20px; padding: 6px 14px;
+  font-size: 12px; font-weight: 700; cursor: pointer;
+  color: var(--muted); background: white;
+  transition: all 0.15s;
+  min-height: 36px; display: flex; align-items: center;
+}
+.status-chip.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+/* ── EVENT / AGENDA ROW ── */
+.list-wrap { display: flex; flex-direction: column; gap: 8px; }
+.ev-row {
+  display: flex; align-items: center; gap: 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px; padding: 11px 12px;
+  background: #fafcfa; min-height: 52px;
+  cursor: pointer; transition: background 0.12s;
+  -webkit-user-select: none; user-select: none;
+}
+.ev-row:active { background: var(--tag-bg); }
+.ev-num {
+  background: var(--primary); color: white;
+  border-radius: 50%; width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; flex-shrink: 0;
+}
+.ev-num.accent { background: var(--accent); }
+.ev-texts { flex: 1; min-width: 0; }
+.ev-name { font-weight: 700; font-size: 14px; }
+.ev-note { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.ev-edit-icon { font-size: 15px; color: #ccc; flex-shrink: 0; padding: 4px; }
+
+/* ── ADD ROW ── */
+.add-row { display: flex; gap: 8px; margin-top: 10px; }
+.add-input {
+  flex: 1; border: 1.5px solid var(--border);
+  border-radius: 10px; padding: 10px 13px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px; outline: none;
+  -webkit-appearance: none; appearance: none;
+  min-height: 44px; color: var(--text);
+  background: white;
+}
+.add-input:focus { border-color: var(--primary-light); }
+.add-btn {
+  background: var(--primary); color: white;
+  border: none; border-radius: 10px;
+  padding: 0 16px; font-size: 14px; font-weight: 700;
+  cursor: pointer; font-family: 'Noto Sans KR', sans-serif;
+  min-height: 44px; white-space: nowrap;
+  -webkit-appearance: none;
+}
+.add-btn:active { background: var(--primary-light); }
+
+/* ── TEAM ── */
+.team-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.team-box {
+  border: 2px solid var(--border);
+  border-radius: 12px; padding: 14px 12px; text-align: center;
+}
+.team-box.ta { border-color: #e84343; }
+.team-box.tb { border-color: #2196f3; }
+.team-label { font-size: 9px; font-weight: 700; letter-spacing: 2px; color: var(--muted); margin-bottom: 4px; }
+.team-name { font-size: 16px; font-weight: 900; }
+.ta .team-name { color: #e84343; }
+.tb .team-name { color: #2196f3; }
+.team-sub { font-size: 11px; color: var(--muted); margin-top: 5px; }
+.team-tip { font-size: 11px; color: var(--muted); margin-top: 10px; line-height: 1.5; padding: 8px 10px; background: var(--tag-bg); border-radius: 8px; }
+
+/* ── ROLES (card-style on mobile) ── */
+.role-card {
+  border: 1px solid var(--border); border-radius: 10px;
+  padding: 11px 13px; margin-bottom: 8px; background: #fafcfa;
+}
+.role-card:last-child { margin-bottom: 0; }
+.role-top { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.role-tag {
+  background: var(--tag-bg); color: var(--primary);
+  border-radius: 4px; padding: 2px 8px;
+  font-size: 10px; font-weight: 700;
+}
+.role-person { font-weight: 700; font-size: 14px; }
+.role-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+/* ── NOTES ── */
+.notes-area {
+  width: 100%; min-height: 100px;
+  border: 1.5px dashed var(--border);
+  border-radius: 10px; padding: 12px 13px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 13px; color: var(--text);
+  resize: none; outline: none;
+  background: #fafcfa; line-height: 1.75;
+  -webkit-appearance: none;
+}
+.notes-area:focus { border-color: var(--primary-light); background: white; }
+
+/* ── BOTTOM FAB BAR ── */
+.fab-bar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: white;
+  border-top: 1px solid var(--border);
+  padding: 10px 16px calc(10px + var(--safe-bottom));
+  display: flex; gap: 10px; z-index: 200;
+  box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
+}
+.fab-btn {
+  flex: 1; border-radius: 12px; border: none;
+  padding: 13px 10px; font-size: 14px; font-weight: 700;
+  cursor: pointer; font-family: 'Noto Sans KR', sans-serif;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  min-height: 48px; -webkit-appearance: none;
+}
+.fab-btn.primary { background: var(--primary); color: white; }
+.fab-btn.secondary { background: var(--tag-bg); color: var(--primary); border: 1.5px solid var(--border); }
+.fab-btn:active { opacity: 0.8; }
+
+/* ── MODAL ── */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+  z-index: 500; display: none; align-items: flex-end;
+  justify-content: center;
+  -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);
+}
+.modal-overlay.open { display: flex; }
+.modal-sheet {
+  background: white; border-radius: 20px 20px 0 0;
+  width: 100%; max-width: 540px;
+  padding: 20px 20px calc(20px + var(--safe-bottom));
+  animation: slideUp 0.25s ease;
+}
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+.modal-handle {
+  width: 40px; height: 4px; background: #ddd;
+  border-radius: 2px; margin: 0 auto 18px;
+}
+.modal-title { font-size: 16px; font-weight: 900; margin-bottom: 14px; color: var(--primary); }
+.modal-field { margin-bottom: 12px; }
+.modal-label { font-size: 11px; font-weight: 700; color: var(--muted); margin-bottom: 5px; letter-spacing: 1px; }
+.modal-input, .modal-textarea {
+  width: 100%; border: 1.5px solid var(--border);
+  border-radius: 10px; padding: 11px 13px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 15px; color: var(--text); outline: none;
+  background: white; -webkit-appearance: none;
+  min-height: 48px;
+}
+.modal-textarea { min-height: 80px; resize: none; }
+.modal-input:focus, .modal-textarea:focus { border-color: var(--primary); }
+.modal-actions { display: flex; gap: 10px; margin-top: 16px; }
+.modal-btn {
+  flex: 1; border-radius: 12px; border: none;
+  padding: 14px; font-size: 15px; font-weight: 700;
+  cursor: pointer; font-family: 'Noto Sans KR', sans-serif;
+  min-height: 50px; -webkit-appearance: none;
+}
+.modal-btn.save { background: var(--primary); color: white; }
+.modal-btn.cancel { background: var(--bg); color: var(--muted); }
+.modal-btn.danger { background: #fff0f0; color: var(--accent2); }
+.modal-btn:active { opacity: 0.75; }
+
+/* ── PRINT ── */
+@media print {
+  .fab-bar, .edit-hint, .add-row, .ev-edit-icon,
+  .modal-overlay { display: none !important; }
+  body { padding-bottom: 0; background: white; }
+  .card { break-inside: avoid; box-shadow: none; }
+  .header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="header-left">
+      <div class="label">연천장로교회 · 중고등부</div>
+      <div class="title">🏃 체육대회 기획안</div>
+    </div>
+    <div class="header-badge" id="status-badge">기획 중</div>
+  </div>
+  <div class="header-date" id="today-date"></div>
+</div>
+
+<div class="main">
+
+  <div class="edit-hint">✏️ 항목을 <strong>탭</strong>하면 바로 편집할 수 있습니다</div>
+
+  <!-- 기본 정보 -->
+  <div class="card">
+    <div class="card-header">📋 기본 정보</div>
+    <div class="card-body">
+      <div class="info-grid">
+        <div class="info-item" onclick="openFieldModal('행사명','field-event-name')">
+          <div class="info-label">행사명</div>
+          <div class="info-value" id="field-event-name">중고등부 체육대회</div>
+        </div>
+        <div class="info-item" onclick="openFieldModal('대상','field-target')">
+          <div class="info-label">대상</div>
+          <div class="info-value" id="field-target">중고등부 + 청년부</div>
+          <div class="info-sub" id="field-target-sub">학부모 초청 검토 중</div>
+        </div>
+        <div class="info-item" onclick="openFieldModal('예정 날짜','field-date')">
+          <div class="info-label">예정 날짜</div>
+          <div class="info-value" id="field-date">미정</div>
+        </div>
+        <div class="info-item" onclick="openFieldModal('경기 방식','field-type')">
+          <div class="info-label">경기 방식</div>
+          <div class="info-value" id="field-type">실외 경기</div>
+          <div class="info-sub" id="field-type-sub">실외 선호도 높음</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 장소 정보 -->
+  <div class="card">
+    <div class="card-header">🏟 장소 정보</div>
+    <div class="card-body">
+      <div class="venue-highlight" onclick="openFieldModal('장소명','field-venue')">
+        <div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:2px;margin-bottom:3px;">후보 장소</div>
+        <div class="big" id="field-venue">연천중고 체육관</div>
+        <div class="venue-note" id="field-venue-note">실외 경기 가능 여부 확인 예정 (이지현 집사님)</div>
+      </div>
+      <div class="info-grid">
+        <div class="info-item" onclick="openFieldModal('대관료','field-fee')">
+          <div class="info-label">대관료</div>
+          <div class="info-value" id="field-fee">시간당 요금</div>
+          <div class="info-sub" id="field-fee-sub">최대 3만원/1시간</div>
+        </div>
+        <div class="info-item" onclick="openFieldModal('신청 방법','field-apply')">
+          <div class="info-label">신청 방법</div>
+          <div class="info-value" id="field-apply">신청서 작성</div>
+          <div class="info-sub" id="field-apply-sub">김명옥 집사님 확인 중</div>
+        </div>
+        <div class="info-item" onclick="openFieldModal('담당자','field-contact')">
+          <div class="info-label">담당</div>
+          <div class="info-value" id="field-contact">김명옥 집사님</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">확인 상태</div>
+          <div class="status-row" id="status-row" style="margin-top:6px;">
+            <span class="status-chip" onclick="toggleStatus(this,'확인 전')">확인 전</span>
+            <span class="status-chip active" onclick="toggleStatus(this,'문의 중')">문의 중</span>
+            <span class="status-chip" onclick="toggleStatus(this,'확정')">확정</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 경기 종목 -->
+  <div class="card">
+    <div class="card-header">🏆 경기 종목</div>
+    <div class="card-body">
+      <div class="list-wrap" id="events-list"></div>
+      <div class="add-row">
+        <input class="add-input" id="new-event-name" placeholder="종목 추가..." />
+        <button class="add-btn" onclick="addEvent()">추가</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 팀 구성 -->
+  <div class="card">
+    <div class="card-header">👥 팀 구성 (안)</div>
+    <div class="card-body">
+      <div class="team-grid">
+        <div class="team-box ta" onclick="openFieldModal('팀 A 이름','field-team-a')">
+          <div class="team-label">팀 A</div>
+          <div class="team-name" id="field-team-a">중고등부</div>
+          <div class="team-sub" id="field-team-a-sub">학생 전원</div>
+        </div>
+        <div class="team-box tb" onclick="openFieldModal('팀 B 이름','field-team-b')">
+          <div class="team-label">팀 B</div>
+          <div class="team-name" id="field-team-b">청년부</div>
+          <div class="team-sub" id="field-team-b-sub">청년부 전원</div>
+        </div>
+      </div>
+      <div class="team-tip" id="field-team-tip" onclick="openFieldModal('팀 구성 메모','field-team-tip')">
+        💡 중고등부 vs 청년부 팀 대항전 — 단합 도모 (이지현 집사님 제안)
+      </div>
+    </div>
+  </div>
+
+  <!-- 역할 분담 -->
+  <div class="card">
+    <div class="card-header">🙋 역할 분담</div>
+    <div class="card-body" id="roles-body">
+      <!-- JS로 렌더 -->
+    </div>
+  </div>
+
+  <!-- 특이사항 -->
+  <div class="card">
+    <div class="card-header">💬 특이사항 / 기타 아이디어</div>
+    <div class="card-body">
+      <textarea class="notes-area" id="notes-area" rows="5">• 인간컬링: 안전 우려 보류 의견 있음 (기구 사용 시 5만원 추가)
+• 학부모 초청 여부 검토 중
+• 교사월례회에서 추가 종목 제안 예정
+• 더운 날 실내 대안 종목 검토 필요</textarea>
+    </div>
+  </div>
+
+  <!-- 월례회 안건 -->
+  <div class="card">
+    <div class="card-header">✅ 월례회 결정 안건</div>
+    <div class="card-body">
+      <div class="list-wrap" id="agenda-list"></div>
+      <div class="add-row">
+        <input class="add-input" id="new-agenda" placeholder="안건 추가..." />
+        <button class="add-btn" onclick="addAgenda()">추가</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- FAB BAR -->
+<div class="fab-bar">
+  <button class="fab-btn secondary" onclick="window.print()">🖨 인쇄</button>
+  <button class="fab-btn primary" onclick="copyAll()">📋 내용 복사</button>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-title">편집</div>
+    <div class="modal-field">
+      <div class="modal-label" id="modal-label">내용</div>
+      <input class="modal-input" id="modal-input" type="text" />
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" onclick="closeModal()">취소</button>
+      <button class="modal-btn save" onclick="saveField()">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- EV MODAL (edit/delete event) -->
+<div class="modal-overlay" id="ev-modal" onclick="closeEvModal(event)">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="ev-modal-title">종목 편집</div>
+    <div class="modal-field">
+      <div class="modal-label">종목명</div>
+      <input class="modal-input" id="ev-modal-name" type="text" />
+    </div>
+    <div class="modal-field">
+      <div class="modal-label">비고 (선택)</div>
+      <input class="modal-input" id="ev-modal-note" type="text" placeholder="비고 없음" />
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn danger" onclick="deleteCurrentEv()">삭제</button>
+      <button class="modal-btn cancel" onclick="closeEvModal()">취소</button>
+      <button class="modal-btn save" onclick="saveEv()">저장</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATE ──
+const d = new Date();
+document.getElementById('today-date').textContent =
+  `작성일: ${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+
+// ── FIELD MODAL ──
+let currentFieldId = '';
+function openFieldModal(title, fieldId) {
+  currentFieldId = fieldId;
+  const el = document.getElementById(fieldId);
+  document.getElementById('modal-title').textContent = title + ' 편집';
+  document.getElementById('modal-label').textContent = title;
+  document.getElementById('modal-input').value = el ? el.textContent.trim() : '';
+  document.getElementById('modal').classList.add('open');
+  setTimeout(() => document.getElementById('modal-input').focus(), 150);
+}
+function saveField() {
+  const val = document.getElementById('modal-input').value.trim();
+  if (val && currentFieldId) {
+    document.getElementById(currentFieldId).textContent = val;
+  }
+  closeModal();
+}
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('modal')) return;
+  document.getElementById('modal').classList.remove('open');
+}
+document.getElementById('modal-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') saveField();
+});
+
+// ── STATUS ──
+function toggleStatus(el, label) {
+  document.querySelectorAll('#status-row .status-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('status-badge').textContent = label;
+}
+
+// ── EVENTS ──
+let events = [
+  { name: '피구', note: '' },
+  { name: '2인 3각', note: '' },
+  { name: '신발 던지기', note: '' },
+  { name: '계주', note: '' },
+];
+let editEvIdx = -1;
+
+function renderEvents() {
+  const list = document.getElementById('events-list');
+  list.innerHTML = '';
+  events.forEach((ev, i) => {
+    const row = document.createElement('div');
+    row.className = 'ev-row';
+    row.onclick = () => openEvModal(i);
+    row.innerHTML = `
+      <div class="ev-num">${i+1}</div>
+      <div class="ev-texts">
+        <div class="ev-name">${ev.name}</div>
+        ${ev.note ? `<div class="ev-note">${ev.note}</div>` : ''}
+      </div>
+      <div class="ev-edit-icon">✎</div>
+    `;
+    list.appendChild(row);
+  });
+}
+function addEvent() {
+  const v = document.getElementById('new-event-name').value.trim();
+  if (!v) return;
+  events.push({ name: v, note: '' });
+  document.getElementById('new-event-name').value = '';
+  renderEvents();
+}
+document.getElementById('new-event-name').addEventListener('keydown', e => {
+  if (e.key === 'Enter') addEvent();
+});
+
+function openEvModal(i) {
+  editEvIdx = i;
+  const ev = events[i];
+  document.getElementById('ev-modal-title').textContent = `종목 편집`;
+  document.getElementById('ev-modal-name').value = ev.name;
+  document.getElementById('ev-modal-note').value = ev.note || '';
+  document.getElementById('ev-modal').classList.add('open');
+  setTimeout(() => document.getElementById('ev-modal-name').focus(), 150);
+}
+function saveEv() {
+  const name = document.getElementById('ev-modal-name').value.trim();
+  if (!name) return;
+  events[editEvIdx] = { name, note: document.getElementById('ev-modal-note').value.trim() };
+  closeEvModal(); renderEvents();
+}
+function deleteCurrentEv() {
+  if (editEvIdx < 0) return;
+  events.splice(editEvIdx, 1);
+  closeEvModal(); renderEvents();
+}
+function closeEvModal(e) {
+  if (e && e.target !== document.getElementById('ev-modal')) return;
+  document.getElementById('ev-modal').classList.remove('open');
+}
+
+// ── AGENDA ──
+let agenda = [
+  { name: '행사 날짜 확정', note: '날씨 고려' },
+  { name: '최종 종목 결정', note: '교사 추가 제안 반영' },
+  { name: '장소 대관 확정', note: '연천중고 or 대안 장소' },
+  { name: '학부모 초청 여부', note: '찬반 논의' },
+];
+let editAgIdx = -1;
+
+function renderAgenda() {
+  const list = document.getElementById('agenda-list');
+  list.innerHTML = '';
+  agenda.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'ev-row';
+    row.onclick = () => openAgModal(i);
+    row.innerHTML = `
+      <div class="ev-num accent">${i+1}</div>
+      <div class="ev-texts">
+        <div class="ev-name">${item.name}</div>
+        ${item.note ? `<div class="ev-note">${item.note}</div>` : ''}
+      </div>
+      <div class="ev-edit-icon">✎</div>
+    `;
+    list.appendChild(row);
+  });
+}
+function addAgenda() {
+  const v = document.getElementById('new-agenda').value.trim();
+  if (!v) return;
+  agenda.push({ name: v, note: '' });
+  document.getElementById('new-agenda').value = '';
+  renderAgenda();
+}
+document.getElementById('new-agenda').addEventListener('keydown', e => {
+  if (e.key === 'Enter') addAgenda();
+});
+
+// reuse ev-modal for agenda editing
+function openAgModal(i) {
+  editAgIdx = i;
+  const item = agenda[i];
+  document.getElementById('ev-modal-title').textContent = `안건 편집`;
+  document.getElementById('ev-modal-name').value = item.name;
+  document.getElementById('ev-modal-note').value = item.note || '';
+  // override save/delete for agenda
+  document.querySelector('#ev-modal .modal-btn.save').onclick = saveAg;
+  document.querySelector('#ev-modal .modal-btn.danger').onclick = deleteCurrentAg;
+  document.getElementById('ev-modal').classList.add('open');
+}
+function saveAg() {
+  const name = document.getElementById('ev-modal-name').value.trim();
+  if (!name) return;
+  agenda[editAgIdx] = { name, note: document.getElementById('ev-modal-note').value.trim() };
+  // restore defaults
+  document.querySelector('#ev-modal .modal-btn.save').onclick = saveEv;
+  document.querySelector('#ev-modal .modal-btn.danger').onclick = deleteCurrentEv;
+  closeEvModal(); renderAgenda();
+}
+function deleteCurrentAg() {
+  agenda.splice(editAgIdx, 1);
+  document.querySelector('#ev-modal .modal-btn.save').onclick = saveEv;
+  document.querySelector('#ev-modal .modal-btn.danger').onclick = deleteCurrentEv;
+  closeEvModal(); renderAgenda();
+}
+
+// ── ROLES ──
+const roles = [
+  { tag: '진행', person: '안준용 집사님', desc: '경기 전반 진행 (흔쾌히 수락)' },
+  { tag: '장소 섭외', person: '김명옥 집사님', desc: '연천중고 체육관 대관 문의 및 확정' },
+  { tag: '기획 총괄', person: '이지현 집사님', desc: '종목 기획, 팀 구성 제안' },
+  { tag: '협의', person: '전체 교사', desc: '교사월례회에서 최종 협의' },
+];
+function renderRoles() {
+  const body = document.getElementById('roles-body');
+  body.innerHTML = roles.map((r, i) => `
+    <div class="role-card" onclick="openRoleModal(${i})">
+      <div class="role-top">
+        <span class="role-tag">${r.tag}</span>
+        <span class="role-person">${r.person}</span>
+        <span style="margin-left:auto;font-size:14px;color:#ccc;">✎</span>
+      </div>
+      <div class="role-desc">${r.desc}</div>
+    </div>
+  `).join('');
+}
+let editRoleIdx = -1;
+function openRoleModal(i) {
+  editRoleIdx = i;
+  const r = roles[i];
+  document.getElementById('ev-modal-title').textContent = `역할 편집`;
+  document.getElementById('ev-modal-name').value = r.person;
+  document.getElementById('ev-modal-note').value = r.desc;
+  document.querySelector('#ev-modal .modal-btn.save').onclick = saveRole;
+  document.querySelector('#ev-modal .modal-btn.danger').onclick = () => closeEvModal();
+  document.querySelector('#ev-modal .modal-btn.danger').textContent = '닫기';
+  document.getElementById('ev-modal').classList.add('open');
+}
+function saveRole() {
+  roles[editRoleIdx].person = document.getElementById('ev-modal-name').value.trim() || roles[editRoleIdx].person;
+  roles[editRoleIdx].desc = document.getElementById('ev-modal-note').value.trim();
+  document.querySelector('#ev-modal .modal-btn.save').onclick = saveEv;
+  document.querySelector('#ev-modal .modal-btn.danger').onclick = deleteCurrentEv;
+  document.querySelector('#ev-modal .modal-btn.danger').textContent = '삭제';
+  closeEvModal(); renderRoles();
+}
+
+// ── COPY ALL ──
+function copyAll() {
+  let t = '중고등부 체육대회 기획안\n' + '='.repeat(35) + '\n\n';
+  ['field-event-name','field-target','field-date','field-type','field-venue','field-fee','field-contact'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) t += el.textContent.trim() + '\n';
+  });
+  t += '\n[경기 종목]\n';
+  events.forEach((e,i) => t += `${i+1}. ${e.name}${e.note?' ('+e.note+')':''}\n`);
+  t += '\n[팀 구성]\nA팀: ' + document.getElementById('field-team-a').textContent +
+       '\nB팀: ' + document.getElementById('field-team-b').textContent + '\n';
+  t += '\n[역할 분담]\n';
+  roles.forEach(r => t += `[${r.tag}] ${r.person} - ${r.desc}\n`);
+  t += '\n[월례회 안건]\n';
+  agenda.forEach((a,i) => t += `${i+1}. ${a.name}${a.note?' - '+a.note:''}\n`);
+  t += '\n[특이사항]\n' + document.getElementById('notes-area').value;
+  navigator.clipboard.writeText(t)
+    .then(() => { showToast('📋 클립보드에 복사되었습니다!'); })
+    .catch(() => { showToast('복사 실패 — 직접 선택해 주세요'); });
+}
+
+// ── TOAST ──
+function showToast(msg) {
+  let el = document.getElementById('toast');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'toast';
+    el.style.cssText = 'position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#222;color:white;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:700;z-index:999;opacity:0;transition:opacity 0.3s;white-space:nowrap;pointer-events:none;';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.style.opacity = '1';
+  setTimeout(() => { el.style.opacity = '0'; }, 2200);
+}
+
+// ── AUTO BULLET (notes-area) ──
+const notesArea = document.getElementById('notes-area');
+
+// 초기값 각 줄 앞에 • 없으면 추가
+function normalizeBullets(text) {
+  return text.split('\n').map(line => {
+    const t = line.trimStart();
+    if (t === '') return '';
+    return t.startsWith('•') ? line : '• ' + t;
+  }).join('\n');
+}
+notesArea.value = normalizeBullets(notesArea.value);
+
+notesArea.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    const el = this;
+    const start = el.selectionStart;
+    const end   = el.selectionEnd;
+    const val   = el.value;
+
+    // 현재 줄이 '• ' 만 있으면 → 불릿 제거 후 줄바꿈 (빈 줄)
+    const lineStart = val.lastIndexOf('\n', start - 1) + 1;
+    const currentLine = val.substring(lineStart, start);
+    if (currentLine.trim() === '•' || currentLine === '• ') {
+      el.value = val.substring(0, lineStart) + '\n' + val.substring(end);
+      el.selectionStart = el.selectionEnd = lineStart + 1;
+      return;
+    }
+
+    // 일반: 줄바꿈 + '• ' 삽입
+    const insert = '\n• ';
+    el.value = val.substring(0, start) + insert + val.substring(end);
+    el.selectionStart = el.selectionEnd = start + insert.length;
+  }
+
+  // Backspace: 커서가 '• ' 바로 뒤면 불릿+공백 함께 삭제
+  if (e.key === 'Backspace') {
+    const el = this;
+    const start = el.selectionStart;
+    const val   = el.value;
+    if (el.selectionStart === el.selectionEnd) {
+      const lineStart = val.lastIndexOf('\n', start - 1) + 1;
+      const currentLine = val.substring(lineStart, start);
+      if (currentLine === '• ') {
+        e.preventDefault();
+        el.value = val.substring(0, lineStart > 0 ? lineStart - 1 : 0) + val.substring(start);
+        const pos = lineStart > 0 ? lineStart - 1 : 0;
+        el.selectionStart = el.selectionEnd = pos;
+      }
+    }
+  }
+});
+
+// 붙여넣기 시에도 각 줄에 • 붙이기
+notesArea.addEventListener('paste', function(e) {
+  e.preventDefault();
+  const pasted = (e.clipboardData || window.clipboardData).getData('text');
+  const el = this;
+  const start = el.selectionStart;
+  const end   = el.selectionEnd;
+  const lines = pasted.split('\n').map(l => {
+    const t = l.trimStart();
+    if (t === '') return '';
+    return t.startsWith('•') ? l : '• ' + t;
+  }).join('\n');
+  el.value = el.value.substring(0, start) + lines + el.value.substring(end);
+  el.selectionStart = el.selectionEnd = start + lines.length;
+});
+
+// ── INIT ──
+renderEvents();
+renderAgenda();
+renderRoles();
+</script>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<script src="sync-config.js"></script>
+<script src="sports-sync.js"></script>
+</body>
+</html>
