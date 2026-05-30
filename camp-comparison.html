@@ -35,7 +35,7 @@
     font-family: 'Noto Sans KR', sans-serif;
     background: var(--bg);
     color: var(--text);
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1.6;
   }
 
@@ -67,7 +67,7 @@
     margin-top: 14px;
   }
 
-  .container { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
+  .container { max-width: 100%; margin: 0 auto; padding: 30px 48px; }
 
   /* NOTICE BOX */
   .notice {
@@ -400,6 +400,46 @@
   /* HIGHLIGHT BEST */
   .best-val { color: var(--accent3); font-weight: 700; }
   .worst-val { color: var(--warn); font-weight: 600; }
+
+  /* =====================
+     데스크탑 최적화 (≥769px)
+  ===================== */
+  @media (min-width: 769px) {
+    body { font-size: 16px; }
+    .doc-header { padding: 44px 48px 34px; }
+    .doc-title { font-size: 30px; }
+    .doc-sub { font-size: 16px; }
+    .section-title { font-size: 20px; margin-bottom: 24px; padding-bottom: 10px; }
+    .camp-name { font-size: 17px; }
+    .camp-org { font-size: 13px; }
+    .camp-info-row { font-size: 14px; }
+    .info-label { font-size: 13px; min-width: 60px; }
+    .info-value { font-size: 14px; }
+    .price-badge { font-size: 15px; padding: 3px 10px; }
+    .tag { font-size: 12px; padding: 3px 9px; }
+    .compare-table { font-size: 15px; }
+    .compare-table th { padding: 13px 18px; font-size: 14px; }
+    .compare-table th.row-head { width: 150px; }
+    .compare-table td { padding: 11px 16px; font-size: 14px; }
+    .score-table { font-size: 15px; }
+    .score-table th, .score-table td { padding: 11px 18px; font-size: 14px; }
+    .travel-card-header { font-size: 15px; padding: 12px 18px; }
+    .travel-card-body { padding: 14px 18px; font-size: 14px; }
+    .travel-label { font-size: 13px; }
+    .pros-cons-header { font-size: 15px; padding: 12px 18px; }
+    .pros-list li, .cons-list li { font-size: 14px; padding: 7px 0 7px 24px; }
+    .rec-title { font-size: 20px; }
+    .rec-condition { font-size: 13px; }
+    .rec-pick { font-size: 16px; }
+    .rec-reason { font-size: 13px; }
+    .q-list li { font-size: 15px; }
+    .notice { font-size: 15px; padding: 16px 22px; }
+    .camp-card-body { padding: 16px 18px; }
+    .camp-card-header { padding: 18px 18px 14px; }
+    .recommendation { padding: 28px 36px; }
+    .question-box { padding: 22px 28px; }
+    .doc-footer { font-size: 13px; padding: 24px; }
+  }
 
   @media print {
     body { background: white; }
