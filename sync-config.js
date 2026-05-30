@@ -1,17 +1,13 @@
-// 별도 Firebase Realtime Database를 만들면 아래 값을 채우세요.
-// 비워두면 체육대회 자료는 현재 브라우저에만 로컬 저장됩니다.
-window.SPORTS_SYNC_CONFIG = null;
-
-// 예시:
-// window.SPORTS_SYNC_CONFIG = {
-//   firebase: {
-//     apiKey: "YOUR_API_KEY",
-//     authDomain: "YOUR_PROJECT.firebaseapp.com",
-//     databaseURL: "https://YOUR_PROJECT-default-rtdb.asia-southeast1.firebasedatabase.app",
-//     projectId: "YOUR_PROJECT",
-//     appId: "YOUR_APP_ID"
-//   },
-//   path: "sportsMeeting2026",
-//   userName: "체육팀",
-//   enablePresence: true
-// };
+window.SPORTS_SYNC_CONFIG = {
+  firebase: {
+    apiKey: "AIzaSyBX3ChO790OvmxE9BFcyRnpXTHIDM-6nmE",
+    authDomain: "yc-young-2026-sync.firebaseapp.com",
+    databaseURL: "https://yc-young-2026-sync-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "yc-young-2026-sync",
+    appId: "1:326235365797:web:ff515835212913dc3f084c",
+    messagingSenderId: "326235365797",
+    storageBucket: "yc-young-2026-sync.firebasestorage.app"
+  },
+  path: "sportsMeeting2026",
+  enablePresence: true
+};
