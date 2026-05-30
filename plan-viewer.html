@@ -75,11 +75,40 @@
     padding: 18px;
   }
   .viewer {
-    width: 100%;
-    height: calc(100vh - 103px);
+    min-height: calc(100vh - 103px);
     border: 1px solid var(--line);
     border-radius: 8px;
+    background: #efe8dc;
+    padding: 18px;
+  }
+  .viewer-status {
+    padding: 24px 18px;
+    color: var(--muted);
+    font-size: 14px;
+    text-align: center;
+  }
+  .page-stack {
+    display: grid;
+    gap: 18px;
+  }
+  .page-card {
     background: var(--paper);
+    border-radius: 6px;
+    box-shadow: 0 6px 20px rgba(31, 31, 31, 0.08);
+    overflow: hidden;
+  }
+  .page-canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .viewer-fallback {
+    margin-top: 14px;
+    text-align: center;
+  }
+  .viewer-fallback a {
+    color: var(--accent);
+    font-weight: 700;
   }
   @media (max-width: 720px) {
     .topbar {
@@ -87,7 +116,8 @@
       flex-direction: column;
     }
     .viewer {
-      height: calc(100vh - 162px);
+      min-height: calc(100vh - 162px);
+      padding: 12px;
     }
   }
 </style>
@@ -105,12 +135,70 @@
       </div>
     </div>
     <div class="viewer-wrap">
-      <iframe
-        class="viewer"
-        src="2026-middle-high-plan.pdf"
-        title="중고등부 계획서 PDF"
-      ></iframe>
+      <div class="viewer" id="viewer">
+        <div class="viewer-status" id="viewer-status">계획서를 불러오는 중입니다.</div>
+        <div class="page-stack" id="page-stack"></div>
+        <div class="viewer-fallback" id="viewer-fallback" hidden>
+          <a href="2026-middle-high-plan.pdf" target="_blank" rel="noreferrer">PDF 직접 열기</a>
+        </div>
+      </div>
     </div>
   </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs" type="module"></script>
+  <script type="module">
+    import * as pdfjsLib from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs';
+
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs';
+
+    const pdfUrl = '2026-middle-high-plan.pdf';
+    const statusEl = document.getElementById('viewer-status');
+    const stackEl = document.getElementById('page-stack');
+    const fallbackEl = document.getElementById('viewer-fallback');
+
+    function showError() {
+      statusEl.textContent = '브라우저 안에서 바로 보여주지 못했습니다.';
+      fallbackEl.hidden = false;
+    }
+
+    async function renderPage(pdf, pageNumber) {
+      const page = await pdf.getPage(pageNumber);
+      const baseViewport = page.getViewport({ scale: 1 });
+      const containerWidth = stackEl.clientWidth || 900;
+      const scale = Math.min(2, containerWidth / baseViewport.width);
+      const viewport = page.getViewport({ scale });
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+
+      canvas.width = Math.floor(viewport.width);
+      canvas.height = Math.floor(viewport.height);
+      canvas.className = 'page-canvas';
+
+      const card = document.createElement('div');
+      card.className = 'page-card';
+      card.appendChild(canvas);
+      stackEl.appendChild(card);
+
+      await page.render({
+        canvasContext: context,
+        viewport
+      }).promise;
+    }
+
+    async function boot() {
+      try {
+        const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
+        statusEl.hidden = true;
+        for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
+          await renderPage(pdf, pageNumber);
+        }
+      } catch (error) {
+        console.error(error);
+        showError();
+      }
+    }
+
+    boot();
+  </script>
 </body>
 </html>
