@@ -97,13 +97,12 @@
     gap: 10px;
   }
   .recent-item {
-    display: block;
+    display: grid;
+    gap: 12px;
     padding: 16px 18px;
     border: 1px solid var(--line);
     border-radius: 8px;
     background: #fff;
-    color: inherit;
-    text-decoration: none;
   }
   .recent-item-title {
     font-size: 16px;
@@ -111,9 +110,41 @@
     color: var(--text);
   }
   .recent-item-meta {
-    margin-top: 6px;
     font-size: 13px;
     color: var(--muted);
+  }
+  .recent-item-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .recent-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 36px;
+    padding: 0 12px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .recent-btn.restore {
+    background: #f3faf7;
+    color: #1a6b3c;
+    border-color: #cfe6d8;
+  }
+  .recent-btn.danger {
+    background: #fff4f4;
+    color: #b14444;
+    border-color: #efd0d0;
+  }
+  .trash-section {
+    margin-top: 18px;
   }
   .recent-empty {
     padding: 20px 18px;
@@ -172,6 +203,14 @@
         <div class="recent-list" id="recent-list">
           <div class="recent-empty">최근 회의자료를 불러오는 중입니다.</div>
         </div>
+        <div class="trash-section">
+          <div class="section-head">
+            <h2 class="section-title">휴지통</h2>
+          </div>
+          <div class="recent-list" id="trash-list">
+            <div class="recent-empty">휴지통을 불러오는 중입니다.</div>
+          </div>
+        </div>
       </section>
     </div>
   </main>
@@ -180,22 +219,40 @@
   <script src="sync-config.js"></script>
   <script>
     const recentList = document.getElementById('recent-list');
+    const trashList = document.getElementById('trash-list');
+    let docsRef = null;
 
-    function renderRecent(items) {
+    function renderList(targetEl, items, emptyText, isTrash) {
       if (!items.length) {
-        recentList.innerHTML = '<div class="recent-empty">아직 작성된 일반 회의자료가 없습니다.</div>';
+        targetEl.innerHTML = '<div class="recent-empty">' + emptyText + '</div>';
         return;
       }
 
-      recentList.innerHTML = items.map(function (item) {
+      targetEl.innerHTML = items.map(function (item) {
         const title = item.title && item.title.trim() ? item.title.trim() : '제목 없음';
+        const openButton = !isTrash
+          ? '<a class="recent-btn" href="meeting-editor.html?id=' + item.id + '">다시 열기</a>'
+          : '';
+        const trashButton = !isTrash
+          ? '<button class="recent-btn danger" type="button" data-action="trash" data-id="' + item.id + '">휴지통</button>'
+          : '<button class="recent-btn restore" type="button" data-action="restore" data-id="' + item.id + '">복구</button>' +
+            '<button class="recent-btn danger" type="button" data-action="purge" data-id="' + item.id + '">완전 삭제</button>';
         return `
-          <a class="recent-item" href="meeting-editor.html?id=${item.id}">
+          <article class="recent-item">
             <div class="recent-item-title">${title}</div>
-            <div class="recent-item-meta">${formatDate(item.updatedAt)} · 다시 열기</div>
-          </a>
+            <div class="recent-item-meta">${formatDate(item.updatedAt)}</div>
+            <div class="recent-item-actions">${openButton}${trashButton}</div>
+          </article>
         `;
       }).join('');
+    }
+
+    function renderRecent(items) {
+      renderList(recentList, items, '아직 작성된 일반 회의자료가 없습니다.', false);
+    }
+
+    function renderTrash(items) {
+      renderList(trashList, items, '휴지통이 비어 있습니다.', true);
     }
 
     function formatDate(value) {
@@ -214,9 +271,44 @@
       return !title && !text;
     }
 
+    function moveToTrash(id) {
+      if (!docsRef) return;
+      docsRef.child(id).update({
+        deletedAt: firebase.database.ServerValue.TIMESTAMP
+      });
+    }
+
+    function restoreFromTrash(id) {
+      if (!docsRef) return;
+      docsRef.child(id).update({
+        deletedAt: null
+      });
+    }
+
+    function purgeDocument(id) {
+      if (!docsRef) return;
+      docsRef.child(id).remove();
+    }
+
+    function attachListActions() {
+      document.addEventListener('click', function (event) {
+        const button = event.target.closest('[data-action]');
+        if (!button) return;
+
+        const action = button.dataset.action;
+        const id = button.dataset.id;
+        if (!id) return;
+
+        if (action === 'trash') moveToTrash(id);
+        if (action === 'restore') restoreFromTrash(id);
+        if (action === 'purge') purgeDocument(id);
+      });
+    }
+
     function bootRecentDocs() {
       if (!window.SPORTS_SYNC_CONFIG || !window.SPORTS_SYNC_CONFIG.firebase) {
         renderRecent([]);
+        renderTrash([]);
         return;
       }
 
@@ -224,9 +316,10 @@
         firebase.initializeApp(window.SPORTS_SYNC_CONFIG.firebase);
       }
 
-      firebase.database().ref('meetingDocuments').on('value', function (snap) {
+      docsRef = firebase.database().ref('meetingDocuments');
+
+      docsRef.on('value', function (snap) {
         const value = snap.val() || {};
-        const docsRef = firebase.database().ref('meetingDocuments');
         const items = Object.keys(value).map(function (id) {
           return Object.assign({ id: id }, value[id]);
         });
@@ -234,17 +327,25 @@
           docsRef.child(item.id).remove();
         });
         const visibleItems = items.filter(function (item) {
-          return !isBlankDocument(item);
+          return !isBlankDocument(item) && !item.deletedAt;
         }).sort(function (a, b) {
           return (b.updatedAt || 0) - (a.updatedAt || 0);
         }).slice(0, 8);
+        const trashedItems = items.filter(function (item) {
+          return !isBlankDocument(item) && !!item.deletedAt;
+        }).sort(function (a, b) {
+          return (b.deletedAt || 0) - (a.deletedAt || 0);
+        }).slice(0, 8);
 
         renderRecent(visibleItems);
+        renderTrash(trashedItems);
       }, function () {
         recentList.innerHTML = '<div class="recent-empty">최근 회의자료를 불러오지 못했습니다.</div>';
+        trashList.innerHTML = '<div class="recent-empty">휴지통을 불러오지 못했습니다.</div>';
       });
     }
 
+    attachListActions();
     bootRecentDocs();
   </script>
 </body>
