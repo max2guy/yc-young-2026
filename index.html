@@ -206,6 +206,30 @@
   .trash-wrap.open {
     display: block;
   }
+  .backup-section {
+    margin-top: 18px;
+  }
+  .backup-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 0 14px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .backup-wrap {
+    display: none;
+    margin-top: 12px;
+  }
+  .backup-wrap.open {
+    display: block;
+  }
   .backup-panel {
     padding: 16px 18px;
     border: 1px solid var(--line);
@@ -385,13 +409,18 @@
         </div>
       </section>
       <section class="section">
-        <div class="section-head">
-          <h2 class="section-title">백업</h2>
-        </div>
-        <div class="backup-panel">
-          <div class="backup-actions">
-            <button class="backup-btn" type="button" id="backup-download-btn">전체 백업 ZIP 다운로드</button>
-            <div class="backup-status" id="backup-status">사이트 파일과 회의 데이터를 함께 저장합니다.</div>
+        <div class="backup-section">
+          <div class="section-head">
+            <h2 class="section-title">백업</h2>
+            <button class="backup-toggle" type="button" id="backup-toggle">백업 보기</button>
+          </div>
+          <div class="backup-wrap" id="backup-wrap">
+            <div class="backup-panel">
+              <div class="backup-actions">
+                <button class="backup-btn" type="button" id="backup-download-btn">전체 백업 ZIP 다운로드</button>
+                <div class="backup-status" id="backup-status">사이트 파일과 회의 데이터를 함께 저장합니다.</div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -418,6 +447,8 @@
     const trashList = document.getElementById('trash-list');
     const trashWrap = document.getElementById('trash-wrap');
     const trashToggle = document.getElementById('trash-toggle');
+    const backupWrap = document.getElementById('backup-wrap');
+    const backupToggle = document.getElementById('backup-toggle');
     const purgeModal = document.getElementById('purge-modal');
     const purgeNameInput = document.getElementById('purge-name-input');
     const purgeError = document.getElementById('purge-error');
@@ -832,6 +863,11 @@ node_modules/
         const willOpen = !trashWrap.classList.contains('open');
         trashWrap.classList.toggle('open', willOpen);
         trashToggle.textContent = willOpen ? '휴지통 닫기' : '휴지통 보기';
+      });
+      backupToggle.addEventListener('click', function () {
+        const willOpen = !backupWrap.classList.contains('open');
+        backupWrap.classList.toggle('open', willOpen);
+        backupToggle.textContent = willOpen ? '백업 닫기' : '백업 보기';
       });
       backupDownloadBtn.addEventListener('click', downloadBackup);
     }
