@@ -11,6 +11,12 @@
           ".write": true
         }
       }
+    },
+    "meetingDocuments": {
+      ".read": true,
+      "$documentId": {
+        ".write": true
+      }
     }
   }
 }
