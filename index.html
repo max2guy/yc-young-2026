@@ -143,7 +143,7 @@
   <main>
     <div class="wrap">
       <div class="grid">
-        <a class="card meeting" href="meeting-editor.html">
+        <a class="card meeting" href="meeting-editor.html?new=1">
           <span class="tag">일반 회의</span>
           <h2>새 회의자료 작성</h2>
           <div class="meta">열기 →</div>
@@ -167,7 +167,7 @@
       <section class="section">
         <div class="section-head">
           <h2 class="section-title">최근 회의자료</h2>
-          <a class="section-action" href="meeting-editor.html">새 문서</a>
+          <a class="section-action" href="meeting-editor.html?new=1">새 문서</a>
         </div>
         <div class="recent-list" id="recent-list">
           <div class="recent-empty">최근 회의자료를 불러오는 중입니다.</div>
@@ -208,6 +208,12 @@
         String(date.getMinutes()).padStart(2, '0');
     }
 
+    function isBlankDocument(item) {
+      const title = item.title && item.title.trim();
+      const text = item.contentText && item.contentText.trim();
+      return !title && !text;
+    }
+
     function bootRecentDocs() {
       if (!window.SPORTS_SYNC_CONFIG || !window.SPORTS_SYNC_CONFIG.firebase) {
         renderRecent([]);
@@ -220,13 +226,20 @@
 
       firebase.database().ref('meetingDocuments').on('value', function (snap) {
         const value = snap.val() || {};
+        const docsRef = firebase.database().ref('meetingDocuments');
         const items = Object.keys(value).map(function (id) {
           return Object.assign({ id: id }, value[id]);
+        });
+        items.filter(isBlankDocument).forEach(function (item) {
+          docsRef.child(item.id).remove();
+        });
+        const visibleItems = items.filter(function (item) {
+          return !isBlankDocument(item);
         }).sort(function (a, b) {
           return (b.updatedAt || 0) - (a.updatedAt || 0);
         }).slice(0, 8);
 
-        renderRecent(items);
+        renderRecent(visibleItems);
       }, function () {
         recentList.innerHTML = '<div class="recent-empty">최근 회의자료를 불러오지 못했습니다.</div>';
       });
