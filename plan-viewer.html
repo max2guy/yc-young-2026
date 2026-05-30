@@ -97,17 +97,17 @@
     box-shadow: 0 6px 20px rgba(31, 31, 31, 0.08);
     overflow: hidden;
   }
-  .page-canvas {
+  .page-image {
     display: block;
     width: 100%;
     height: auto;
   }
-  .viewer-fallback {
-    margin-top: 14px;
-    text-align: center;
-  }
-  .viewer-fallback a {
-    color: var(--accent);
+  .page-label {
+    padding: 10px 14px;
+    border-top: 1px solid #ece5d9;
+    background: #fcfaf6;
+    color: var(--muted);
+    font-size: 13px;
     font-weight: 700;
   }
   @media (max-width: 720px) {
@@ -136,69 +136,43 @@
     </div>
     <div class="viewer-wrap">
       <div class="viewer" id="viewer">
-        <div class="viewer-status" id="viewer-status">계획서를 불러오는 중입니다.</div>
-        <div class="page-stack" id="page-stack"></div>
-        <div class="viewer-fallback" id="viewer-fallback" hidden>
-          <a href="2026-middle-high-plan.pdf" target="_blank" rel="noreferrer">PDF 직접 열기</a>
+        <div class="viewer-status" id="viewer-status" hidden>이미지를 불러오는 중입니다.</div>
+        <div class="page-stack">
+          <figure class="page-card">
+            <img class="page-image" src="plan-page-01.jpeg" alt="중고등부 계획서 1페이지" loading="eager">
+            <figcaption class="page-label">1 / 8</figcaption>
+          </figure>
+          <figure class="page-card">
+            <img class="page-image" src="plan-page-02.jpeg" alt="중고등부 계획서 2페이지" loading="lazy">
+            <figcaption class="page-label">2 / 8</figcaption>
+          </figure>
+          <figure class="page-card">
+            <img class="page-image" src="plan-page-03.jpeg" alt="중고등부 계획서 3페이지" loading="lazy">
+            <figcaption class="page-label">3 / 8</figcaption>
+          </figure>
+          <figure class="page-card">
+            <img class="page-image" src="plan-page-04.jpeg" alt="중고등부 계획서 4페이지" loading="lazy">
+            <figcaption class="page-label">4 / 8</figcaption>
+          </figure>
+          <figure class="page-card">
+            <img class="page-image" src="plan-page-05.jpeg" alt="중고등부 계획서 5페이지" loading="lazy">
+            <figcaption class="page-label">5 / 8</figcaption>
+          </figure>
+          <figure class="page-card">
+            <img class="page-image" src="plan-page-06.jpeg" alt="중고등부 계획서 6페이지" loading="lazy">
+            <figcaption class="page-label">6 / 8</figcaption>
+          </figure>
+          <figure class="page-card">
+            <img class="page-image" src="plan-page-07.jpeg" alt="중고등부 계획서 7페이지" loading="lazy">
+            <figcaption class="page-label">7 / 8</figcaption>
+          </figure>
+          <figure class="page-card">
+            <img class="page-image" src="plan-page-08.jpeg" alt="중고등부 계획서 8페이지" loading="lazy">
+            <figcaption class="page-label">8 / 8</figcaption>
+          </figure>
         </div>
       </div>
     </div>
   </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs" type="module"></script>
-  <script type="module">
-    import * as pdfjsLib from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs';
-
-    pdfjsLib.GlobalWorkerOptions.workerSrc =
-      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs';
-
-    const pdfUrl = '2026-middle-high-plan.pdf';
-    const statusEl = document.getElementById('viewer-status');
-    const stackEl = document.getElementById('page-stack');
-    const fallbackEl = document.getElementById('viewer-fallback');
-
-    function showError() {
-      statusEl.textContent = '브라우저 안에서 바로 보여주지 못했습니다.';
-      fallbackEl.hidden = false;
-    }
-
-    async function renderPage(pdf, pageNumber) {
-      const page = await pdf.getPage(pageNumber);
-      const baseViewport = page.getViewport({ scale: 1 });
-      const containerWidth = stackEl.clientWidth || 900;
-      const scale = Math.min(2, containerWidth / baseViewport.width);
-      const viewport = page.getViewport({ scale });
-      const canvas = document.createElement('canvas');
-      const context = canvas.getContext('2d');
-
-      canvas.width = Math.floor(viewport.width);
-      canvas.height = Math.floor(viewport.height);
-      canvas.className = 'page-canvas';
-
-      const card = document.createElement('div');
-      card.className = 'page-card';
-      card.appendChild(canvas);
-      stackEl.appendChild(card);
-
-      await page.render({
-        canvasContext: context,
-        viewport
-      }).promise;
-    }
-
-    async function boot() {
-      try {
-        const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
-        statusEl.hidden = true;
-        for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
-          await renderPage(pdf, pageNumber);
-        }
-      } catch (error) {
-        console.error(error);
-        showError();
-      }
-    }
-
-    boot();
-  </script>
 </body>
 </html>
