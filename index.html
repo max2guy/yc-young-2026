@@ -206,6 +206,41 @@
   .trash-wrap.open {
     display: block;
   }
+  .backup-panel {
+    padding: 16px 18px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fff;
+  }
+  .backup-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .backup-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 0 14px;
+    border-radius: 8px;
+    border: 1px solid #1f514d;
+    background: #1f514d;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .backup-btn[disabled] {
+    opacity: 0.6;
+    cursor: wait;
+  }
+  .backup-status {
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+  }
   .recent-empty {
     padding: 20px 18px;
     border: 1px dashed var(--line);
@@ -349,6 +384,17 @@
           </div>
         </div>
       </section>
+      <section class="section">
+        <div class="section-head">
+          <h2 class="section-title">백업</h2>
+        </div>
+        <div class="backup-panel">
+          <div class="backup-actions">
+            <button class="backup-btn" type="button" id="backup-download-btn">전체 백업 다운로드</button>
+            <div class="backup-status" id="backup-status">회의자료와 체육대회 자료를 한 파일로 저장합니다.</div>
+          </div>
+        </div>
+      </section>
     </div>
   </main>
   <div class="modal-overlay" id="purge-modal">
@@ -376,9 +422,12 @@
     const purgeError = document.getElementById('purge-error');
     const purgeCancelBtn = document.getElementById('purge-cancel-btn');
     const purgeConfirmBtn = document.getElementById('purge-confirm-btn');
+    const backupDownloadBtn = document.getElementById('backup-download-btn');
+    const backupStatus = document.getElementById('backup-status');
     const allowedPurgeNames = ['김우중', '이지현', '손정숙', '김명옥', '라규미', '정혜정', '안준용', '유다희'];
     let docsRef = null;
     let auditRef = null;
+    let sportsRef = null;
     let docsCache = {};
     let purgeTargetId = null;
 
@@ -438,6 +487,34 @@
         String(date.getMinutes()).padStart(2, '0');
     }
 
+    function fileStamp() {
+      const date = new Date();
+      return String(date.getFullYear()) +
+        String(date.getMonth() + 1).padStart(2, '0') +
+        String(date.getDate()).padStart(2, '0') + '-' +
+        String(date.getHours()).padStart(2, '0') +
+        String(date.getMinutes()).padStart(2, '0') +
+        String(date.getSeconds()).padStart(2, '0');
+    }
+
+    function setBackupStatus(text) {
+      backupStatus.textContent = text;
+    }
+
+    function downloadJsonFile(filename, payload) {
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(function () {
+        URL.revokeObjectURL(url);
+      }, 1000);
+    }
+
     function isBlankDocument(item) {
       const title = item.title && item.title.trim();
       const text = item.contentText && item.contentText.trim();
@@ -492,6 +569,36 @@
         closePurgeModal();
       }).catch(function () {
         purgeError.textContent = '완전 삭제 처리 중 문제가 생겼습니다.';
+      });
+    }
+
+    function downloadBackup() {
+      if (!docsRef || !auditRef || !sportsRef) {
+        setBackupStatus('백업 준비가 아직 끝나지 않았습니다.');
+        return;
+      }
+
+      backupDownloadBtn.disabled = true;
+      setBackupStatus('백업 파일을 준비하는 중입니다...');
+
+      Promise.all([
+        docsRef.once('value'),
+        auditRef.once('value'),
+        sportsRef.once('value')
+      ]).then(function (results) {
+        const payload = {
+          exportedAt: new Date().toISOString(),
+          source: 'yc-young-2026',
+          meetingDocuments: results[0].val() || {},
+          deletedMeetingDocumentsAudit: results[1].val() || {},
+          sportsMeeting: results[2].val() || {}
+        };
+        downloadJsonFile('yc-young-2026-backup-' + fileStamp() + '.json', payload);
+        setBackupStatus('백업 파일을 다운로드했습니다.');
+      }).catch(function () {
+        setBackupStatus('백업 파일을 만들지 못했습니다.');
+      }).finally(function () {
+        backupDownloadBtn.disabled = false;
       });
     }
 
@@ -554,12 +661,15 @@
         trashWrap.classList.toggle('open', willOpen);
         trashToggle.textContent = willOpen ? '휴지통 닫기' : '휴지통 보기';
       });
+      backupDownloadBtn.addEventListener('click', downloadBackup);
     }
 
     function bootRecentDocs() {
       if (!window.SPORTS_SYNC_CONFIG || !window.SPORTS_SYNC_CONFIG.firebase) {
         renderRecent([]);
         renderTrash([]);
+        backupDownloadBtn.disabled = true;
+        setBackupStatus('Firebase 연결이 없어 백업을 만들 수 없습니다.');
         return;
       }
 
@@ -569,6 +679,7 @@
 
       docsRef = firebase.database().ref('meetingDocuments');
       auditRef = firebase.database().ref('deletedMeetingDocumentsAudit');
+      sportsRef = firebase.database().ref((window.SPORTS_SYNC_CONFIG && window.SPORTS_SYNC_CONFIG.path) || 'sportsMeeting2026');
 
       docsRef.on('value', function (snap) {
         const value = snap.val() || {};
