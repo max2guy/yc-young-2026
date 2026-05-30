@@ -98,11 +98,20 @@
   }
   .recent-item {
     display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
     gap: 12px;
     padding: 16px 18px;
     border: 1px solid var(--line);
     border-radius: 8px;
     background: #fff;
+    cursor: pointer;
+    position: relative;
+  }
+  .recent-item:hover {
+    border-color: #c5d6cb;
+  }
+  .recent-item-main {
+    min-width: 0;
   }
   .recent-item-title {
     font-size: 16px;
@@ -110,15 +119,46 @@
     color: var(--text);
   }
   .recent-item-meta {
+    margin-top: 6px;
     font-size: 13px;
     color: var(--muted);
   }
-  .recent-item-actions {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
+  .recent-item-menu {
+    position: relative;
+    align-self: start;
   }
-  .recent-btn {
+  .menu-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--text);
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .menu-panel {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 132px;
+    display: none;
+    padding: 8px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 10px 30px rgba(17, 32, 27, 0.16);
+    z-index: 10;
+  }
+  .menu-panel.open {
+    display: grid;
+    gap: 6px;
+  }
+  .menu-item {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -128,23 +168,43 @@
     border: 1px solid var(--line);
     background: #fff;
     color: var(--text);
-    text-decoration: none;
     font-size: 13px;
     font-weight: 700;
     cursor: pointer;
   }
-  .recent-btn.restore {
+  .menu-item.restore {
     background: #f3faf7;
     color: #1a6b3c;
     border-color: #cfe6d8;
   }
-  .recent-btn.danger {
+  .menu-item.danger {
     background: #fff4f4;
     color: #b14444;
     border-color: #efd0d0;
   }
   .trash-section {
     margin-top: 18px;
+  }
+  .trash-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 0 14px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .trash-wrap {
+    display: none;
+    margin-top: 12px;
+  }
+  .trash-wrap.open {
+    display: block;
   }
   .recent-empty {
     padding: 20px 18px;
@@ -182,16 +242,6 @@
     color: var(--muted);
     font-size: 14px;
     margin-bottom: 14px;
-  }
-  .modal-help {
-    margin: 0 0 14px;
-    padding: 12px 14px;
-    border-radius: 10px;
-    background: #f8faf8;
-    border: 1px solid var(--line);
-    color: #44514a;
-    font-size: 13px;
-    line-height: 1.6;
   }
   .modal-input {
     width: 100%;
@@ -290,9 +340,12 @@
         <div class="trash-section">
           <div class="section-head">
             <h2 class="section-title">휴지통</h2>
+            <button class="trash-toggle" type="button" id="trash-toggle">휴지통 보기</button>
           </div>
-          <div class="recent-list" id="trash-list">
-            <div class="recent-empty">휴지통을 불러오는 중입니다.</div>
+          <div class="trash-wrap" id="trash-wrap">
+            <div class="recent-list" id="trash-list">
+              <div class="recent-empty">휴지통을 불러오는 중입니다.</div>
+            </div>
           </div>
         </div>
       </section>
@@ -302,9 +355,6 @@
     <div class="modal-card">
       <h3>완전 삭제</h3>
       <div class="modal-copy">삭제 권한자 이름을 정확히 입력해야 완전 삭제됩니다.</div>
-      <div class="modal-help">
-        삭제 권한자: 김우중, 이지현, 손정숙, 김명옥, 라규미, 정혜정, 안준용, 유다희
-      </div>
       <input class="modal-input" id="purge-name-input" type="text" placeholder="삭제 권한자 이름 입력">
       <div class="modal-error" id="purge-error"></div>
       <div class="modal-actions">
@@ -319,6 +369,8 @@
   <script>
     const recentList = document.getElementById('recent-list');
     const trashList = document.getElementById('trash-list');
+    const trashWrap = document.getElementById('trash-wrap');
+    const trashToggle = document.getElementById('trash-toggle');
     const purgeModal = document.getElementById('purge-modal');
     const purgeNameInput = document.getElementById('purge-name-input');
     const purgeError = document.getElementById('purge-error');
@@ -330,6 +382,15 @@
     let docsCache = {};
     let purgeTargetId = null;
 
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+    }
+
     function renderList(targetEl, items, emptyText, isTrash) {
       if (!items.length) {
         targetEl.innerHTML = '<div class="recent-empty">' + emptyText + '</div>';
@@ -338,18 +399,22 @@
 
       targetEl.innerHTML = items.map(function (item) {
         const title = item.title && item.title.trim() ? item.title.trim() : '제목 없음';
-        const openButton = !isTrash
-          ? '<a class="recent-btn" href="meeting-editor.html?id=' + item.id + '">다시 열기</a>'
-          : '';
-        const trashButton = !isTrash
-          ? '<button class="recent-btn danger" type="button" data-action="trash" data-id="' + item.id + '">휴지통</button>'
-          : '<button class="recent-btn restore" type="button" data-action="restore" data-id="' + item.id + '">복구</button>' +
-            '<button class="recent-btn danger" type="button" data-action="purge" data-id="' + item.id + '">완전 삭제</button>';
+        const menuItems = !isTrash
+          ? '<button class="menu-item danger" type="button" data-action="trash" data-id="' + item.id + '">휴지통</button>'
+          : '<button class="menu-item restore" type="button" data-action="restore" data-id="' + item.id + '">복구</button>' +
+            '<button class="menu-item danger" type="button" data-action="purge" data-id="' + item.id + '">완전 삭제</button>';
         return `
-          <article class="recent-item">
-            <div class="recent-item-title">${title}</div>
-            <div class="recent-item-meta">${formatDate(item.updatedAt)}</div>
-            <div class="recent-item-actions">${openButton}${trashButton}</div>
+          <article class="recent-item" data-open-id="${item.id}">
+            <div class="recent-item-main">
+              <div class="recent-item-title">${escapeHtml(title)}</div>
+              <div class="recent-item-meta">${formatDate(item.updatedAt)}</div>
+            </div>
+            <div class="recent-item-menu">
+              <button class="menu-trigger" type="button" aria-label="문서 메뉴" data-menu-trigger="${item.id}">︙</button>
+              <div class="menu-panel" data-menu-panel="${item.id}">
+                ${menuItems}
+              </div>
+            </div>
           </article>
         `;
       }).join('');
@@ -432,6 +497,20 @@
 
     function attachListActions() {
       document.addEventListener('click', function (event) {
+        const trigger = event.target.closest('[data-menu-trigger]');
+        if (trigger) {
+          const id = trigger.dataset.menuTrigger;
+          const panel = document.querySelector('[data-menu-panel="' + id + '"]');
+          const isOpen = panel && panel.classList.contains('open');
+          document.querySelectorAll('.menu-panel.open').forEach(function (el) {
+            el.classList.remove('open');
+          });
+          if (panel && !isOpen) {
+            panel.classList.add('open');
+          }
+          return;
+        }
+
         const button = event.target.closest('[data-action]');
         if (!button) return;
 
@@ -439,9 +518,27 @@
         const id = button.dataset.id;
         if (!id) return;
 
+        document.querySelectorAll('.menu-panel.open').forEach(function (el) {
+          el.classList.remove('open');
+        });
+
         if (action === 'trash') moveToTrash(id);
         if (action === 'restore') restoreFromTrash(id);
         if (action === 'purge') purgeDocument(id);
+      });
+
+      document.addEventListener('click', function (event) {
+        const item = event.target.closest('[data-open-id]');
+        if (!item) return;
+        if (event.target.closest('.recent-item-menu')) return;
+        window.location.href = 'meeting-editor.html?id=' + item.dataset.openId;
+      });
+
+      document.addEventListener('click', function (event) {
+        if (event.target.closest('.recent-item-menu')) return;
+        document.querySelectorAll('.menu-panel.open').forEach(function (el) {
+          el.classList.remove('open');
+        });
       });
 
       purgeCancelBtn.addEventListener('click', closePurgeModal);
@@ -451,6 +548,11 @@
       });
       purgeNameInput.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') confirmPurge();
+      });
+      trashToggle.addEventListener('click', function () {
+        const willOpen = !trashWrap.classList.contains('open');
+        trashWrap.classList.toggle('open', willOpen);
+        trashToggle.textContent = willOpen ? '휴지통 닫기' : '휴지통 보기';
       });
     }
 
