@@ -5,6 +5,8 @@
 - `camp-comparison.html`: 2026 수련회 비교 분석 자료
 - `sports-sync.js`: 체육대회 자료의 수정 내용을 저장/반영
 - `sync-config.js`: 별도 Firebase Realtime Database 설정 파일. 비워두면 로컬 저장만 동작
+- `firebase-database.rules.json`: 실시간 동기화용 Realtime Database 규칙 예시
+- `FIREBASE_SETUP.md`: Firebase 연결 순서
 - `sync-materials.mjs`: Downloads 폴더의 원본 HTML을 다시 반영
 
 원본 HTML을 고친 뒤에는 아래 명령만 실행하면 됩니다.

@@ -11,5 +11,7 @@ window.SPORTS_SYNC_CONFIG = null;
 //     projectId: "YOUR_PROJECT",
 //     appId: "YOUR_APP_ID"
 //   },
-//   path: "sportsMeeting2026"
+//   path: "sportsMeeting2026",
+//   userName: "체육팀",
+//   enablePresence: true
 // };

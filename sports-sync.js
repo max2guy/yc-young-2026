@@ -3,7 +3,13 @@
   var LOCAL_KEY = 'sportsMeetingLocalState';
   var clientId = localStorage.getItem(CLIENT_KEY);
   var applyingRemote = false;
+  var connected = false;
   var saveTimer = null;
+  var syncBadge = null;
+  var presenceBadge = null;
+  var firebaseRootRef = null;
+  var firebaseStateRef = null;
+  var firebasePresenceRef = null;
 
   if (!clientId) {
     clientId = Date.now().toString(36) + Math.random().toString(36).slice(2);
@@ -33,8 +39,16 @@
       agenda: typeof agenda !== 'undefined' ? agenda : [],
       roles: typeof roles !== 'undefined' ? roles : [],
       updatedAt: Date.now(),
-      updatedBy: clientId
+      updatedBy: clientId,
+      updatedByLabel: getUserLabel()
     };
+  }
+
+  function getUserLabel() {
+    if (window.SPORTS_SYNC_CONFIG && window.SPORTS_SYNC_CONFIG.userName) {
+      return window.SPORTS_SYNC_CONFIG.userName;
+    }
+    return '편집자';
   }
 
   function replaceArray(target, next) {
@@ -79,11 +93,12 @@
     clearTimeout(saveTimer);
     saveTimer = setTimeout(function () {
       var state = collectState();
+      localStorage.setItem(LOCAL_KEY, JSON.stringify(state));
       if (window.sportsMeetingRef) {
+        state.updatedAt = firebase.database.ServerValue.TIMESTAMP;
         window.sportsMeetingRef.set(state);
-        showSyncState('저장됨');
+        showSyncState(connected ? '동기화 저장 중' : '재연결 대기');
       } else {
-        localStorage.setItem(LOCAL_KEY, JSON.stringify(state));
         showSyncState('로컬 저장됨');
       }
     }, 350);
@@ -100,18 +115,62 @@
   }
 
   function showSyncState(text) {
-    var el = document.getElementById('sync-state');
-    if (el) el.textContent = text;
+    if (syncBadge) syncBadge.textContent = text;
+  }
+
+  function showPresenceState(count) {
+    if (!presenceBadge) return;
+    presenceBadge.textContent = count > 0 ? '접속 ' + count + '명' : '접속 없음';
+  }
+
+  function loadLocalState() {
+    try {
+      applyState(JSON.parse(localStorage.getItem(LOCAL_KEY) || 'null'));
+    } catch (_) {}
+  }
+
+  function attachPresence(config) {
+    if (!firebase.database || !firebaseRootRef) return;
+    var infoRef = firebase.database().ref('.info/connected');
+    infoRef.on('value', function (snap) {
+      connected = !!snap.val();
+      showSyncState(connected ? '실시간 연결됨' : '재연결 중');
+      if (!connected) return;
+
+      var currentPresenceRef = firebasePresenceRef.child(clientId);
+      currentPresenceRef.onDisconnect().remove();
+      currentPresenceRef.set({
+        id: clientId,
+        name: getUserLabel(),
+        updatedAt: firebase.database.ServerValue.TIMESTAMP
+      });
+    });
+
+    firebasePresenceRef.on('value', function (snap) {
+      var value = snap.val() || {};
+      showPresenceState(Object.keys(value).length);
+    });
+
+    if (config.enablePresence === false) {
+      showPresenceState(0);
+    }
   }
 
   ready(function () {
     var hint = document.querySelector('.edit-hint');
     if (hint) {
-      var badge = document.createElement('span');
-      badge.id = 'sync-state';
-      badge.textContent = '동기화 준비 중';
-      badge.style.cssText = 'float:right;font-weight:800;color:#1a6b3c;';
-      hint.appendChild(badge);
+      var meta = document.createElement('span');
+      meta.style.cssText = 'float:right;display:flex;gap:10px;align-items:center;font-weight:800;color:#1a6b3c;';
+      syncBadge = document.createElement('span');
+      syncBadge.id = 'sync-state';
+      syncBadge.textContent = '동기화 준비 중';
+      presenceBadge = document.createElement('span');
+      presenceBadge.id = 'presence-state';
+      presenceBadge.style.color = '#6f7f74';
+      presenceBadge.textContent = '로컬 모드';
+      meta.appendChild(syncBadge);
+      meta.appendChild(presenceBadge);
+      hint.appendChild(meta);
     }
 
     ['saveField', 'toggleStatus', 'addEvent', 'saveEv', 'deleteCurrentEv', 'addAgenda', 'saveAg', 'deleteCurrentAg', 'saveRole'].forEach(wrap);
@@ -121,10 +180,9 @@
 
     var config = window.SPORTS_SYNC_CONFIG;
     if (!window.firebase || !firebase.database || !config) {
-      try {
-        applyState(JSON.parse(localStorage.getItem(LOCAL_KEY) || 'null'));
-      } catch (_) {}
+      loadLocalState();
       showSyncState('로컬 저장');
+      showPresenceState(0);
       return;
     }
 
@@ -132,7 +190,13 @@
       firebase.initializeApp(config.firebase);
     }
 
-    window.sportsMeetingRef = firebase.database().ref(config.path || 'sportsMeeting2026');
+    firebaseRootRef = firebase.database().ref(config.path || 'sportsMeeting2026');
+    firebaseStateRef = firebaseRootRef.child('state');
+    firebasePresenceRef = firebaseRootRef.child('presence');
+    window.sportsMeetingRef = firebaseStateRef;
+
+    loadLocalState();
+    attachPresence(config);
 
     window.sportsMeetingRef.on('value', function (snap) {
       var state = snap.val();
@@ -142,7 +206,8 @@
         return;
       }
       if (state.updatedBy !== clientId) applyState(state);
-      showSyncState('동기화됨');
+      localStorage.setItem(LOCAL_KEY, JSON.stringify(state));
+      showSyncState(state.updatedBy === clientId ? '동기화 저장됨' : '원격 변경 반영됨');
     }, function () {
       showSyncState('동기화 오류');
     });

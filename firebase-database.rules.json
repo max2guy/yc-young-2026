@@ -1,0 +1,16 @@
+{
+  "rules": {
+    "sportsMeeting2026": {
+      ".read": true,
+      "state": {
+        ".write": true
+      },
+      "presence": {
+        ".read": true,
+        "$clientId": {
+          ".write": true
+        }
+      }
+    }
+  }
+}
