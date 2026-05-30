@@ -17,6 +17,12 @@
       "$documentId": {
         ".write": true
       }
+    },
+    "deletedMeetingDocumentsAudit": {
+      ".read": true,
+      "$documentId": {
+        ".write": true
+      }
     }
   }
 }
