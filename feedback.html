@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="format-detection" content="telephone=no">
+<title>2026 연합 체육대회 피드백</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --primary:#1A3A5C;--primary-light:#E6F1FB;--primary-mid:#185FA5;
+  --accent:#0F6E56;--text:#1a1a1a;--text-muted:#666;
+  --border:#dde3ea;--bg:#f7f9fc;--white:#fff;--radius:10px;
+}
+body{font-family:'Apple SD Gothic Neo','Malgun Gothic','맑은 고딕',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.6;-webkit-text-size-adjust:100%;touch-action:manipulation}
+.wrap{max-width:600px;margin:0 auto;padding:24px 16px 60px}
+.site-header{background:var(--primary);color:#fff;padding:18px 20px;border-radius:var(--radius) var(--radius) 0 0;text-align:center}
+.site-header .church{font-size:12px;opacity:.75;margin-bottom:4px;letter-spacing:.05em}
+.site-header h1{font-size:18px;font-weight:600;line-height:1.4}
+.site-header .meta{font-size:12px;opacity:.65;margin-top:6px}
+.progress-wrap{background:var(--white);padding:12px 16px;border-left:1px solid var(--border);border-right:1px solid var(--border)}
+.progress-bar{height:5px;background:#dde3ea;border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:var(--primary-mid);border-radius:3px;transition:width .4s ease}
+.progress-text{font-size:12px;color:var(--text-muted);margin-top:6px;text-align:right}
+.card{background:var(--white);border:1px solid var(--border);padding:20px 16px;border-bottom:none}
+.card:last-of-type{border-bottom:1px solid var(--border);border-radius:0 0 var(--radius) var(--radius)}
+.section-badge{display:inline-block;font-size:11px;font-weight:600;color:var(--primary-mid);background:var(--primary-light);padding:2px 9px;border-radius:20px;margin-bottom:10px}
+.teacher-badge{display:inline-block;font-size:11px;font-weight:600;color:#3B6D11;background:#EAF3DE;padding:2px 9px;border-radius:20px;margin-bottom:10px}
+.q-label{font-size:14px;font-weight:600;color:var(--text);margin-bottom:12px;line-height:1.5}
+.q-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;background:var(--primary);color:#fff;border-radius:50%;font-size:11px;font-weight:700;margin-right:7px;flex-shrink:0;vertical-align:middle}
+.q-num.teacher{background:#3B6D11}
+.options{display:flex;flex-direction:column;gap:7px}
+.opt{display:flex;align-items:center;gap:10px;padding:10px 13px;border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all .15s;font-size:14px;color:var(--text);user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.opt:hover{border-color:var(--primary-mid);background:#f0f6fd}
+.opt.selected{border-color:var(--primary-mid);background:var(--primary-light);color:var(--primary)}
+.opt input{accent-color:var(--primary-mid);width:16px;height:16px;flex-shrink:0;cursor:pointer}
+textarea{width:100%;border:1px solid var(--border);border-radius:8px;padding:11px 13px;font-size:16px;font-family:inherit;color:var(--text);background:var(--white);resize:vertical;min-height:80px;transition:border .15s;-webkit-appearance:none}
+textarea:focus{outline:none;border-color:var(--primary-mid)}
+textarea::placeholder{color:#aaa}
+.etc-input{width:100%;border:1px solid var(--primary-mid);border-radius:8px;padding:9px 13px;font-size:15px;font-family:inherit;color:var(--text);background:#f0f6fd;margin-top:6px;-webkit-appearance:none;outline:none;touch-action:manipulation}
+.etc-input:focus{border-color:var(--primary);background:var(--white)}
+.submit-wrap{margin-top:20px;text-align:center}
+.btn-submit{background:var(--primary);color:#fff;border:none;padding:14px 40px;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;width:100%;transition:background .2s;font-family:inherit;-webkit-tap-highlight-color:transparent;touch-action:manipulation;-webkit-appearance:none}
+.btn-submit:hover{background:#0C447C}
+.btn-submit:disabled{background:#aaa;cursor:not-allowed}
+.done-wrap{text-align:center;padding:50px 20px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius)}
+.done-icon{font-size:56px;margin-bottom:16px}
+.done-wrap h2{font-size:20px;font-weight:600;color:var(--primary);margin-bottom:8px}
+.done-wrap p{font-size:14px;color:var(--text-muted);margin-bottom:24px}
+.btn-again{background:var(--white);color:var(--primary);border:1px solid var(--primary);padding:10px 28px;border-radius:8px;font-size:14px;cursor:pointer;font-family:inherit}
+.admin-link{text-align:center;margin-top:16px}
+.btn-admin{background:none;border:none;font-size:12px;color:#bbb;cursor:pointer;font-family:inherit;text-decoration:underline}
+.pin-wrap{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:40px 20px;text-align:center}
+.pin-wrap h2{font-size:17px;font-weight:600;margin-bottom:6px}
+.pin-wrap p{font-size:13px;color:var(--text-muted);margin-bottom:20px}
+.pin-input{width:140px;text-align:center;font-size:22px;letter-spacing:8px;padding:12px;border:1px solid var(--border);border-radius:8px;font-family:inherit}
+.pin-input:focus{outline:none;border-color:var(--primary-mid)}
+.pin-error{font-size:12px;color:#c0392b;margin-top:8px}
+.pin-btns{display:flex;gap:8px;justify-content:center;margin-top:16px}
+.btn-cancel{padding:10px 20px;border:1px solid var(--border);border-radius:8px;background:var(--white);cursor:pointer;font-size:14px;font-family:inherit}
+.btn-pin-ok{padding:10px 20px;border:none;border-radius:8px;background:var(--primary);color:#fff;cursor:pointer;font-size:14px;font-family:inherit;font-weight:600}
+.dash-header{background:var(--primary);color:#fff;padding:16px 20px;border-radius:var(--radius) var(--radius) 0 0;display:flex;align-items:center;justify-content:space-between}
+.dash-header h2{font-size:16px;font-weight:600}
+.btn-logout{background:rgba(255,255,255,.15);border:none;color:#fff;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:13px;font-family:inherit}
+.dash-body{background:var(--white);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius) var(--radius);padding:20px 16px}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.stat-box{background:var(--bg);border-radius:8px;padding:14px 10px;text-align:center}
+.stat-box .num{font-size:26px;font-weight:700;color:var(--primary)}
+.stat-box .lbl{font-size:11px;color:var(--text-muted);margin-top:2px}
+.tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:16px}
+.tab{padding:9px 16px;font-size:13px;cursor:pointer;color:var(--text-muted);border-bottom:2px solid transparent;margin-bottom:-1px;font-family:inherit;background:none;border-top:none;border-left:none;border-right:none}
+.tab.active{color:var(--primary-mid);border-bottom-color:var(--primary-mid);font-weight:600}
+.section-lbl{font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin:16px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.bar-lbl{font-size:12px;color:var(--text-muted);width:90px;flex-shrink:0;text-align:right}
+.bar-track{flex:1;height:18px;background:var(--bg);border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;background:var(--primary-mid);border-radius:4px;transition:width .5s}
+.bar-fill.green{background:#0F6E56}
+.bar-val{font-size:12px;color:var(--text-muted);width:60px;flex-shrink:0}
+.chart-wrap{position:relative;width:100%;height:220px;margin-bottom:8px}
+.text-answer{background:var(--bg);border-radius:6px;padding:10px 12px;font-size:13px;color:var(--text);margin-bottom:6px;line-height:1.6}
+.no-ans{font-size:13px;color:#bbb;padding:8px 0}
+.raw-item{border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:8px;font-size:13px}
+.raw-item .badge{display:inline-block;background:var(--primary-light);color:var(--primary);font-size:11px;padding:2px 8px;border-radius:20px;margin-bottom:6px;font-weight:600}
+.raw-item .row{display:flex;gap:6px;margin-bottom:3px;color:var(--text-muted)}
+.raw-item .row strong{color:var(--text);min-width:80px;flex-shrink:0}
+
+.btn-report{display:block;width:100%;margin-top:16px;padding:12px;background:#0F6E56;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;-webkit-tap-highlight-color:transparent;}
+.btn-report:hover{background:#085041}
+.btn-report:disabled{background:#aaa;cursor:not-allowed}
+.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.55);z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px}
+.modal-box{background:#fff;border-radius:12px;width:100%;max-width:560px;max-height:88vh;display:flex;flex-direction:column;overflow:hidden}
+.modal-head{background:#1A3A5C;color:#fff;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.modal-head h3{font-size:15px;font-weight:600}
+.modal-close{background:none;border:none;color:#fff;font-size:22px;cursor:pointer;line-height:1;padding:0 4px}
+.modal-body{padding:20px;overflow-y:auto;flex:1;font-size:13px;line-height:1.7;color:#1a1a1a}
+.modal-body .ai-loading{text-align:center;padding:30px 0;color:#666}
+.modal-body .spinner{font-size:28px;display:block;margin-bottom:12px;animation:spin 1.2s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.modal-foot{padding:12px 16px;border-top:1px solid #dde3ea;display:flex;gap:8px;flex-shrink:0}
+.btn-print{flex:1;padding:10px;background:#1A3A5C;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn-modal-close{padding:10px 20px;background:#fff;color:#666;border:1px solid #dde3ea;border-radius:8px;font-size:14px;cursor:pointer;font-family:inherit}
+@media print{.modal-overlay,.dash-header,.tabs,.btn-report{display:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const FB_URL = "https://yc-feedback-43688-default-rtdb.asia-southeast1.firebasedatabase.app";
+const ADMIN_PIN = "6291";
+
+const Q = [
+  {id:"q1",  type:"radio", sec:"기본 정보",
+   text:"나는 누구인가요?",
+   opts:["중학생","고등학생","청년부","교사"]},
+  {id:"q2",  type:"radio", sec:"행사 전반",
+   text:"이번 체육대회에 전반적으로 만족하셨나요?",
+   opts:["매우 만족","만족","보통","불만족","매우 불만족"]},
+  {id:"q3",  type:"radio", sec:"행사 전반",
+   text:"행사 진행이 원활하게 이루어졌다고 생각하나요?",
+   opts:["매우 그렇다","그렇다","보통","그렇지 않다","전혀 그렇지 않다"]},
+  {id:"q4",  type:"check", sec:"종목 및 프로그램", etc:true,
+   text:"가장 재미있었던 종목은 무엇인가요? (중복 선택 가능)",
+   opts:["피구","2인 3각","신발던지기","계주","줄다리기","판 뒤집기","기타"]},
+  {id:"q5",  type:"radio", sec:"종목 및 프로그램",
+   text:"종목 구성이 적절했다고 생각하나요?",
+   opts:["매우 그렇다","그렇다","보통","그렇지 않다","전혀 그렇지 않다"]},
+  {id:"q6",  type:"radio", sec:"교제 및 공동체",
+   text:"이번 행사를 통해 중고등부·청년부 친구들과 더 친해진 것 같나요?",
+   opts:["매우 그렇다","그렇다","보통","그렇지 않다","전혀 그렇지 않다"]},
+  {id:"q7",  type:"radio", sec:"교제 및 공동체",
+   text:"이런 연합 행사가 앞으로도 계속되기를 원하나요?",
+   opts:["매우 원한다","원한다","상관없다","원하지 않는다"]},
+  {id:"qs1", type:"radio", sec:"간식 만족도",
+   text:"간식 1 (수박 · 도너츠)은 어땠나요?",
+   opts:["매우 좋았다","좋았다","보통","아쉬웠다"]},
+  {id:"qs2", type:"radio", sec:"간식 만족도",
+   text:"간식 2 (치킨 · 팥빙수)는 어땠나요?",
+   opts:["매우 좋았다","좋았다","보통","아쉬웠다"]},
+  {id:"qs3", type:"check", sec:"간식 만족도", etc:true,
+   text:"가장 좋았던 간식은 무엇인가요? (중복 선택 가능)",
+   opts:["수박","도너츠","치킨","팥빙수","기타"]},
+  {id:"qs4", type:"text", sec:"간식 만족도",
+   text:"간식에 대한 의견이나 다음에 먹고 싶은 간식이 있다면 적어주세요."},
+  {id:"q8",  type:"radio", sec:"개선 사항",
+   text:"아쉬웠거나 불편했던 점이 있었나요?",
+   opts:["없다","있다"]},
+  {id:"q8b", type:"text",  sec:"개선 사항", cond:{q:"q8",v:"있다"},
+   text:"있다면 어떤 점이 아쉬웠나요?"},
+  {id:"q9",  type:"text",  sec:"개선 사항",
+   text:"다음 행사에 추가되었으면 하는 종목이나 프로그램이 있다면 적어주세요."},
+  {id:"q10", type:"text",  sec:"개선 사항",
+   text:"이번 행사에 대한 자유로운 의견이나 소감을 남겨주세요."},
+  {id:"qt1", type:"text",  sec:"교사 평가", cond:{q:"q1",v:"교사"}, teacher:true,
+   text:"행사에서 잘 진행된 점은 무엇이라고 생각하시나요?"},
+  {id:"qt2", type:"text",  sec:"교사 평가", cond:{q:"q1",v:"교사"}, teacher:true,
+   text:"아쉽거나 잘 되지 않았던 점은 무엇인가요?"},
+  {id:"qt3", type:"text",  sec:"교사 평가", cond:{q:"q1",v:"교사"}, teacher:true,
+   text:"다음 행사를 위해 보완하거나 개선했으면 하는 점을 적어주세요."},
+  {id:"qt4", type:"radio", sec:"교사 평가", cond:{q:"q1",v:"교사"}, teacher:true,
+   text:"학생들의 참여도와 반응은 어떠했나요?",
+   opts:["매우 적극적이었다","적극적이었다","보통이었다","소극적이었다"]},
+  {id:"qt5", type:"radio", sec:"교사 평가", cond:{q:"q1",v:"교사"}, teacher:true,
+   text:"중고등부·청년부 연합 행사 형식이 효과적이었다고 생각하시나요?",
+   opts:["매우 그렇다","그렇다","보통","그렇지 않다"]},
+  {id:"qt6", type:"text",  sec:"교사 평가", cond:{q:"q1",v:"교사"}, teacher:true,
+   text:"교사로서 추가로 건의하고 싶은 사항이 있다면 자유롭게 적어주세요."},
+];
+
+let S = {view:"survey", ans:{}, pin:"", pinErr:false, adminTab:"stats", responses:[], charts:{}};
+
+async function fbGet(){
+  try{
+    const res = await fetch(FB_URL+"/responses.json",{mode:"cors",cache:"no-cache"});
+    const data = await res.json();
+    if(!data) return [];
+    return Object.values(data);
+  }catch(e){ return []; }
+}
+async function fbPost(obj){
+  try{
+    await fetch(FB_URL+"/responses.json",{
+      method:"POST", mode:"cors",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(Object.assign({},obj,{_time:new Date().toLocaleString("ko-KR")}))
+    });
+  }catch(e){}
+}
+
+function pct(n,t){ return t===0?0:Math.round(n/t*100); }
+
+function isVisible(q){
+  if(!q.cond) return true;
+  var cv = S.ans[q.cond.q];
+  return Array.isArray(cv) ? cv.includes(q.cond.v) : cv===q.cond.v;
+}
+
+function renderSurvey(){
+  var visQ = Q.filter(function(q){ return isVisible(q); });
+  var mandatory = visQ.filter(function(q){ return q.type!=="text"; });
+  var done = mandatory.filter(function(q){
+    var a=S.ans[q.id];
+    return a!==undefined && a!=="" && !(Array.isArray(a)&&a.length===0);
+  }).length;
+  var p = pct(done, mandatory.length);
+  var lastSec="", html="";
+
+  html += '<div class="site-header">'
+    + '<div class="church">연천장로교회</div>'
+    + '<h1>2026 중고등부 · 청년부<br>연합 체육대회 피드백</h1>'
+    + '<div class="meta">2026년 6월 7일(주일)</div>'
+    + '</div>'
+    + '<div class="progress-wrap">'
+    + '<div class="progress-bar"><div class="progress-fill" style="width:'+p+'%"></div></div>'
+    + '<div class="progress-text">'+done+' / '+mandatory.length+' 완료</div>'
+    + '</div>';
+
+  Q.forEach(function(q, i){
+    if(!isVisible(q)) return;
+    if(q.sec !== lastSec){
+      if(lastSec) html += '</div>';
+      var badgeClass = q.teacher ? 'teacher-badge' : 'section-badge';
+      html += '<div class="card"><div class="'+badgeClass+'">' + q.sec + (q.teacher?' (교사 전용)':'') + '</div>';
+      lastSec = q.sec;
+    }
+    var numClass = q.teacher ? 'q-num teacher' : 'q-num';
+    html += '<div class="q-block" style="margin-bottom:18px">'
+      + '<div class="q-label"><span class="'+numClass+'">'+(i+1)+'</span>'+q.text+'</div>';
+
+    if(q.type==="radio"){
+      html += '<div class="options">';
+      q.opts.forEach(function(o){
+        var sel = S.ans[q.id]===o;
+        html += '<label class="opt'+(sel?' selected':'')+'"><input type="radio" name="'+q.id+'" value="'+o+'"'+(sel?' checked':'')+'>'+o+'</label>';
+      });
+      html += '</div>';
+    } else if(q.type==="check"){
+      var arr = S.ans[q.id]||[];
+      html += '<div class="options">';
+      q.opts.forEach(function(o){
+        var sel = arr.indexOf(o)>=0;
+        if(o==="기타" && q.etc){
+          var etcVal = S.ans[q.id+"_etc"]||"";
+          html += '<label class="opt'+(sel?' selected':'')+'"><input type="checkbox" name="'+q.id+'" value="기타"'+(sel?' checked':'')+'>기타</label>';
+          if(sel) html += '<input type="text" class="etc-input" name="'+q.id+'_etc" placeholder="직접 입력해 주세요" value="'+etcVal+'" autocomplete="off">';
+        } else {
+          html += '<label class="opt'+(sel?' selected':'')+'"><input type="checkbox" name="'+q.id+'" value="'+o+'"'+(sel?' checked':'')+'>'+o+'</label>';
+        }
+      });
+      html += '</div>';
+    } else {
+      html += '<textarea name="'+q.id+'" placeholder="자유롭게 입력해 주세요.">'+(S.ans[q.id]||'')+'</textarea>';
+    }
+    html += '</div>';
+  });
+  if(lastSec) html += '</div>';
+  html += '<div class="submit-wrap"><button class="btn-submit" id="btn-submit">✓ 제출하기</button></div>'
+    + '<div class="admin-link"><button class="btn-admin" id="btn-admin">관리자</button></div>';
+  return html;
+}
+
+function renderDone(){
+  return '<div class="done-wrap"><div class="done-icon">🎉</div><h2>제출 완료!</h2>'
+    +'<p>소중한 피드백 감사합니다.<br>더 좋은 행사를 만드는 데 사용하겠습니다.</p>'
+    +'<button class="btn-again" id="btn-again">다시 응답하기</button></div>';
+}
+
+function renderPin(){
+  return '<div class="pin-wrap"><h2>🔒 관리자 로그인</h2><p>PIN 번호 4자리를 입력하세요</p>'
+    +'<input class="pin-input" type="password" id="pin-input" maxlength="4" placeholder="••••" value="'+S.pin+'">'
+    +(S.pinErr?'<div class="pin-error">PIN이 올바르지 않습니다.</div>':'')
+    +'<div class="pin-btns"><button class="btn-cancel" id="btn-pin-cancel">취소</button>'
+    +'<button class="btn-pin-ok" id="btn-pin-ok">확인</button></div></div>';
+}
+
+function barRow(label, cnt, total, green){
+  var p = pct(cnt, total||1);
+  return '<div class="bar-row">'
+    +'<div class="bar-lbl">'+label+'</div>'
+    +'<div class="bar-track"><div class="bar-fill'+(green?' green':'')+'" style="width:'+p+'%"></div></div>'
+    +'<div class="bar-val">'+cnt+'명 ('+p+'%)</div></div>';
+}
+function barChart(qid, opts, rs, green){
+  var total = rs.length||1;
+  return opts.map(function(o){
+    return barRow(o, rs.filter(function(r){return r[qid]===o;}).length, total, green);
+  }).join('');
+}
+function checkBarChart(qid, opts, rs, green){
+  var total = rs.length||1;
+  return opts.map(function(o){
+    return barRow(o, rs.filter(function(r){return (r[qid]||[]).indexOf(o)>=0;}).length, total, green);
+  }).join('');
+}
+
+function renderAdmin(){
+  var rs = S.responses;
+  var total = rs.length;
+  var avgSat = total ? (rs.reduce(function(s,r){
+    return s+({"매우 만족":5,"만족":4,"보통":3,"불만족":2,"매우 불만족":1}[r.q2]||0);
+  },0)/total).toFixed(1) : "-";
+  var wantPct = total ? pct(rs.filter(function(r){return r.q7==="매우 원한다"||r.q7==="원한다";}).length, total) : 0;
+
+  var html = '<div class="dash-header"><h2>📊 피드백 통계 대시보드</h2>'
+    +'<button class="btn-logout" id="btn-logout">로그아웃</button></div>'
+    +'<div class="dash-body">'
+    +'<div class="stat-row">'
+    +'<div class="stat-box"><div class="num">'+total+'</div><div class="lbl">총 응답 수</div></div>'
+    +'<div class="stat-box"><div class="num">'+avgSat+'</div><div class="lbl">평균 만족도 /5</div></div>'
+    +'<div class="stat-box"><div class="num">'+wantPct+'%</div><div class="lbl">연합 행사 원함</div></div>'
+    +'</div>'
+    +'<div class="tabs">'
+    +'<button class="tab'+(S.adminTab==="stats"?" active":"")+'" data-tab="stats">통계 차트</button>'
+    +'<button class="tab'+(S.adminTab==="text"?" active":"")+'" data-tab="text">주관식 응답</button>'
+    +'<button class="tab'+(S.adminTab==="raw"?" active":"")+'" data-tab="raw">전체 응답</button>'
+    +'</div>'
+    +(total>0?'<button class="btn-report" id="btn-report">📄 AI 분석 보고서 생성</button>':'');
+
+  if(S.adminTab==="stats"){
+    html += '<div class="section-lbl">응답자 구분</div>'
+      +'<div class="chart-wrap"><canvas id="ch-q1" role="img" aria-label="응답자 구분">응답자 구분</canvas></div>'
+      +'<div class="section-lbl">전반적 만족도</div>'
+      +'<div class="chart-wrap"><canvas id="ch-q2" role="img" aria-label="만족도">만족도</canvas></div>'
+      +'<div class="section-lbl">가장 재미있었던 종목 (복수 선택)</div>'
+      +'<div class="chart-wrap" style="height:260px"><canvas id="ch-q4" role="img" aria-label="종목">종목</canvas></div>'
+      +'<div class="section-lbl">교제 증진</div>'
+      +barChart("q6",["매우 그렇다","그렇다","보통","그렇지 않다","전혀 그렇지 않다"],rs)
+      +'<div class="section-lbl">연합 행사 지속 희망</div>'
+      +barChart("q7",["매우 원한다","원한다","상관없다","원하지 않는다"],rs)
+      +'<div class="section-lbl">간식 1 만족도 — 수박·도너츠</div>'
+      +barChart("qs1",["매우 좋았다","좋았다","보통","아쉬웠다"],rs,true)
+      +'<div class="section-lbl">간식 2 만족도 — 치킨·팥빙수</div>'
+      +barChart("qs2",["매우 좋았다","좋았다","보통","아쉬웠다"],rs,true)
+      +'<div class="section-lbl">가장 좋았던 간식 (복수 선택)</div>'
+      +checkBarChart("qs3",["수박","도너츠","치킨","팥빙수","기타"],rs,true)
+      +'<div class="section-lbl">[교사] 학생 참여도</div>'
+      +barChart("qt4",["매우 적극적이었다","적극적이었다","보통이었다","소극적이었다"],rs)
+      +'<div class="section-lbl">[교사] 연합 행사 효과</div>'
+      +barChart("qt5",["매우 그렇다","그렇다","보통","그렇지 않다"],rs);
+
+  } else if(S.adminTab==="text"){
+    var textQs = [
+      {id:"qs4",lbl:"간식 의견"},
+      {id:"q8b",lbl:"아쉬웠던 점"},
+      {id:"q9", lbl:"추가 희망 종목·프로그램"},
+      {id:"q10",lbl:"자유 소감"},
+      {id:"qt1",lbl:"[교사] 잘된 점"},
+      {id:"qt2",lbl:"[교사] 아쉬운 점"},
+      {id:"qt3",lbl:"[교사] 보완할 점"},
+      {id:"qt6",lbl:"[교사] 건의사항"}
+    ];
+    textQs.forEach(function(tq){
+      var ans = rs.map(function(r){return r[tq.id];}).filter(function(a){return a&&a.trim();});
+      html += '<div class="section-lbl">'+tq.lbl+' ('+ans.length+'건)</div>';
+      html += ans.length ? ans.map(function(a){return '<div class="text-answer">'+a+'</div>';}).join('')
+                        : '<div class="no-ans">응답 없음</div>';
+    });
+
+  } else {
+    if(!total){
+      html += '<div class="no-ans" style="padding:20px 0">아직 응답이 없습니다.</div>';
+    } else {
+      rs.slice().reverse().forEach(function(rr, i){
+        html += '<div class="raw-item">'
+          +'<div class="badge">#'+(rs.length-i)+' · '+(rr.q1||"미선택")+' · '+(rr._time||"")+'</div>'
+          +'<div class="row"><strong>만족도</strong>'+(rr.q2||"-")+'</div>'
+          +'<div class="row"><strong>진행 원활</strong>'+(rr.q3||"-")+'</div>'
+          +'<div class="row"><strong>재미 종목</strong>'+((rr.q4||[]).join(", ")||"-")+'</div>'
+          +'<div class="row"><strong>교제 증진</strong>'+(rr.q6||"-")+'</div>'
+          +'<div class="row"><strong>연합 희망</strong>'+(rr.q7||"-")+'</div>'
+          +'<div class="row"><strong>간식1</strong>'+(rr.qs1||"-")+' / <strong>간식2</strong>'+(rr.qs2||"-")+'</div>'
+          +(rr.qs4?'<div class="row"><strong>간식의견</strong>'+rr.qs4+'</div>':'')
+          +(rr.q10?'<div class="row"><strong>소감</strong>'+rr.q10+'</div>':'')
+          +(rr.qt1?'<div class="row"><strong>[교사]잘된점</strong>'+rr.qt1+'</div>':'')
+          +(rr.qt2?'<div class="row"><strong>[교사]아쉬운점</strong>'+rr.qt2+'</div>':'')
+          +(rr.qt3?'<div class="row"><strong>[교사]보완점</strong>'+rr.qt3+'</div>':'')
+          +(rr.qt6?'<div class="row"><strong>[교사]건의</strong>'+rr.qt6+'</div>':'')
+          +'</div>';
+      });
+    }
+  }
+  html += '</div>';
+  return html;
+}
+
+function buildPrompt(rs){
+  var total = rs.length;
+  if(!total) return null;
+
+  function cnt(qid, val){ return rs.filter(function(r){return r[qid]===val;}).length; }
+  function cntArr(qid, val){ return rs.filter(function(r){return (r[qid]||[]).indexOf(val)>=0;}).length; }
+  function pctS(n){ return Math.round(n/total*100)+'%'; }
+  function textList(qid){ return rs.map(function(r){return r[qid];}).filter(function(a){return a&&a.trim();}); }
+
+  var lines = [];
+  lines.push("아래는 2026년 연천장로교회 중고등부·청년부 연합 체육대회(6월 7일) 피드백 설문 결과입니다.");
+  lines.push("총 응답자 수: "+total+"명");
+  lines.push("");
+  lines.push("=== 객관식 통계 ===");
+  lines.push("[응답자 구분] 중학생:"+cnt("q1","중학생")+" 고등학생:"+cnt("q1","고등학생")+" 청년부:"+cnt("q1","청년부")+" 교사:"+cnt("q1","교사"));
+  lines.push("[전반 만족도] 매우만족:"+cnt("q2","매우 만족")+" 만족:"+cnt("q2","만족")+" 보통:"+cnt("q2","보통")+" 불만족:"+cnt("q2","불만족")+" 매우불만족:"+cnt("q2","매우 불만족"));
+  lines.push("[진행 원활] 매우그렇다:"+cnt("q3","매우 그렇다")+" 그렇다:"+cnt("q3","그렇다")+" 보통:"+cnt("q3","보통")+" 아님:"+cnt("q3","그렇지 않다")+"+"+cnt("q3","전혀 그렇지 않다"));
+  lines.push("[재미종목(복수)] 피구:"+cntArr("q4","피구")+" 2인3각:"+cntArr("q4","2인 3각")+" 신발던지기:"+cntArr("q4","신발던지기")+" 계주:"+cntArr("q4","계주")+" 줄다리기:"+cntArr("q4","줄다리기")+" 판뒤집기:"+cntArr("q4","판 뒤집기")+" 기타:"+cntArr("q4","기타"));
+  lines.push("[종목구성] 매우적절:"+cnt("q5","매우 그렇다")+" 적절:"+cnt("q5","그렇다")+" 보통:"+cnt("q5","보통")+" 부적절:"+cnt("q5","그렇지 않다")+"+"+cnt("q5","전혀 그렇지 않다"));
+  lines.push("[교제증진] 매우그렇다:"+cnt("q6","매우 그렇다")+" 그렇다:"+cnt("q6","그렇다")+" 보통:"+cnt("q6","보통")+" 아님:"+cnt("q6","그렇지 않다")+"+"+cnt("q6","전혀 그렇지 않다"));
+  lines.push("[연합희망] 매우원함:"+cnt("q7","매우 원한다")+" 원함:"+cnt("q7","원한다")+" 상관없음:"+cnt("q7","상관없다")+" 불원:"+cnt("q7","원하지 않는다"));
+  lines.push("[간식1수박도너츠] 매우좋음:"+cnt("qs1","매우 좋았다")+" 좋음:"+cnt("qs1","좋았다")+" 보통:"+cnt("qs1","보통")+" 아쉬움:"+cnt("qs1","아쉬웠다"));
+  lines.push("[간식2치킨팥빙수] 매우좋음:"+cnt("qs2","매우 좋았다")+" 좋음:"+cnt("qs2","좋았다")+" 보통:"+cnt("qs2","보통")+" 아쉬움:"+cnt("qs2","아쉬웠다"));
+  lines.push("[좋은간식(복수)] 수박:"+cntArr("qs3","수박")+" 도너츠:"+cntArr("qs3","도너츠")+" 치킨:"+cntArr("qs3","치킨")+" 팥빙수:"+cntArr("qs3","팥빙수"));
+  lines.push("[교사참여도] 매우적극:"+cnt("qt4","매우 적극적이었다")+" 적극:"+cnt("qt4","적극적이었다")+" 보통:"+cnt("qt4","보통이었다")+" 소극:"+cnt("qt4","소극적이었다"));
+  lines.push("[교사연합효과] 매우그렇다:"+cnt("qt5","매우 그렇다")+" 그렇다:"+cnt("qt5","그렇다")+" 보통:"+cnt("qt5","보통")+" 아님:"+cnt("qt5","그렇지 않다"));
+  lines.push("");
+  lines.push("=== 주관식 응답 원문 ===");
+
+  var textQs = [
+    {id:"qs4", lbl:"간식 의견"},
+    {id:"q8b", lbl:"아쉬웠던 점"},
+    {id:"q9",  lbl:"추가 희망 종목·프로그램"},
+    {id:"q10", lbl:"자유 소감"},
+    {id:"qt1", lbl:"[교사] 잘된 점"},
+    {id:"qt2", lbl:"[교사] 아쉬운 점"},
+    {id:"qt3", lbl:"[교사] 보완할 점"},
+    {id:"qt6", lbl:"[교사] 건의사항"}
+  ];
+  textQs.forEach(function(tq){
+    var answers = textList(tq.id);
+    if(answers.length){
+      lines.push("【"+tq.lbl+"】");
+      answers.forEach(function(a,i){ lines.push((i+1)+". "+a); });
+      lines.push("");
+    }
+  });
+
+  lines.push("=== 작성 지시 ===");
+  lines.push("위 데이터를 바탕으로 한국어로 행사 결과 보고서를 HTML 형식으로 작성해 주세요.");
+  lines.push("보고서 구조:");
+  lines.push("1. 요약 (핵심 수치 3~5개를 강조)");
+  lines.push("2. 객관식 결과 분석 (각 항목별 수치와 간단한 해석)");
+  lines.push("3. 주관식 의견 분석 (비슷한 의견끼리 묶어 카테고리화, 각 카테고리에 몇 명이 해당하는지 표시, 대표 의견 1~2개 인용)");
+  lines.push("4. 교사 평가 요약 (교사 응답자가 있을 경우)");
+  lines.push("5. 종합 제언 (다음 행사를 위한 개선 방향 3~5가지)");
+  lines.push("");
+  lines.push("HTML 출력 규칙:");
+  lines.push("- <body> 태그 안 내용만 출력 (DOCTYPE, html, head 태그 없이)");
+  lines.push("- 인라인 스타일만 사용, 외부 CSS/JS 없음");
+  lines.push("- 색상: 제목 #1A3A5C, 강조 #185FA5, 교사섹션 #0F6E56");
+  lines.push("- 폰트: Apple SD Gothic Neo, 맑은 고딕, sans-serif");
+  lines.push("- 인쇄에 적합한 깔끔한 레이아웃");
+  lines.push("- 마크다운 사용 금지, 순수 HTML만");
+
+  return lines.join("\n");
+}
+
+async function generateReport(){
+  var rs = S.responses;
+  if(!rs.length){ alert("응답 데이터가 없습니다."); return; }
+
+  // 모달 표시
+  var overlay = document.createElement("div");
+  overlay.className = "modal-overlay";
+  overlay.id = "report-modal";
+  overlay.innerHTML =
+    '<div class="modal-box">'
+    +'<div class="modal-head"><h3>📄 AI 분석 보고서</h3><button class="modal-close" id="modal-x">×</button></div>'
+    +'<div class="modal-body" id="modal-body">'
+    +'<div class="ai-loading"><span class="spinner">⏳</span>AI가 응답을 분석 중입니다...<br><small style="color:#aaa;margin-top:8px;display:block">주관식 의견을 분류하고 보고서를 작성하고 있어요 (약 20~40초)</small></div>'
+    +'</div>'
+    +'<div class="modal-foot">'
+    +'<button class="btn-print" id="btn-print" disabled>🖨️ 인쇄 / PDF 저장</button>'
+    +'<button class="btn-modal-close" id="modal-close-btn">닫기</button>'
+    +'</div></div>';
+  document.body.appendChild(overlay);
+
+  document.getElementById("modal-x").onclick = function(){ document.body.removeChild(overlay); };
+  document.getElementById("modal-close-btn").onclick = function(){ document.body.removeChild(overlay); };
+
+  var prompt = buildPrompt(rs);
+
+  try{
+    var res = await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({
+        model:"claude-sonnet-4-6",
+        max_tokens:3000,
+        system:"당신은 교회 청소년 행사 결과 보고서를 작성하는 전문가입니다. 요청된 형식에 맞게 정확하고 읽기 쉬운 HTML 보고서를 작성합니다. HTML body 내용만 출력하고, 마크다운이나 코드블록을 절대 사용하지 않습니다.",
+        messages:[{role:"user", content:prompt}]
+      })
+    });
+    var data = await res.json();
+    var reportHtml = "";
+    if(data.content && data.content[0] && data.content[0].text){
+      reportHtml = data.content[0].text;
+      // 혹시 코드블록이 있으면 제거
+      reportHtml = reportHtml.replace(/```html\n?/gi,"").replace(/```\n?/g,"").trim();
+    } else {
+      reportHtml = "<p style='color:red'>보고서 생성 중 오류가 발생했습니다. 다시 시도해 주세요.</p>";
+    }
+
+    var body = document.getElementById("modal-body");
+    if(body){
+      body.innerHTML = reportHtml;
+      document.getElementById("btn-print").disabled = false;
+    }
+  } catch(e){
+    var body = document.getElementById("modal-body");
+    if(body) body.innerHTML = "<p style='color:red;padding:20px'>오류: "+e.message+"</p>";
+  }
+
+  document.getElementById("btn-print").onclick = function(){
+    var content = document.getElementById("modal-body").innerHTML;
+    var w = window.open("","_blank");
+    w.document.write(
+      '<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8">'
+      +'<title>2026 연합 체육대회 피드백 보고서</title>'
+      +'<style>body{font-family:"Apple SD Gothic Neo","맑은 고딕",sans-serif;max-width:800px;margin:0 auto;padding:30px 24px;color:#1a1a1a;font-size:14px;line-height:1.7}'
+      +'@media print{body{padding:0}}</style>'
+      +'</head><body>'+content+'</body></html>'
+    );
+    w.document.close();
+    setTimeout(function(){ w.print(); }, 500);
+  };
+}
+
+
+function drawCharts(){
+  if(!window.Chart) return;
+  var rs = S.responses;
+  Object.values(S.charts).forEach(function(c){ try{c.destroy();}catch(e){} });
+  S.charts = {};
+  var c1 = document.getElementById("ch-q1");
+  if(c1){
+    var l1=["중학생","고등학생","청년부","교사"];
+    S.charts.q1 = new Chart(c1,{type:"doughnut",data:{labels:l1,datasets:[{data:l1.map(function(l){return rs.filter(function(r){return r.q1===l;}).length;}),backgroundColor:["#185FA5","#0F6E56","#BA7517","#993556"],borderWidth:2,borderColor:"#fff"}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"right",labels:{font:{size:12},boxWidth:14,padding:10}}}}});
+  }
+  var c2 = document.getElementById("ch-q2");
+  if(c2){
+    var l2=["매우 만족","만족","보통","불만족","매우 불만족"];
+    S.charts.q2 = new Chart(c2,{type:"bar",data:{labels:l2,datasets:[{data:l2.map(function(l){return rs.filter(function(r){return r.q2===l;}).length;}),backgroundColor:"#185FA5",borderRadius:5,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1}}}}});
+  }
+  var c4 = document.getElementById("ch-q4");
+  if(c4){
+    var l4=["피구","2인 3각","신발던지기","계주","줄다리기","판 뒤집기","기타"];
+    S.charts.q4 = new Chart(c4,{type:"bar",data:{labels:l4,datasets:[{data:l4.map(function(l){return rs.filter(function(r){return (r.q4||[]).indexOf(l)>=0;}).length;}),backgroundColor:"#0F6E56",borderRadius:5,borderSkipped:false}]},options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{stepSize:1}}}}});
+  }
+}
+
+function bind(){
+  document.querySelectorAll("input[type=radio]").forEach(function(el){
+    el.addEventListener("change",function(e){ S.ans[e.target.name]=e.target.value; render(); });
+  });
+  document.querySelectorAll("input[type=checkbox]").forEach(function(el){
+    el.addEventListener("change",function(e){
+      var arr=S.ans[e.target.name]||[];
+      arr=e.target.checked?arr.concat([e.target.value]):arr.filter(function(v){return v!==e.target.value;});
+      S.ans[e.target.name]=arr; render();
+    });
+  });
+  document.querySelectorAll("textarea").forEach(function(el){
+    el.addEventListener("input",function(e){ S.ans[e.target.name]=e.target.value; });
+  });
+  document.querySelectorAll("input.etc-input").forEach(function(el){
+    el.addEventListener("input",function(e){ S.ans[e.target.name]=e.target.value; });
+    el.addEventListener("focus",function(e){ e.target.scrollIntoView({block:"center",behavior:"smooth"}); });
+  });
+  var bs=document.getElementById("btn-submit");
+  if(bs) bs.addEventListener("click",async function(){
+    bs.disabled=true; bs.textContent="제출 중...";
+    await fbPost(Object.assign({},S.ans));
+    S.ans={}; S.view="done"; render();
+  });
+  var ba=document.getElementById("btn-again");
+  if(ba) ba.addEventListener("click",function(){ S.view="survey"; render(); });
+  var bad=document.getElementById("btn-admin");
+  if(bad) bad.addEventListener("click",function(){ S.view="pin"; S.pin=""; S.pinErr=false; render(); });
+  var bpc=document.getElementById("btn-pin-cancel");
+  if(bpc) bpc.addEventListener("click",function(){ S.view="survey"; render(); });
+  var pi=document.getElementById("pin-input");
+  if(pi){ pi.addEventListener("input",function(e){ S.pin=e.target.value; }); pi.focus(); }
+  var bpo=document.getElementById("btn-pin-ok");
+  if(bpo) bpo.addEventListener("click",async function(){
+    if(S.pin===ADMIN_PIN){
+      S.view="admin"; S.adminTab="stats"; S.pinErr=false;
+      S.responses=await fbGet(); render(); setTimeout(drawCharts,100);
+    } else { S.pinErr=true; render(); }
+  });
+  var bl=document.getElementById("btn-logout");
+  if(bl) bl.addEventListener("click",function(){ S.view="survey"; render(); });
+  document.querySelectorAll(".tab").forEach(function(el){
+    el.addEventListener("click",async function(e){
+      S.adminTab=e.target.dataset.tab;
+      S.responses=await fbGet(); render();
+      if(S.adminTab==="stats") setTimeout(drawCharts,100);
+    });
+  });
+  var brp=document.getElementById("btn-report");
+  if(brp) brp.addEventListener("click",function(){ generateReport(); });
+}
+
+function render(){
+  var app=document.getElementById("app");
+  if(S.view==="survey")      app.innerHTML=renderSurvey();
+  else if(S.view==="done")   app.innerHTML=renderDone();
+  else if(S.view==="pin")    app.innerHTML=renderPin();
+  else if(S.view==="admin")  app.innerHTML=renderAdmin();
+  bind();
+}
+
+if(document.readyState==="loading"){
+  document.addEventListener("DOMContentLoaded",render);
+} else {
+  render();
+}
+</script>
+</body>
+</html>
