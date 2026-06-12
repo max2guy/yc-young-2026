@@ -610,8 +610,12 @@ function render(){
 }
 
 if(document.readyState==="loading"){
-  document.addEventListener("DOMContentLoaded",render);
+  document.addEventListener("DOMContentLoaded",function(){
+    if(location.hash==="#admin"){ S.view="pin"; }
+    render();
+  });
 } else {
+  if(location.hash==="#admin"){ S.view="pin"; }
   render();
 }
 </script>
