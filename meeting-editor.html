@@ -90,86 +90,133 @@
   .toolbar {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 6px;
     flex-wrap: wrap;
     margin-bottom: 14px;
-    padding: 8px 10px;
-    border: 1px solid #d8d2c5;
-    border-radius: 8px;
-    background: linear-gradient(180deg, #fcfbf8 0%, #f2eee7 100%);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.9);
+    padding: 4px 6px;
+    border: 1px solid #d9d9d9;
+    border-radius: 6px;
+    background: #f6f6f6;
   }
   .toolbar-group {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
     flex-wrap: wrap;
   }
   .toolbar-divider {
     width: 1px;
-    align-self: stretch;
-    background: #d6d0c5;
+    height: 24px;
+    align-self: center;
+    background: #dcdcdc;
   }
   .toolbar-btn,
   .toolbar-select,
   .toolbar-color {
-    min-height: 32px;
-    border-radius: 6px;
-    border: 1px solid transparent;
-    background: transparent;
+    min-height: 28px;
+    border-radius: 3px;
+    border: 1px solid #d5d5d5;
+    background: #fff;
     color: var(--text);
     font-size: 12px;
     line-height: 1;
   }
   .toolbar-btn {
-    min-width: 32px;
-    padding: 0 9px;
-    font-weight: 700;
+    min-width: 28px;
+    padding: 0 8px;
+    font-weight: 600;
     cursor: pointer;
   }
   .toolbar-btn:hover,
   .toolbar-select:hover,
   .toolbar-color:hover {
-    border-color: #d3cbbb;
-    background: #fff;
+    border-color: #bdbdbd;
+    background: #fcfcfc;
   }
   .toolbar-btn:focus-visible,
   .toolbar-select:focus-visible,
   .toolbar-color:focus-visible {
-    outline: 2px solid rgba(31, 81, 77, 0.18);
+    outline: 2px solid rgba(31, 81, 77, 0.12);
     outline-offset: 1px;
     border-color: #1f514d;
     background: #fff;
   }
   .toolbar-btn.primary {
-    font-weight: 800;
+    font-weight: 700;
   }
   .toolbar-btn.soft {
-    color: #5c5a54;
+    color: #666;
     font-weight: 600;
   }
   .toolbar-select {
-    padding: 0 10px;
+    padding: 0 26px 0 10px;
     cursor: pointer;
-    border-color: #ddd7ca;
+    border-color: #d5d5d5;
     background: #fff;
     appearance: none;
+    background-image:
+      linear-gradient(45deg, transparent 50%, #8a8a8a 50%),
+      linear-gradient(135deg, #8a8a8a 50%, transparent 50%);
+    background-position:
+      calc(100% - 12px) 11px,
+      calc(100% - 8px) 11px;
+    background-size: 4px 4px, 4px 4px;
+    background-repeat: no-repeat;
   }
   .toolbar-color {
     width: 30px;
     min-width: 30px;
     padding: 3px;
     cursor: pointer;
-    border-color: #ddd7ca;
+    border-color: #d5d5d5;
     background: #fff;
+  }
+  .toolbar-select.font-name {
+    min-width: 140px;
+  }
+  .toolbar-select.font-size {
+    min-width: 76px;
+  }
+  .toolbar-select.block-format {
+    min-width: 92px;
   }
   .toolbar-label {
     padding: 0 2px 0 0;
-    color: #666258;
-    font-size: 12px;
-    font-weight: 700;
+    color: #757575;
+    font-size: 11px;
+    font-weight: 600;
     white-space: nowrap;
   }
+  .toolbar-glyph {
+    font-size: 18px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .toolbar-glyph.subtle {
+    color: #6f6f6f;
+  }
+  .align-icon {
+    display: inline-grid;
+    gap: 2px;
+    width: 12px;
+  }
+  .align-icon span {
+    display: block;
+    height: 2px;
+    background: #737373;
+    border-radius: 999px;
+  }
+  .align-left span:nth-child(1) { width: 12px; }
+  .align-left span:nth-child(2) { width: 10px; }
+  .align-left span:nth-child(3) { width: 8px; }
+  .align-center { justify-items: center; }
+  .align-center span:nth-child(1) { width: 12px; }
+  .align-center span:nth-child(2) { width: 10px; }
+  .align-center span:nth-child(3) { width: 8px; }
+  .align-right { justify-items: end; }
+  .align-right span:nth-child(1) { width: 12px; }
+  .align-right span:nth-child(2) { width: 10px; }
+  .align-right span:nth-child(3) { width: 8px; }
   .title-input {
     width: 100%;
     border: 0;
@@ -247,7 +294,7 @@
     .shell { width: min(100% - 20px, 980px); }
     .topbar { align-items: flex-start; flex-direction: column; }
     .editor-shell { padding: 16px; }
-    .toolbar { padding: 8px; gap: 8px; }
+    .toolbar { padding: 6px; gap: 6px; }
     .editor { min-height: 62vh; padding: 18px; }
   }
 </style>
@@ -269,14 +316,14 @@
       <input class="title-input" id="title-input" type="text" placeholder="제목 없음" />
       <div class="toolbar" id="toolbar">
         <div class="toolbar-group">
-          <select class="toolbar-select" id="font-name">
+          <select class="toolbar-select font-name" id="font-name">
             <option value="">폰트</option>
             <option value="-apple-system">기본</option>
             <option value="Arial">Arial</option>
             <option value="Georgia">Georgia</option>
             <option value="'Noto Sans KR'">Noto Sans KR</option>
           </select>
-          <select class="toolbar-select" id="font-size">
+          <select class="toolbar-select font-size" id="font-size">
             <option value="">크기</option>
             <option value="2">작게</option>
             <option value="3">보통</option>
@@ -286,37 +333,43 @@
         </div>
         <div class="toolbar-divider"></div>
         <div class="toolbar-group">
-          <button class="toolbar-btn primary" type="button" data-command="bold">굵게</button>
-          <button class="toolbar-btn soft" type="button" data-command="italic">기울임</button>
-          <button class="toolbar-btn soft" type="button" data-command="underline">밑줄</button>
+          <button class="toolbar-btn primary" type="button" data-command="bold"><span class="toolbar-glyph">가</span></button>
+          <button class="toolbar-btn soft" type="button" data-command="italic"><span class="toolbar-glyph subtle"><em>가</em></span></button>
+          <button class="toolbar-btn soft" type="button" data-command="underline"><span class="toolbar-glyph subtle"><u>가</u></span></button>
         </div>
         <div class="toolbar-divider"></div>
         <div class="toolbar-group">
-          <span class="toolbar-label">글자색</span>
+          <span class="toolbar-label">글자</span>
           <input class="toolbar-color" id="text-color" type="color" value="#1e1f1d">
-          <span class="toolbar-label">배경색</span>
+          <span class="toolbar-label">배경</span>
           <input class="toolbar-color" id="highlight-color" type="color" value="#fff2a8">
         </div>
         <div class="toolbar-divider"></div>
         <div class="toolbar-group">
-          <button class="toolbar-btn" type="button" data-command="insertUnorderedList">글머리표</button>
-          <button class="toolbar-btn" type="button" data-command="insertOrderedList">번호</button>
+          <button class="toolbar-btn" type="button" data-command="insertUnorderedList">•</button>
+          <button class="toolbar-btn" type="button" data-command="insertOrderedList">1.</button>
         </div>
         <div class="toolbar-divider"></div>
         <div class="toolbar-group">
-          <button class="toolbar-btn" type="button" data-command="justifyLeft">왼쪽</button>
-          <button class="toolbar-btn" type="button" data-command="justifyCenter">가운데</button>
-          <button class="toolbar-btn" type="button" data-command="justifyRight">오른쪽</button>
+          <button class="toolbar-btn" type="button" data-command="justifyLeft" aria-label="왼쪽 정렬">
+            <span class="align-icon align-left"><span></span><span></span><span></span></span>
+          </button>
+          <button class="toolbar-btn" type="button" data-command="justifyCenter" aria-label="가운데 정렬">
+            <span class="align-icon align-center"><span></span><span></span><span></span></span>
+          </button>
+          <button class="toolbar-btn" type="button" data-command="justifyRight" aria-label="오른쪽 정렬">
+            <span class="align-icon align-right"><span></span><span></span><span></span></span>
+          </button>
         </div>
         <div class="toolbar-divider"></div>
         <div class="toolbar-group">
-          <select class="toolbar-select" id="block-format">
+          <select class="toolbar-select block-format" id="block-format">
             <option value="default">본문</option>
             <option value="h2">제목 1</option>
             <option value="h3">제목 2</option>
             <option value="blockquote">인용문</option>
           </select>
-          <button class="toolbar-btn soft" type="button" id="insert-divider-btn">구분선</button>
+          <button class="toolbar-btn soft" type="button" id="insert-divider-btn">―</button>
         </div>
       </div>
       <div
