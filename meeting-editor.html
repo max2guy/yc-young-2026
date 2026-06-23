@@ -214,6 +214,14 @@
     background: #737373;
     border-radius: 999px;
   }
+  .history-icon {
+    width: 16px;
+    height: 16px;
+    display: block;
+  }
+  .history-icon path {
+    fill: #666;
+  }
   .align-left span:nth-child(1) { width: 12px; }
   .align-left span:nth-child(2) { width: 10px; }
   .align-left span:nth-child(3) { width: 8px; }
@@ -324,8 +332,16 @@
       <input class="title-input" id="title-input" type="text" placeholder="제목 없음" />
       <div class="toolbar" id="toolbar">
         <div class="toolbar-group">
-          <button class="toolbar-btn soft" type="button" data-command="undo" aria-label="뒤로 돌리기">↶</button>
-          <button class="toolbar-btn soft" type="button" data-command="redo" aria-label="앞으로 돌리기">↷</button>
+          <button class="toolbar-btn soft" type="button" data-command="undo" aria-label="되돌리기">
+            <svg class="history-icon" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M6.2 3.2 1.8 7.1l4.4 3.8V8.6h2.7c2.4 0 4.3 1.9 4.3 4.2v.2h1.6v-.2c0-3.2-2.6-5.8-5.9-5.8H6.2V3.2z"/>
+            </svg>
+          </button>
+          <button class="toolbar-btn soft" type="button" data-command="redo" aria-label="다시 실행">
+            <svg class="history-icon" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="m9.8 3.2 4.4 3.9-4.4 3.8V8.6H7.1c-2.4 0-4.3 1.9-4.3 4.2v.2H1.2v-.2c0-3.2 2.6-5.8 5.9-5.8h2.7V3.2z"/>
+            </svg>
+          </button>
         </div>
         <div class="toolbar-divider"></div>
         <div class="toolbar-group">
