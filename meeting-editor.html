@@ -112,7 +112,7 @@
   }
   .toolbar-btn,
   .toolbar-select,
-  .toolbar-color {
+  .toolbar-swatch {
     min-height: 28px;
     border-radius: 3px;
     border: 1px solid #d5d5d5;
@@ -129,13 +129,13 @@
   }
   .toolbar-btn:hover,
   .toolbar-select:hover,
-  .toolbar-color:hover {
+  .toolbar-swatch:hover {
     border-color: #bdbdbd;
     background: #fcfcfc;
   }
   .toolbar-btn:focus-visible,
   .toolbar-select:focus-visible,
-  .toolbar-color:focus-visible {
+  .toolbar-swatch:focus-visible {
     outline: 2px solid rgba(31, 81, 77, 0.12);
     outline-offset: 1px;
     border-color: #1f514d;
@@ -163,13 +163,18 @@
     background-size: 4px 4px, 4px 4px;
     background-repeat: no-repeat;
   }
-  .toolbar-color {
-    width: 30px;
-    min-width: 30px;
-    padding: 3px;
+  .toolbar-palette {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .toolbar-swatch {
+    width: 20px;
+    min-width: 20px;
+    min-height: 20px;
+    padding: 0;
     cursor: pointer;
-    border-color: #d5d5d5;
-    background: #fff;
+    border-radius: 999px;
   }
   .toolbar-select.font-name {
     min-width: 140px;
@@ -186,6 +191,9 @@
     font-size: 11px;
     font-weight: 600;
     white-space: nowrap;
+  }
+  .toolbar-label.tight {
+    padding-right: 0;
   }
   .toolbar-glyph {
     font-size: 18px;
@@ -344,10 +352,22 @@
         </div>
         <div class="toolbar-divider"></div>
         <div class="toolbar-group">
-          <span class="toolbar-label">글자</span>
-          <input class="toolbar-color" id="text-color" type="color" value="#1e1f1d">
-          <span class="toolbar-label">배경</span>
-          <input class="toolbar-color" id="highlight-color" type="color" value="#fff2a8">
+          <span class="toolbar-label tight">글자</span>
+          <div class="toolbar-palette" id="text-palette">
+            <button class="toolbar-swatch" type="button" data-color-command="foreColor" data-color-value="#1e1f1d" style="background:#1e1f1d" aria-label="기본 글자색"></button>
+            <button class="toolbar-swatch" type="button" data-color-command="foreColor" data-color-value="#1f514d" style="background:#1f514d" aria-label="초록 글자색"></button>
+            <button class="toolbar-swatch" type="button" data-color-command="foreColor" data-color-value="#1a3a5c" style="background:#1a3a5c" aria-label="파랑 글자색"></button>
+            <button class="toolbar-swatch" type="button" data-color-command="foreColor" data-color-value="#9c2f2f" style="background:#9c2f2f" aria-label="빨강 글자색"></button>
+            <button class="toolbar-swatch" type="button" data-color-command="foreColor" data-color-value="#8a5a14" style="background:#8a5a14" aria-label="갈색 글자색"></button>
+          </div>
+          <span class="toolbar-label tight">배경</span>
+          <div class="toolbar-palette" id="highlight-palette">
+            <button class="toolbar-swatch" type="button" data-color-command="hiliteColor" data-color-value="#fff2a8" style="background:#fff2a8" aria-label="노랑 배경색"></button>
+            <button class="toolbar-swatch" type="button" data-color-command="hiliteColor" data-color-value="#dff3e4" style="background:#dff3e4" aria-label="연초록 배경색"></button>
+            <button class="toolbar-swatch" type="button" data-color-command="hiliteColor" data-color-value="#dfe9ff" style="background:#dfe9ff" aria-label="연파랑 배경색"></button>
+            <button class="toolbar-swatch" type="button" data-color-command="hiliteColor" data-color-value="#ffe0e0" style="background:#ffe0e0" aria-label="연빨강 배경색"></button>
+            <button class="toolbar-swatch" type="button" data-color-command="hiliteColor" data-color-value="#f1e6ff" style="background:#f1e6ff" aria-label="연보라 배경색"></button>
+          </div>
         </div>
         <div class="toolbar-divider"></div>
         <div class="toolbar-group">
@@ -406,8 +426,6 @@
     const blockFormat = document.getElementById('block-format');
     const fontName = document.getElementById('font-name');
     const fontSize = document.getElementById('font-size');
-    const textColor = document.getElementById('text-color');
-    const highlightColor = document.getElementById('highlight-color');
     const insertDividerBtn = document.getElementById('insert-divider-btn');
 
     const localKeyPrefix = 'meetingDocument:';
@@ -532,8 +550,13 @@
       editor.addEventListener('focus', saveSelection);
       toolbar.addEventListener('click', function (event) {
         const button = event.target.closest('[data-command]');
-        if (!button) return;
-        runCommand(button.dataset.command);
+        if (button) {
+          runCommand(button.dataset.command);
+          return;
+        }
+        const colorButton = event.target.closest('[data-color-command]');
+        if (!colorButton) return;
+        runCommand(colorButton.dataset.colorCommand, colorButton.dataset.colorValue);
       });
       blockFormat.addEventListener('change', function () {
         if (!blockFormat.value) return;
@@ -553,12 +576,6 @@
         if (!fontSize.value) return;
         runCommand('fontSize', fontSize.value);
         fontSize.value = '';
-      });
-      textColor.addEventListener('input', function () {
-        runCommand('foreColor', textColor.value);
-      });
-      highlightColor.addEventListener('input', function () {
-        runCommand('hiliteColor', highlightColor.value);
       });
       insertDividerBtn.addEventListener('click', function () {
         runCommand('insertHorizontalRule');
