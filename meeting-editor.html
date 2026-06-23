@@ -90,13 +90,14 @@
   .toolbar {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     flex-wrap: wrap;
     margin-bottom: 14px;
-    padding: 12px;
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    background: rgba(255,255,255,0.88);
+    padding: 8px 10px;
+    border: 1px solid #d8d2c5;
+    border-radius: 8px;
+    background: linear-gradient(180deg, #fcfbf8 0%, #f2eee7 100%);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.9);
   }
   .toolbar-group {
     display: inline-flex;
@@ -107,32 +108,67 @@
   .toolbar-divider {
     width: 1px;
     align-self: stretch;
-    background: var(--line);
+    background: #d6d0c5;
   }
   .toolbar-btn,
   .toolbar-select,
   .toolbar-color {
-    min-height: 36px;
-    border-radius: 8px;
-    border: 1px solid var(--line);
-    background: #fff;
+    min-height: 32px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    background: transparent;
     color: var(--text);
-    font-size: 13px;
+    font-size: 12px;
+    line-height: 1;
   }
   .toolbar-btn {
-    min-width: 36px;
-    padding: 0 10px;
+    min-width: 32px;
+    padding: 0 9px;
     font-weight: 700;
     cursor: pointer;
+  }
+  .toolbar-btn:hover,
+  .toolbar-select:hover,
+  .toolbar-color:hover {
+    border-color: #d3cbbb;
+    background: #fff;
+  }
+  .toolbar-btn:focus-visible,
+  .toolbar-select:focus-visible,
+  .toolbar-color:focus-visible {
+    outline: 2px solid rgba(31, 81, 77, 0.18);
+    outline-offset: 1px;
+    border-color: #1f514d;
+    background: #fff;
+  }
+  .toolbar-btn.primary {
+    font-weight: 800;
+  }
+  .toolbar-btn.soft {
+    color: #5c5a54;
+    font-weight: 600;
   }
   .toolbar-select {
     padding: 0 10px;
     cursor: pointer;
+    border-color: #ddd7ca;
+    background: #fff;
+    appearance: none;
   }
   .toolbar-color {
-    width: 38px;
-    padding: 4px;
+    width: 30px;
+    min-width: 30px;
+    padding: 3px;
     cursor: pointer;
+    border-color: #ddd7ca;
+    background: #fff;
+  }
+  .toolbar-label {
+    padding: 0 2px 0 0;
+    color: #666258;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
   }
   .title-input {
     width: 100%;
@@ -211,7 +247,7 @@
     .shell { width: min(100% - 20px, 980px); }
     .topbar { align-items: flex-start; flex-direction: column; }
     .editor-shell { padding: 16px; }
-    .toolbar { padding: 10px; }
+    .toolbar { padding: 8px; gap: 8px; }
     .editor { min-height: 62vh; padding: 18px; }
   }
 </style>
@@ -233,12 +269,6 @@
       <input class="title-input" id="title-input" type="text" placeholder="제목 없음" />
       <div class="toolbar" id="toolbar">
         <div class="toolbar-group">
-          <select class="toolbar-select" id="block-format">
-            <option value="default">본문</option>
-            <option value="h2">제목 1</option>
-            <option value="h3">제목 2</option>
-            <option value="blockquote">인용문</option>
-          </select>
           <select class="toolbar-select" id="font-name">
             <option value="">폰트</option>
             <option value="-apple-system">기본</option>
@@ -256,28 +286,37 @@
         </div>
         <div class="toolbar-divider"></div>
         <div class="toolbar-group">
-          <button class="toolbar-btn" type="button" data-command="bold">B</button>
-          <button class="toolbar-btn" type="button" data-command="italic">I</button>
-          <button class="toolbar-btn" type="button" data-command="underline">U</button>
+          <button class="toolbar-btn primary" type="button" data-command="bold">굵게</button>
+          <button class="toolbar-btn soft" type="button" data-command="italic">기울임</button>
+          <button class="toolbar-btn soft" type="button" data-command="underline">밑줄</button>
         </div>
         <div class="toolbar-divider"></div>
         <div class="toolbar-group">
-          <label class="toolbar-btn" for="text-color">색</label>
+          <span class="toolbar-label">글자색</span>
           <input class="toolbar-color" id="text-color" type="color" value="#1e1f1d">
-          <label class="toolbar-btn" for="highlight-color">배경</label>
+          <span class="toolbar-label">배경색</span>
           <input class="toolbar-color" id="highlight-color" type="color" value="#fff2a8">
         </div>
         <div class="toolbar-divider"></div>
         <div class="toolbar-group">
-          <button class="toolbar-btn" type="button" data-command="justifyLeft">좌</button>
-          <button class="toolbar-btn" type="button" data-command="justifyCenter">중</button>
-          <button class="toolbar-btn" type="button" data-command="justifyRight">우</button>
+          <button class="toolbar-btn" type="button" data-command="insertUnorderedList">글머리표</button>
+          <button class="toolbar-btn" type="button" data-command="insertOrderedList">번호</button>
         </div>
         <div class="toolbar-divider"></div>
         <div class="toolbar-group">
-          <button class="toolbar-btn" type="button" data-command="insertUnorderedList">• 목록</button>
-          <button class="toolbar-btn" type="button" data-command="insertOrderedList">1. 목록</button>
-          <button class="toolbar-btn" type="button" id="insert-divider-btn">구분선</button>
+          <button class="toolbar-btn" type="button" data-command="justifyLeft">왼쪽</button>
+          <button class="toolbar-btn" type="button" data-command="justifyCenter">가운데</button>
+          <button class="toolbar-btn" type="button" data-command="justifyRight">오른쪽</button>
+        </div>
+        <div class="toolbar-divider"></div>
+        <div class="toolbar-group">
+          <select class="toolbar-select" id="block-format">
+            <option value="default">본문</option>
+            <option value="h2">제목 1</option>
+            <option value="h3">제목 2</option>
+            <option value="blockquote">인용문</option>
+          </select>
+          <button class="toolbar-btn soft" type="button" id="insert-divider-btn">구분선</button>
         </div>
       </div>
       <div
