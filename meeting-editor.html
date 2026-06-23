@@ -87,6 +87,53 @@
     padding: 22px;
     backdrop-filter: blur(10px);
   }
+  .toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: rgba(255,255,255,0.88);
+  }
+  .toolbar-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .toolbar-divider {
+    width: 1px;
+    align-self: stretch;
+    background: var(--line);
+  }
+  .toolbar-btn,
+  .toolbar-select,
+  .toolbar-color {
+    min-height: 36px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--text);
+    font-size: 13px;
+  }
+  .toolbar-btn {
+    min-width: 36px;
+    padding: 0 10px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .toolbar-select {
+    padding: 0 10px;
+    cursor: pointer;
+  }
+  .toolbar-color {
+    width: 38px;
+    padding: 4px;
+    cursor: pointer;
+  }
   .title-input {
     width: 100%;
     border: 0;
@@ -114,6 +161,40 @@
     white-space: pre-wrap;
     word-break: break-word;
   }
+  .editor h2,
+  .editor h3,
+  .editor p,
+  .editor ul,
+  .editor ol,
+  .editor blockquote {
+    margin-top: 0;
+  }
+  .editor h2 {
+    font-size: 1.5em;
+    line-height: 1.35;
+    margin-bottom: 12px;
+  }
+  .editor h3 {
+    font-size: 1.2em;
+    line-height: 1.4;
+    margin-bottom: 10px;
+  }
+  .editor p,
+  .editor ul,
+  .editor ol {
+    margin-bottom: 12px;
+  }
+  .editor blockquote {
+    margin-bottom: 12px;
+    padding-left: 14px;
+    border-left: 3px solid #c9d9cf;
+    color: #4f5e55;
+  }
+  .editor hr {
+    border: 0;
+    border-top: 1px solid var(--line);
+    margin: 18px 0;
+  }
   .editor:empty::before {
     content: attr(data-placeholder);
     color: #b8b1a5;
@@ -130,6 +211,7 @@
     .shell { width: min(100% - 20px, 980px); }
     .topbar { align-items: flex-start; flex-direction: column; }
     .editor-shell { padding: 16px; }
+    .toolbar { padding: 10px; }
     .editor { min-height: 62vh; padding: 18px; }
   }
 </style>
@@ -149,6 +231,55 @@
     </div>
     <div class="editor-shell">
       <input class="title-input" id="title-input" type="text" placeholder="제목 없음" />
+      <div class="toolbar" id="toolbar">
+        <div class="toolbar-group">
+          <select class="toolbar-select" id="block-format">
+            <option value="default">본문</option>
+            <option value="h2">제목 1</option>
+            <option value="h3">제목 2</option>
+            <option value="blockquote">인용문</option>
+          </select>
+          <select class="toolbar-select" id="font-name">
+            <option value="">폰트</option>
+            <option value="-apple-system">기본</option>
+            <option value="Arial">Arial</option>
+            <option value="Georgia">Georgia</option>
+            <option value="'Noto Sans KR'">Noto Sans KR</option>
+          </select>
+          <select class="toolbar-select" id="font-size">
+            <option value="">크기</option>
+            <option value="2">작게</option>
+            <option value="3">보통</option>
+            <option value="5">크게</option>
+            <option value="6">매우 크게</option>
+          </select>
+        </div>
+        <div class="toolbar-divider"></div>
+        <div class="toolbar-group">
+          <button class="toolbar-btn" type="button" data-command="bold">B</button>
+          <button class="toolbar-btn" type="button" data-command="italic">I</button>
+          <button class="toolbar-btn" type="button" data-command="underline">U</button>
+        </div>
+        <div class="toolbar-divider"></div>
+        <div class="toolbar-group">
+          <label class="toolbar-btn" for="text-color">색</label>
+          <input class="toolbar-color" id="text-color" type="color" value="#1e1f1d">
+          <label class="toolbar-btn" for="highlight-color">배경</label>
+          <input class="toolbar-color" id="highlight-color" type="color" value="#fff2a8">
+        </div>
+        <div class="toolbar-divider"></div>
+        <div class="toolbar-group">
+          <button class="toolbar-btn" type="button" data-command="justifyLeft">좌</button>
+          <button class="toolbar-btn" type="button" data-command="justifyCenter">중</button>
+          <button class="toolbar-btn" type="button" data-command="justifyRight">우</button>
+        </div>
+        <div class="toolbar-divider"></div>
+        <div class="toolbar-group">
+          <button class="toolbar-btn" type="button" data-command="insertUnorderedList">• 목록</button>
+          <button class="toolbar-btn" type="button" data-command="insertOrderedList">1. 목록</button>
+          <button class="toolbar-btn" type="button" id="insert-divider-btn">구분선</button>
+        </div>
+      </div>
       <div
         class="editor"
         id="editor"
@@ -174,6 +305,13 @@
     const docIdText = document.getElementById('doc-id-text');
     const updatedAtText = document.getElementById('updated-at-text');
     const newDocBtn = document.getElementById('new-doc-btn');
+    const toolbar = document.getElementById('toolbar');
+    const blockFormat = document.getElementById('block-format');
+    const fontName = document.getElementById('font-name');
+    const fontSize = document.getElementById('font-size');
+    const textColor = document.getElementById('text-color');
+    const highlightColor = document.getElementById('highlight-color');
+    const insertDividerBtn = document.getElementById('insert-divider-btn');
 
     const localKeyPrefix = 'meetingDocument:';
     const shouldStartNew = params.get('new') === '1';
@@ -182,6 +320,7 @@
     let docsRef = null;
     let saveTimer = null;
     let applyingRemote = false;
+    let savedRange = null;
     let clientId = localStorage.getItem('meetingDocumentClientId');
 
     if (!clientId) {
@@ -242,6 +381,34 @@
       applyingRemote = false;
     }
 
+    function focusEditor() {
+      editor.focus();
+    }
+
+    function saveSelection() {
+      const selection = window.getSelection();
+      if (!selection || selection.rangeCount === 0) return;
+      const range = selection.getRangeAt(0);
+      if (!editor.contains(range.commonAncestorContainer)) return;
+      savedRange = range.cloneRange();
+    }
+
+    function restoreSelection() {
+      if (!savedRange) return;
+      const selection = window.getSelection();
+      if (!selection) return;
+      selection.removeAllRanges();
+      selection.addRange(savedRange);
+    }
+
+    function runCommand(command, value) {
+      focusEditor();
+      restoreSelection();
+      document.execCommand(command, false, value);
+      saveSelection();
+      scheduleSave();
+    }
+
     function scheduleSave() {
       if (applyingRemote) return;
       clearTimeout(saveTimer);
@@ -257,8 +424,48 @@
     }
 
     function attachDocListeners() {
+      try {
+        document.execCommand('styleWithCSS', false, true);
+      } catch (_) {}
+
       titleInput.addEventListener('input', scheduleSave);
       editor.addEventListener('input', scheduleSave);
+      editor.addEventListener('mouseup', saveSelection);
+      editor.addEventListener('keyup', saveSelection);
+      editor.addEventListener('focus', saveSelection);
+      toolbar.addEventListener('click', function (event) {
+        const button = event.target.closest('[data-command]');
+        if (!button) return;
+        runCommand(button.dataset.command);
+      });
+      blockFormat.addEventListener('change', function () {
+        if (!blockFormat.value) return;
+        if (blockFormat.value === 'default') {
+          runCommand('formatBlock', 'p');
+        } else {
+          runCommand('formatBlock', blockFormat.value);
+        }
+        blockFormat.value = 'default';
+      });
+      fontName.addEventListener('change', function () {
+        if (!fontName.value) return;
+        runCommand('fontName', fontName.value);
+        fontName.value = '';
+      });
+      fontSize.addEventListener('change', function () {
+        if (!fontSize.value) return;
+        runCommand('fontSize', fontSize.value);
+        fontSize.value = '';
+      });
+      textColor.addEventListener('input', function () {
+        runCommand('foreColor', textColor.value);
+      });
+      highlightColor.addEventListener('input', function () {
+        runCommand('hiliteColor', highlightColor.value);
+      });
+      insertDividerBtn.addEventListener('click', function () {
+        runCommand('insertHorizontalRule');
+      });
       newDocBtn.addEventListener('click', function () {
         window.location.href = 'meeting-editor.html?new=1';
       });
