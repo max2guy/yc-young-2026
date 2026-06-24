@@ -3,29 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#f3f4f6">
+<meta name="theme-color" content="#1f436d">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
 <title>새 회의자료 작성</title>
 <style>
   :root {
-    --bg: #f3f4f6;
+    --bg: #eef2f6;
     --panel: #ffffff;
-    --line: #d8dee6;
-    --text: #22303a;
-    --muted: #6e7781;
-    --primary: #2c4664;
-    --primary-soft: #e8eef5;
-    --primary-bright: linear-gradient(135deg, #53779b 0%, #34587d 100%);
+    --line: #cfd7e1;
+    --text: #182531;
+    --muted: #596776;
+    --primary: #1f436d;
+    --primary-soft: #dde8f4;
+    --primary-bright: linear-gradient(135deg, #3f6795 0%, #1f436d 100%);
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; min-height: 100%; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR", sans-serif;
     background:
-      radial-gradient(circle at top left, rgba(83, 119, 155, 0.08), transparent 28%),
-      linear-gradient(180deg, #f8f9fb 0%, var(--bg) 100%);
+      radial-gradient(circle at top left, rgba(63, 103, 149, 0.08), transparent 24%),
+      linear-gradient(180deg, #f7f9fc 0%, var(--bg) 100%);
     color: var(--text);
   }
   .shell {
@@ -47,7 +47,7 @@
     font-size: 12px;
     font-weight: 800;
     letter-spacing: 1px;
-    color: #60788f;
+    color: #4f6781;
     margin-bottom: 6px;
   }
   .topbar h1 {
@@ -82,13 +82,13 @@
   }
   .btn.primary {
     background: var(--primary-bright);
-    border-color: #34587d;
+    border-color: #1f436d;
     color: #fff;
-    box-shadow: 0 8px 18px rgba(52, 88, 125, 0.14);
+    box-shadow: 0 10px 22px rgba(31, 67, 109, 0.18);
   }
   .editor-shell {
-    background: rgba(255,255,255,0.76);
-    border: 1px solid rgba(216, 222, 230, 0.9);
+    background: rgba(255,255,255,0.88);
+    border: 1px solid rgba(207, 215, 225, 0.94);
     border-radius: 12px;
     padding: 22px;
     backdrop-filter: blur(10px);
@@ -100,13 +100,13 @@
     flex-wrap: wrap;
     margin-bottom: 14px;
     padding: 4px 6px;
-    border: 1px solid #d8dee6;
+    border: 1px solid #cfd7e1;
     border-radius: 6px;
-    background: #f4f6f8;
+    background: #f7f9fc;
     position: sticky;
     top: 10px;
     z-index: 15;
-    box-shadow: 0 2px 10px rgba(34, 48, 58, 0.06);
+    box-shadow: 0 4px 12px rgba(24, 37, 49, 0.08);
   }
   .toolbar-group {
     display: inline-flex;
@@ -118,14 +118,14 @@
     width: 1px;
     height: 24px;
     align-self: center;
-    background: #d8dee6;
+    background: #cfd7e1;
   }
   .toolbar-btn,
   .toolbar-select,
   .toolbar-swatch {
     min-height: 28px;
     border-radius: 3px;
-    border: 1px solid #d3dae3;
+    border: 1px solid #c7d1dc;
     background: #fff;
     color: var(--text);
     font-size: 12px;
@@ -140,33 +140,33 @@
   .toolbar-btn:hover,
   .toolbar-select:hover,
   .toolbar-swatch:hover {
-    border-color: #b8c3cf;
-    background: #fcfcfc;
+    border-color: #a9b7c7;
+    background: #ffffff;
   }
   .toolbar-btn:focus-visible,
   .toolbar-select:focus-visible,
   .toolbar-swatch:focus-visible {
-    outline: 2px solid rgba(52, 88, 125, 0.12);
+    outline: 2px solid rgba(31, 67, 109, 0.14);
     outline-offset: 1px;
-    border-color: #34587d;
+    border-color: #1f436d;
     background: #fff;
   }
   .toolbar-btn.primary {
     font-weight: 700;
   }
   .toolbar-btn.soft {
-    color: #666;
+    color: #4f5d6b;
     font-weight: 600;
   }
   .toolbar-select {
     padding: 0 26px 0 10px;
     cursor: pointer;
-    border-color: #d3dae3;
+    border-color: #c7d1dc;
     background: #fff;
     appearance: none;
     background-image:
-      linear-gradient(45deg, transparent 50%, #8a8a8a 50%),
-      linear-gradient(135deg, #8a8a8a 50%, transparent 50%);
+      linear-gradient(45deg, transparent 50%, #637487 50%),
+      linear-gradient(135deg, #637487 50%, transparent 50%);
     background-position:
       calc(100% - 12px) 11px,
       calc(100% - 8px) 11px;
@@ -197,7 +197,7 @@
   }
   .toolbar-label {
     padding: 0 2px 0 0;
-    color: #697684;
+    color: #546273;
     font-size: 11px;
     font-weight: 600;
     white-space: nowrap;
@@ -211,7 +211,7 @@
     letter-spacing: -0.02em;
   }
   .toolbar-glyph.subtle {
-    color: #6f6f6f;
+    color: #596776;
   }
   .align-icon {
     display: inline-grid;
@@ -221,7 +221,7 @@
   .align-icon span {
     display: block;
     height: 2px;
-    background: #687789;
+    background: #53667d;
     border-radius: 999px;
   }
   .history-icon {
@@ -230,7 +230,7 @@
     display: block;
   }
   .history-icon path {
-    fill: #666;
+    fill: #53667d;
   }
   .align-left span:nth-child(1) { width: 12px; }
   .align-left span:nth-child(2) { width: 10px; }
@@ -256,7 +256,7 @@
     margin-bottom: 18px;
   }
   .title-input::placeholder {
-    color: #b4aea2;
+    color: #9aa5b1;
   }
   .editor {
     min-height: 68vh;
