@@ -3,24 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#f4efe4">
+<meta name="theme-color" content="#f3f4f6">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
 <title>새 회의자료 작성</title>
 <style>
   :root {
-    --bg: #f6f3ec;
+    --bg: #f3f4f6;
     --panel: #ffffff;
-    --line: #e2ddd2;
-    --text: #1e1f1d;
-    --muted: #6e6a61;
-    --primary: #1f514d;
+    --line: #d8dee6;
+    --text: #22303a;
+    --muted: #6e7781;
+    --primary: #2c4664;
+    --primary-soft: #e8eef5;
+    --primary-bright: linear-gradient(135deg, #53779b 0%, #34587d 100%);
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; min-height: 100%; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR", sans-serif;
     background:
-      radial-gradient(circle at top left, rgba(31, 81, 77, 0.08), transparent 28%),
-      linear-gradient(180deg, #f9f6f0 0%, var(--bg) 100%);
+      radial-gradient(circle at top left, rgba(83, 119, 155, 0.08), transparent 28%),
+      linear-gradient(180deg, #f8f9fb 0%, var(--bg) 100%);
     color: var(--text);
   }
   .shell {
@@ -42,7 +47,7 @@
     font-size: 12px;
     font-weight: 800;
     letter-spacing: 1px;
-    color: #5f7b74;
+    color: #60788f;
     margin-bottom: 6px;
   }
   .topbar h1 {
@@ -76,14 +81,14 @@
     cursor: pointer;
   }
   .btn.primary {
-    background: linear-gradient(135deg, #22c97a 0%, #0e9e55 100%);
-    border-color: #0e9e55;
+    background: var(--primary-bright);
+    border-color: #34587d;
     color: #fff;
-    box-shadow: 0 10px 20px rgba(14, 158, 85, 0.18);
+    box-shadow: 0 8px 18px rgba(52, 88, 125, 0.14);
   }
   .editor-shell {
-    background: rgba(255,255,255,0.72);
-    border: 1px solid rgba(226, 221, 210, 0.85);
+    background: rgba(255,255,255,0.76);
+    border: 1px solid rgba(216, 222, 230, 0.9);
     border-radius: 12px;
     padding: 22px;
     backdrop-filter: blur(10px);
@@ -95,13 +100,13 @@
     flex-wrap: wrap;
     margin-bottom: 14px;
     padding: 4px 6px;
-    border: 1px solid #d9d9d9;
+    border: 1px solid #d8dee6;
     border-radius: 6px;
-    background: #f6f6f6;
+    background: #f4f6f8;
     position: sticky;
     top: 10px;
     z-index: 15;
-    box-shadow: 0 2px 10px rgba(20, 26, 22, 0.06);
+    box-shadow: 0 2px 10px rgba(34, 48, 58, 0.06);
   }
   .toolbar-group {
     display: inline-flex;
@@ -113,14 +118,14 @@
     width: 1px;
     height: 24px;
     align-self: center;
-    background: #dcdcdc;
+    background: #d8dee6;
   }
   .toolbar-btn,
   .toolbar-select,
   .toolbar-swatch {
     min-height: 28px;
     border-radius: 3px;
-    border: 1px solid #d5d5d5;
+    border: 1px solid #d3dae3;
     background: #fff;
     color: var(--text);
     font-size: 12px;
@@ -135,15 +140,15 @@
   .toolbar-btn:hover,
   .toolbar-select:hover,
   .toolbar-swatch:hover {
-    border-color: #bdbdbd;
+    border-color: #b8c3cf;
     background: #fcfcfc;
   }
   .toolbar-btn:focus-visible,
   .toolbar-select:focus-visible,
   .toolbar-swatch:focus-visible {
-    outline: 2px solid rgba(31, 81, 77, 0.12);
+    outline: 2px solid rgba(52, 88, 125, 0.12);
     outline-offset: 1px;
-    border-color: #1f514d;
+    border-color: #34587d;
     background: #fff;
   }
   .toolbar-btn.primary {
@@ -156,7 +161,7 @@
   .toolbar-select {
     padding: 0 26px 0 10px;
     cursor: pointer;
-    border-color: #d5d5d5;
+    border-color: #d3dae3;
     background: #fff;
     appearance: none;
     background-image:
@@ -192,7 +197,7 @@
   }
   .toolbar-label {
     padding: 0 2px 0 0;
-    color: #757575;
+    color: #697684;
     font-size: 11px;
     font-weight: 600;
     white-space: nowrap;
@@ -216,7 +221,7 @@
   .align-icon span {
     display: block;
     height: 2px;
-    background: #737373;
+    background: #687789;
     border-radius: 999px;
   }
   .history-icon {
@@ -291,8 +296,8 @@
   .editor blockquote {
     margin-bottom: 12px;
     padding-left: 14px;
-    border-left: 3px solid #c9d9cf;
-    color: #4f5e55;
+    border-left: 3px solid #cfd9e4;
+    color: #536474;
   }
   .editor hr {
     border: 0;
