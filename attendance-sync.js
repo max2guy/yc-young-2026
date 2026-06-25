@@ -666,10 +666,6 @@
     ];
     var index = 0;
 
-    if (!getElement(settings.loadingState)) {
-      missingTargets.push('loadingState');
-    }
-
     if (!getElement(containers.weekly)) {
       missingTargets.push('containers.weekly');
     }
