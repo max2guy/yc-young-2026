@@ -27,33 +27,11 @@ nav 순서: 출결현황 → 회의자료 → 수련회 계획 → 예산 및 �
 
 ---
 
-## ⚠️ 유일하게 남은 작업
+## ✅ 모든 작업 완료 (2026-06-25)
 
-### `attendance-config.js` Firebase 설정값 채우기
-
-파일 경로: `attendance-config.js`
-
-현재 상태 (빈 값):
-```js
-window.MINISTRY_ATTENDANCE_CONFIG = {
-  firebase: {
-    apiKey: "",          // ← 채워야 함
-    authDomain: "",      // ← 채워야 함
-    projectId: "",       // ← 채워야 함
-    storageBucket: "",   // ← 채워야 함
-    messagingSenderId: "", // ← 채워야 함
-    appId: ""            // ← 채워야 함
-  },
-  collection: "reports",
-  departmentKey: "middleHigh",
-  recentWeeks: 8,
-  recentMonths: 12
-};
-```
-
-**값 출처:** Firebase 콘솔 → `ministry-report-v2` 프로젝트 → 프로젝트 설정 → 앱 설정 → 웹 앱 SDK 설정
-
-**주의:** `.gitignore`에 추가하지 말 것. 이 값은 공개 브라우저 설정이며, Firestore 보안 규칙으로 읽기 권한을 관리함.
+- `attendance-config.js` Firebase 설정값 채워짐 (`ministry-report-v2` 프로젝트)
+- `ministry-report-v2` Firestore 규칙: `reports` 컬렉션 공개 읽기 허용으로 변경 후 배포 완료
+  - 쓰기는 여전히 로그인 필요, 읽기만 공개 (`allow read: if true`)
 
 ---
 
