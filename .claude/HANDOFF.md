@@ -1,4 +1,4 @@
-# yc-young-2026 — Codex Handoff (v2026-06-25b)
+# yc-young-2026 — Codex Handoff (v2026-06-25c)
 
 ## 현재 상태
 - 브랜치: main
@@ -9,6 +9,23 @@
 ---
 
 ## 방금 수정한 내용
+
+### 카드 레이아웃 수평 행 전환 + 전 디바이스 공간 최적화 (2026-06-25)
+
+**문제:** 주간/월간 카드가 수직 스택(날짜→숫자→메타) 구조라 카드 오른쪽 절반이 항상 비어 있었음. 폰트·패딩 줄이기로는 해결 불가.
+
+**해결 (파일별 변경사항):**
+
+- **`attendance.html`**
+  - `.placeholder-week/.placeholder-month`: `display: flex; align-items: center`로 수평 행 레이아웃 전환
+  - `.placeholder-info` (flex:1), `.placeholder-date`, `.placeholder-meta`, `.placeholder-count` (우측 숫자, clamp) 클래스 추가
+  - `.placeholder-months`: `repeat(auto-fit, minmax(180px, 1fr))` — 중단점 없이 자동 리플로우
+  - `.month-group-entries .placeholder-list`: `repeat(auto-fit, minmax(200px, 1fr))`
+  - 480px 미디어 쿼리: 불필요한 카드 오버라이드 제거, `stats-grid: 1fr`만 유지
+
+- **`attendance-sync.js`**
+  - `renderWeeklyCards`: `stat-label/stat-value/stat-meta` → `placeholder-info/date/meta/count` 구조로 변경
+  - `renderMonthlyCards`: 동일하게 수평 행 구조 변경
 
 ### 출결자 명단 섹션 추가 (2026-06-25)
 
