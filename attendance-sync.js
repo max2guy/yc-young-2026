@@ -408,27 +408,81 @@
       return;
     }
 
-    element.innerHTML = list.map(function (entry) {
-      var metaParts = [formatAttendance(entry.attendance)];
-
-      if (entry.totalMembers && entry.totalMembers > 0) {
-        metaParts.push('총원 ' + entry.totalMembers + '명');
+    var monthMap = new Map();
+    list.forEach(function (entry) {
+      var monthKey = entry.dateParts ? entry.dateParts.monthKey : entry.reportDate.slice(0, 7);
+      if (!monthMap.has(monthKey)) {
+        monthMap.set(monthKey, []);
       }
+      monthMap.get(monthKey).push(entry);
+    });
 
-      if (entry.rate !== null) {
-        metaParts.push('출석률 ' + formatRate(entry.rate));
-      }
+    var isFirst = true;
+    var html = Array.from(monthMap.entries()).map(function (pair) {
+      var monthKey = pair[0];
+      var monthEntries = pair[1];
+      var expanded = isFirst;
+      isFirst = false;
+
+      var match = String(monthKey).match(/^(\d{4})-(\d{2})$/);
+      var monthLabel = match
+        ? Number(match[1]) + '년 ' + Number(match[2]) + '월'
+        : monthKey;
+
+      var cards = monthEntries.map(function (entry) {
+        var metaParts = [formatAttendance(entry.attendance)];
+        if (entry.totalMembers && entry.totalMembers > 0) {
+          metaParts.push('총원 ' + entry.totalMembers + '명');
+        }
+        if (entry.rate !== null) {
+          metaParts.push('출석률 ' + formatRate(entry.rate));
+        }
+        return [
+          '<article class="placeholder-week">',
+          '<div>',
+          '<div class="placeholder-title">', escapeHtml(formatWeekLabel(entry.reportDate)), '</div>',
+          '<div class="placeholder-copy">', escapeHtml(metaParts.join(' · ')), '</div>',
+          '</div>',
+          '<div class="placeholder-pill">', escapeHtml(formatAttendance(entry.attendance)), '</div>',
+          '</article>'
+        ].join('');
+      }).join('');
 
       return [
-        '<article class="placeholder-week">',
-        '<div>',
-        '<div class="placeholder-title">', escapeHtml(formatWeekLabel(entry.reportDate)), '</div>',
-        '<div class="placeholder-copy">', escapeHtml(metaParts.join(' · ')), '</div>',
+        '<div class="month-group">',
+        '<button class="month-group-header" type="button" aria-expanded="', expanded ? 'true' : 'false', '">',
+        '<span class="month-group-name">', escapeHtml(monthLabel), '</span>',
+        '<span class="month-group-count">', escapeHtml(String(monthEntries.length)), '주</span>',
+        '<span class="month-group-toggle">', expanded ? '접기 ↑' : '펼치기 ↓', '</span>',
+        '</button>',
+        '<div class="month-group-entries"', expanded ? '' : ' hidden', '>',
+        '<div class="placeholder-list">',
+        cards,
         '</div>',
-        '<div class="placeholder-pill">', escapeHtml(formatAttendance(entry.attendance)), '</div>',
-        '</article>'
+        '</div>',
+        '</div>'
       ].join('');
     }).join('');
+
+    element.innerHTML = html;
+
+    element.querySelectorAll('.month-group-header').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var group = btn.closest('.month-group');
+        var entriesEl = group.querySelector('.month-group-entries');
+        var toggleEl = btn.querySelector('.month-group-toggle');
+        var isExpanded = btn.getAttribute('aria-expanded') === 'true';
+
+        btn.setAttribute('aria-expanded', isExpanded ? 'false' : 'true');
+        toggleEl.textContent = isExpanded ? '펼치기 ↓' : '접기 ↑';
+
+        if (isExpanded) {
+          entriesEl.setAttribute('hidden', '');
+        } else {
+          entriesEl.removeAttribute('hidden');
+        }
+      });
+    });
   }
 
   function renderMonthlyCards(container, months) {

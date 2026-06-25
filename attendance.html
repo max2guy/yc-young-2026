@@ -129,52 +129,46 @@
     min-width: 0;
     padding: 28px 28px 56px;
   }
-  .hero,
-  .section {
-    border: 1px solid var(--line);
-    border-radius: 18px;
-    background: var(--card);
-  }
   .hero {
-    padding: 26px 28px;
-    box-shadow: var(--shadow-lg);
+    padding: 30px 32px 28px;
+    border: none;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #2f5f95 0%, #163f6b 100%);
+    box-shadow: 0 16px 40px rgba(22, 63, 107, 0.28);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    right: -40px;
+    top: -40px;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    pointer-events: none;
+  }
+  .hero-label {
+    margin: 0 0 8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.55);
+    letter-spacing: 0.4px;
   }
   .hero h1 {
-    margin: 0 0 8px;
-    font-size: clamp(28px, 4vw, 40px);
-    line-height: 1.1;
-    color: var(--green);
-  }
-  .hero p {
     margin: 0;
-    max-width: 720px;
-    color: var(--muted);
-    font-size: 15px;
-  }
-  .hero-status {
-    margin-top: 16px;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    min-height: 38px;
-    padding: 8px 12px;
-    border-radius: 10px;
-    background: #f4f8fc;
-    color: #31506d;
-    font-size: 13px;
-    font-weight: 700;
-  }
-  .hero-status::before {
-    content: "";
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #7f9ebf;
-    flex-shrink: 0;
+    font-size: clamp(24px, 3.5vw, 36px);
+    line-height: 1.1;
+    color: #ffffff;
   }
   .section {
     margin-top: 22px;
     padding: 20px;
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--section-accent, var(--line));
+    border-radius: 18px;
+    background: var(--card);
     box-shadow: var(--shadow-md);
   }
   .section-head {
@@ -332,6 +326,55 @@
     font-weight: 500;
     opacity: 0.7;
   }
+  .month-group {
+    margin-bottom: 10px;
+  }
+  .month-group:last-child {
+    margin-bottom: 0;
+  }
+  .month-group-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #f4f7fc;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--text);
+    transition: background-color 120ms ease;
+  }
+  .month-group-header:hover {
+    background: var(--green-soft);
+  }
+  .month-group-name {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--green);
+  }
+  .month-group-count {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+    background: var(--line);
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+  .month-group-toggle {
+    margin-left: auto;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .month-group-entries {
+    padding-top: 10px;
+  }
+  .month-group-entries[hidden] {
+    display: none;
+  }
   .sr-only {
     position: absolute;
     width: 1px;
@@ -343,36 +386,45 @@
     white-space: nowrap;
     border: 0;
   }
-  @media (max-width: 980px) {
-    .stats-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-  @media (max-width: 760px) {
+  #attendance-weekly-section  { --section-accent: #0d9488; }
+  #attendance-roster-section  { --section-accent: #2a5fc1; }
+  #attendance-summary-section { --section-accent: #d97706; }
+  #attendance-monthly-section { --section-accent: #16a34a; }
+
+  #attendance-weekly-section .section-title   { color: #0d9488; }
+  #attendance-roster-section .section-title   { color: #2a5fc1; }
+  #attendance-summary-section .section-title  { color: #d97706; }
+  #attendance-monthly-section .section-title  { color: #16a34a; }
+
+  #attendance-stat-card-latest .stat-label,
+  #attendance-stat-card-latest .stat-value         { color: #0d9488; }
+  #attendance-stat-card-rate .stat-label,
+  #attendance-stat-card-rate .stat-value           { color: #2a5fc1; }
+  #attendance-stat-card-month-average .stat-label,
+  #attendance-stat-card-month-average .stat-value  { color: #d97706; }
+  #attendance-stat-card-weeks .stat-label,
+  #attendance-stat-card-weeks .stat-value          { color: #7c3aed; }
+
+  @media (max-width: 960px) {
     .layout {
       grid-template-columns: 1fr;
     }
     .sidebar {
-      position: static;
-      height: auto;
-      border-right: 0;
-      border-bottom: 1px solid var(--line);
-    }
-    .sidebar-status {
-      margin-top: 18px;
+      display: none;
     }
     .content {
       padding: 20px 16px 40px;
     }
-    .hero,
-    .section {
-      border-radius: 16px;
-    }
     .stats-grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
     .placeholder-week,
     .placeholder-month {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 480px) {
+    .stats-grid {
       grid-template-columns: 1fr;
     }
   }
@@ -407,49 +459,14 @@
 
     <main class="content">
       <section class="hero">
-        <h1>중고등부 출결현황</h1>
-
-        <div class="hero-status" id="attendance-loading-state" role="status" aria-live="polite">출결 대시보드 준비 중입니다.</div>
+        <div class="hero-label">연천장로교회 중고등부</div>
+        <h1>출결현황</h1>
       </section>
 
       <div id="attendance-dashboard-root">
-        <section class="section" aria-labelledby="attendance-summary-title">
-          <div class="section-head">
-            <div>
-              <h2 class="section-title" id="attendance-summary-title">요약 지표</h2>
-
-            </div>
-          </div>
-          <div class="stats-grid" id="attendance-summary-cards">
-            <article class="stat-card" id="attendance-stat-card-latest">
-              <span class="stat-label">최근 출석</span>
-              <strong class="stat-value" id="attendance-stat-latest-value">--</strong>
-              <div class="stat-meta" id="attendance-stat-latest-meta">가장 최근 주간 보고서 대기 중</div>
-            </article>
-            <article class="stat-card" id="attendance-stat-card-rate">
-              <span class="stat-label">최근 출석률</span>
-              <strong class="stat-value" id="attendance-stat-rate-value">--</strong>
-              <div class="stat-meta" id="attendance-stat-rate-meta">총원 데이터 연결 전</div>
-            </article>
-            <article class="stat-card" id="attendance-stat-card-month-average">
-              <span class="stat-label">이번 달 평균</span>
-              <strong class="stat-value" id="attendance-stat-month-average-value">--</strong>
-              <div class="stat-meta" id="attendance-stat-month-average-meta">월간 집계 준비 중</div>
-            </article>
-            <article class="stat-card" id="attendance-stat-card-weeks">
-              <span class="stat-label">반영 주차</span>
-              <strong class="stat-value" id="attendance-stat-weeks-value">0</strong>
-              <div class="stat-meta" id="attendance-stat-weeks-meta">최근 주간 데이터가 표시됩니다</div>
-            </article>
-          </div>
-        </section>
-
         <section class="section" id="attendance-weekly-section" aria-labelledby="attendance-weekly-title">
           <div class="section-head">
-            <div>
-              <h2 class="section-title" id="attendance-weekly-title">최근 주간 흐름</h2>
-
-            </div>
+            <h2 class="section-title" id="attendance-weekly-title">최근 주간 흐름</h2>
           </div>
           <div class="placeholder-panel">
             <div class="placeholder-list" id="attendance-recent-weeks">
@@ -479,12 +496,37 @@
           <div id="attendance-roster"></div>
         </section>
 
+        <section class="section" id="attendance-summary-section" aria-labelledby="attendance-summary-title">
+          <div class="section-head">
+            <h2 class="section-title" id="attendance-summary-title">요약 지표</h2>
+          </div>
+          <div class="stats-grid" id="attendance-summary-cards">
+            <article class="stat-card" id="attendance-stat-card-latest">
+              <span class="stat-label">최근 출석</span>
+              <strong class="stat-value" id="attendance-stat-latest-value">--</strong>
+              <div class="stat-meta" id="attendance-stat-latest-meta">가장 최근 주간 보고서 대기 중</div>
+            </article>
+            <article class="stat-card" id="attendance-stat-card-rate">
+              <span class="stat-label">최근 출석률</span>
+              <strong class="stat-value" id="attendance-stat-rate-value">--</strong>
+              <div class="stat-meta" id="attendance-stat-rate-meta">총원 데이터 연결 전</div>
+            </article>
+            <article class="stat-card" id="attendance-stat-card-month-average">
+              <span class="stat-label">이번 달 평균</span>
+              <strong class="stat-value" id="attendance-stat-month-average-value">--</strong>
+              <div class="stat-meta" id="attendance-stat-month-average-meta">월간 집계 준비 중</div>
+            </article>
+            <article class="stat-card" id="attendance-stat-card-weeks">
+              <span class="stat-label">반영 주차</span>
+              <strong class="stat-value" id="attendance-stat-weeks-value">0</strong>
+              <div class="stat-meta" id="attendance-stat-weeks-meta">최근 주간 데이터가 표시됩니다</div>
+            </article>
+          </div>
+        </section>
+
         <section class="section" id="attendance-monthly-section" aria-labelledby="attendance-monthly-title">
           <div class="section-head">
-            <div>
-              <h2 class="section-title" id="attendance-monthly-title">월간 요약</h2>
-
-            </div>
+            <h2 class="section-title" id="attendance-monthly-title">월간 요약</h2>
           </div>
           <div class="placeholder-panel">
             <div class="placeholder-months" id="attendance-monthly-summary">
