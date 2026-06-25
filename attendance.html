@@ -273,6 +273,65 @@
     font-size: 13px;
     font-weight: 800;
   }
+  .roster-date-label {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .roster-group {
+    margin-bottom: 18px;
+  }
+  .roster-group:last-child {
+    margin-bottom: 0;
+  }
+  .roster-group-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .roster-group-label {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .roster-group-count {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--green);
+  }
+  .roster-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+  }
+  .roster-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 11px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    border: 1px solid transparent;
+  }
+  .roster-chip.present {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border-color: #c8e6c9;
+  }
+  .roster-chip.absent {
+    background: #f5f5f5;
+    color: var(--muted);
+    border-color: var(--line);
+  }
+  .roster-chip-sub {
+    font-size: 11px;
+    font-weight: 500;
+    opacity: 0.7;
+  }
   .sr-only {
     position: absolute;
     width: 1px;
@@ -349,7 +408,7 @@
     <main class="content">
       <section class="hero">
         <h1>중고등부 출결현황</h1>
-        <p>주간 보고서에 기록된 중고등부 출석 데이터를 최근 흐름과 월간 요약 기준으로 확인합니다. 이 페이지는 읽기 전용이며, 실제 편집은 원본 보고서에서 계속 진행됩니다.</p>
+
         <div class="hero-status" id="attendance-loading-state" role="status" aria-live="polite">출결 대시보드 준비 중입니다.</div>
       </section>
 
@@ -358,7 +417,7 @@
           <div class="section-head">
             <div>
               <h2 class="section-title" id="attendance-summary-title">요약 지표</h2>
-              <p class="section-copy">가장 최근 보고서와 이번 달 평균을 읽기 전용 카드로 요약합니다.</p>
+
             </div>
           </div>
           <div class="stats-grid" id="attendance-summary-cards">
@@ -389,7 +448,7 @@
           <div class="section-head">
             <div>
               <h2 class="section-title" id="attendance-weekly-title">최근 주간 흐름</h2>
-              <p class="section-copy">최근 보고서 순서대로 주차별 출석 수와 비율이 여기에 렌더링됩니다.</p>
+
             </div>
           </div>
           <div class="placeholder-panel">
@@ -412,11 +471,19 @@
           </div>
         </section>
 
+        <section class="section" id="attendance-roster-section" aria-labelledby="attendance-roster-title">
+          <div class="section-head">
+            <h2 class="section-title" id="attendance-roster-title">출결자 명단</h2>
+            <span class="roster-date-label" id="attendance-roster-date"></span>
+          </div>
+          <div id="attendance-roster"></div>
+        </section>
+
         <section class="section" id="attendance-monthly-section" aria-labelledby="attendance-monthly-title">
           <div class="section-head">
             <div>
               <h2 class="section-title" id="attendance-monthly-title">월간 요약</h2>
-              <p class="section-copy">월별 평균 출석, 최고/최저 출석, 반영 주차 수가 여기에 정리됩니다.</p>
+
             </div>
           </div>
           <div class="placeholder-panel">
@@ -477,7 +544,9 @@
         },
         containers: {
           weekly: document.getElementById('attendance-recent-weeks'),
-          monthly: document.getElementById('attendance-monthly-summary')
+          monthly: document.getElementById('attendance-monthly-summary'),
+          roster: document.getElementById('attendance-roster'),
+          rosterDate: document.getElementById('attendance-roster-date')
         }
       })).catch(function (error) {
         console.error('[attendance]', error);

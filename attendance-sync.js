@@ -121,6 +121,7 @@
       attendance: attendance,
       totalMembers: totalMembers,
       rate: rate,
+      members: Array.isArray(department.members) ? department.members.slice() : [],
       updatedAt: report.updatedAt || report.createdAt || null
     };
   }
@@ -467,6 +468,78 @@
     }).join('');
   }
 
+  function renderRosterSection(container, dateEl, latestEntry) {
+    var element = getElement(container);
+    if (!element) {
+      return;
+    }
+
+    var members = latestEntry && Array.isArray(latestEntry.members) ? latestEntry.members : [];
+
+    if (latestEntry && getElement(dateEl)) {
+      setText(dateEl, formatWeekLabel(latestEntry.reportDate) + ' 기준');
+    }
+
+    if (!members.length) {
+      renderEmptyMessage(element, '명단 정보가 없습니다');
+      return;
+    }
+
+    var presentMembers = members.filter(function (m) { return m && m.status === 'present'; });
+    var absentMembers = members.filter(function (m) { return m && m.status !== 'present'; });
+
+    function groupSubLabel(member) {
+      if (!member.group) { return ''; }
+      if (member.group === 'middle') { return '중'; }
+      if (member.group === 'high') { return '고'; }
+      return member.group;
+    }
+
+    function renderChips(list, statusClass) {
+      return list.map(function (m) {
+        var sub = groupSubLabel(m);
+        return [
+          '<span class="roster-chip ', escapeHtml(statusClass), '">',
+          escapeHtml(m.name || '이름 없음'),
+          sub ? '<span class="roster-chip-sub">' + escapeHtml(sub) + '</span>' : '',
+          '</span>'
+        ].join('');
+      }).join('');
+    }
+
+    var html = [];
+
+    if (presentMembers.length) {
+      html.push([
+        '<div class="roster-group">',
+        '<div class="roster-group-head">',
+        '<span class="roster-group-label">출석</span>',
+        '<span class="roster-group-count">', escapeHtml(String(presentMembers.length)), '명</span>',
+        '</div>',
+        '<div class="roster-chips">',
+        renderChips(presentMembers, 'present'),
+        '</div>',
+        '</div>'
+      ].join(''));
+    }
+
+    if (absentMembers.length) {
+      html.push([
+        '<div class="roster-group">',
+        '<div class="roster-group-head">',
+        '<span class="roster-group-label">결석</span>',
+        '<span class="roster-group-count" style="color:var(--muted)">', escapeHtml(String(absentMembers.length)), '명</span>',
+        '</div>',
+        '<div class="roster-chips">',
+        renderChips(absentMembers, 'absent'),
+        '</div>',
+        '</div>'
+      ].join(''));
+    }
+
+    element.innerHTML = html.join('');
+  }
+
   function renderSummaryCards(summaryCards, latestEntry, currentMonth, weeklyEntries) {
     var cards = summaryCards || {};
     var recentCount = Array.isArray(weeklyEntries) ? weeklyEntries.length : 0;
@@ -658,6 +731,7 @@
       renderSummaryCards(summaryCards, latestEntry, currentMonth, weeklyEntries);
       renderWeeklyCards(containers.weekly, weeklyEntries);
       renderMonthlyCards(containers.monthly, monthlyEntries);
+      renderRosterSection(containers.roster, containers.rosterDate, latestEntry);
       setText(loadingState, '최근 출결 보고서를 기준으로 읽기 전용 대시보드를 표시합니다.');
 
       return {
@@ -708,6 +782,7 @@
     renderFailureMessage: renderFailureMessage,
     renderWeeklyCards: renderWeeklyCards,
     renderMonthlyCards: renderMonthlyCards,
+    renderRosterSection: renderRosterSection,
     renderAttendanceDashboard: renderAttendanceDashboard
   };
 })();
