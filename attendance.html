@@ -358,7 +358,7 @@
           <div class="section-head">
             <div>
               <h2 class="section-title" id="attendance-summary-title">요약 지표</h2>
-              <p class="section-copy">Task 5에서 실제 집계 데이터가 연결되기 전까지 기본 플레이스홀더를 표시합니다.</p>
+              <p class="section-copy">가장 최근 보고서와 이번 달 평균을 읽기 전용 카드로 요약합니다.</p>
             </div>
           </div>
           <div class="stats-grid" id="attendance-summary-cards">
@@ -403,8 +403,8 @@
               </article>
               <article class="placeholder-week">
                 <div>
-                  <div class="placeholder-title">렌더러 미연결 상태</div>
-                  <div class="placeholder-copy">Task 5에서 `renderAttendanceDashboard(...)`가 연결되면 이 목록이 실제 주간 카드로 교체됩니다.</div>
+                  <div class="placeholder-title">권한 또는 설정 확인 대기</div>
+                  <div class="placeholder-copy">설정이 비어 있거나 Firestore 읽기 권한이 없으면 안내 문구가 이 영역에 유지됩니다.</div>
                 </div>
                 <div class="placeholder-pill">준비 중</div>
               </article>
@@ -424,7 +424,7 @@
               <article class="placeholder-month">
                 <div>
                   <div class="placeholder-title">월간 요약이 아직 없습니다</div>
-                  <div class="placeholder-copy">최근 월 기준 평균과 분포 정보가 Task 5에서 이 영역에 표시됩니다.</div>
+                  <div class="placeholder-copy">최근 월 기준 평균과 분포 정보가 로드되면 이 영역에 표시됩니다.</div>
                 </div>
                 <div class="placeholder-pill">월간 집계</div>
               </article>
@@ -480,9 +480,6 @@
           monthly: document.getElementById('attendance-monthly-summary')
         }
       })).catch(function (error) {
-        if (loadingState) {
-          loadingState.textContent = '출결 데이터를 불러오지 못했습니다. 잠시 후 다시 확인해 주세요.';
-        }
         console.error('[attendance]', error);
       });
     });
