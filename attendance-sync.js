@@ -439,9 +439,11 @@
         }
         return [
           '<article class="placeholder-week">',
-          '<span class="stat-label">', escapeHtml(formatWeekLabel(entry.reportDate)), '</span>',
-          '<strong class="stat-value">', escapeHtml(formatAttendance(entry.attendance)), '</strong>',
-          metaParts.length ? '<p class="stat-meta">' + escapeHtml(metaParts.join(' · ')) + '</p>' : '',
+          '<div class="placeholder-info">',
+          '<div class="placeholder-date">', escapeHtml(formatWeekLabel(entry.reportDate)), '</div>',
+          metaParts.length ? '<div class="placeholder-meta">' + escapeHtml(metaParts.join(' · ')) + '</div>' : '',
+          '</div>',
+          '<div class="placeholder-count">', escapeHtml(formatAttendance(entry.attendance)), '</div>',
           '</article>'
         ].join('');
       }).join('');
@@ -510,9 +512,11 @@
 
       return [
         '<article class="placeholder-month">',
-        '<span class="stat-label">', escapeHtml(formatMonthLabel(month.month)), '</span>',
-        '<strong class="stat-value">', escapeHtml(formatAttendance(month.averageAttendance)), '</strong>',
-        '<p class="stat-meta">', escapeHtml(summary.join(' · ')), '</p>',
+        '<div class="placeholder-info">',
+        '<div class="placeholder-date">', escapeHtml(formatMonthLabel(month.month)), '</div>',
+        '<div class="placeholder-meta">', escapeHtml(summary.join(' · ')), '</div>',
+        '</div>',
+        '<div class="placeholder-count">', escapeHtml(formatAttendance(month.averageAttendance)), '</div>',
         '</article>'
       ].join('');
     }).join('');

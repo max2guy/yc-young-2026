@@ -227,33 +227,42 @@
     gap: 12px;
   }
   .placeholder-months {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   }
   .month-group-entries .placeholder-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
   .placeholder-week,
   .placeholder-month {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     padding: 10px 14px;
     border: 1px solid var(--line);
     border-radius: 10px;
     background: #ffffff;
     box-shadow: var(--shadow-sm);
   }
-  .placeholder-week .stat-label,
-  .placeholder-month .stat-label {
-    font-size: 11px;
-    margin-bottom: 2px;
+  .placeholder-info {
+    flex: 1;
+    min-width: 0;
   }
-  .placeholder-week .stat-value,
-  .placeholder-month .stat-value {
-    font-size: 20px;
-    line-height: 1.2;
+  .placeholder-date {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text);
   }
-  .placeholder-week .stat-meta,
-  .placeholder-month .stat-meta {
+  .placeholder-meta {
     font-size: 11px;
-    margin-top: 3px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .placeholder-count {
+    font-size: clamp(15px, 2vw, 18px);
+    font-weight: 800;
+    color: var(--green);
+    white-space: nowrap;
+    flex-shrink: 0;
   }
   .placeholder-title {
     font-size: 15px;
@@ -443,28 +452,8 @@
     }
   }
   @media (max-width: 480px) {
-    .stats-grid,
-    .placeholder-months,
-    .month-group-entries .placeholder-list {
+    .stats-grid {
       grid-template-columns: 1fr;
-    }
-    .placeholder-week,
-    .placeholder-month {
-      padding: 12px 14px;
-    }
-    .placeholder-week .stat-value,
-    .placeholder-month .stat-value {
-      font-size: 20px;
-    }
-    .placeholder-week .stat-label,
-    .placeholder-month .stat-label {
-      font-size: 11px;
-      margin-bottom: 4px;
-    }
-    .placeholder-week .stat-meta,
-    .placeholder-month .stat-meta {
-      font-size: 11px;
-      margin-top: 4px;
     }
   }
 </style>
