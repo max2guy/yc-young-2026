@@ -430,7 +430,7 @@
         : monthKey;
 
       var cards = monthEntries.map(function (entry) {
-        var metaParts = [formatAttendance(entry.attendance)];
+        var metaParts = [];
         if (entry.totalMembers && entry.totalMembers > 0) {
           metaParts.push('총원 ' + entry.totalMembers + '명');
         }
@@ -439,11 +439,9 @@
         }
         return [
           '<article class="placeholder-week">',
-          '<div>',
-          '<div class="placeholder-title">', escapeHtml(formatWeekLabel(entry.reportDate)), '</div>',
-          '<div class="placeholder-copy">', escapeHtml(metaParts.join(' · ')), '</div>',
-          '</div>',
-          '<div class="placeholder-pill">', escapeHtml(formatAttendance(entry.attendance)), '</div>',
+          '<span class="stat-label">', escapeHtml(formatWeekLabel(entry.reportDate)), '</span>',
+          '<strong class="stat-value">', escapeHtml(formatAttendance(entry.attendance)), '</strong>',
+          metaParts.length ? '<p class="stat-meta">' + escapeHtml(metaParts.join(' · ')) + '</p>' : '',
           '</article>'
         ].join('');
       }).join('');
