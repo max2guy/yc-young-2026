@@ -186,6 +186,12 @@
     text-decoration: none;
     box-shadow: 0 6px 14px rgba(19, 34, 49, 0.1);
   }
+  .resource-card-button {
+    width: 100%;
+    text-align: left;
+    font: inherit;
+    cursor: pointer;
+  }
   .resource-card:focus-visible {
     outline: 3px solid rgba(31, 67, 109, 0.2);
     outline-offset: 3px;
@@ -205,6 +211,7 @@
   .meeting .tag { background: #295da1; }
   .sheet .tag { background: #1b6199; }
   .archive .tag { background: #405f7f; }
+  .backup .tag { background: #315c89; }
   .resource-card h3 {
     margin: 0 0 4px;
     font-size: 19px;
@@ -540,13 +547,19 @@
         <div class="section-head">
           <h2 class="section-title">보관함</h2>
         </div>
-        <p class="section-copy">완료된 자료를 별도 보관해 다시 열람할 수 있습니다.</p>
+        <p class="section-copy">완료된 자료와 전체 복구용 백업을 함께 보관합니다.</p>
         <div class="resource-grid">
           <a class="resource-card sports archive" href="sports-meeting.html">
             <span class="tag">완료 자료</span>
             <h3>체육대회 회의자료</h3>
             <div class="resource-meta">열기 →</div>
           </a>
+          <button class="resource-card resource-card-button archive backup" type="button" id="backup-download-btn">
+            <span class="tag">백업</span>
+            <h3>전체 백업 ZIP</h3>
+            <div class="resource-meta">다운로드 →</div>
+            <div class="backup-status" id="backup-status">사이트 파일과 회의 데이터를 함께 저장합니다.</div>
+          </button>
         </div>
       </section>
 
@@ -560,18 +573,6 @@
         </div>
       </section>
 
-      <section class="section">
-        <div class="section-head">
-          <h2 class="section-title">백업</h2>
-        </div>
-        <p class="section-copy">문서와 정적 파일을 함께 보존하는 전체 복구용 백업입니다.</p>
-        <div class="backup-panel">
-          <div class="backup-actions">
-            <button class="backup-btn" type="button" id="backup-download-btn">전체 백업 ZIP 다운로드</button>
-            <div class="backup-status" id="backup-status">사이트 파일과 회의 데이터를 함께 저장합니다.</div>
-          </div>
-        </div>
-      </section>
     </main>
   </div>
   <div class="modal-overlay" id="purge-modal">
