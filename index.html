@@ -153,6 +153,7 @@
     margin-top: 22px;
     padding: 20px;
     border: 1px solid var(--line);
+    border-top: 3px solid var(--section-accent, var(--line));
     border-radius: 18px;
     background: #ffffff;
     box-shadow: 0 12px 24px rgba(19, 34, 49, 0.08);
@@ -224,14 +225,14 @@
     font-size: 11px;
     font-weight: 800;
   }
-  .sports .tag { background: #1f5f99; }
-  .camp .tag { background: #24598a; }
-  .plan .tag { background: #6a4f24; }
-  .meeting .tag { background: #295da1; }
-  .sheet .tag { background: #1b6199; }
-  .attendance .tag { background: #2f5f95; }
-  .archive .tag { background: #405f7f; }
-  .backup .tag { background: #315c89; }
+  .sports .tag { background: #7c3aed; }
+  .camp .tag { background: #d97706; }
+  .plan .tag { background: #b45309; }
+  .meeting .tag { background: #2a5fc1; }
+  .sheet .tag { background: #16a34a; }
+  .attendance .tag { background: #0d9488; }
+  .archive .tag { background: #5a7394; }
+  .backup .tag { background: #5a7394; }
   .resource-card h3 {
     margin: 0 0 4px;
     font-size: 19px;
@@ -456,6 +457,21 @@
     border-color: #b14444;
     color: #fff;
   }
+  #attendance-section { --section-accent: #0d9488; }
+  #meetings-section   { --section-accent: #2a5fc1; }
+  #retreat-section    { --section-accent: #d97706; }
+  #budget-section     { --section-accent: #16a34a; }
+  #reports-section    { --section-accent: #7c3aed; }
+  #archive-section    { --section-accent: #5a7394; }
+  #trash-section      { --section-accent: #94a3b8; }
+
+  #attendance-section .section-title { color: #0d9488; }
+  #meetings-section .section-title   { color: #2a5fc1; }
+  #retreat-section .section-title    { color: #b45309; }
+  #budget-section .section-title     { color: #16a34a; }
+  #reports-section .section-title    { color: #7c3aed; }
+  #archive-section .section-title    { color: #5a7394; }
+
   @media (max-width: 960px) {
     .layout {
       grid-template-columns: 1fr;
