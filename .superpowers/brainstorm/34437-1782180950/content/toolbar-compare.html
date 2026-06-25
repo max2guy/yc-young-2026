@@ -1,0 +1,57 @@
+<h2>회의록 서식 툴바 비교</h2>
+<p class="subtitle">둘 다 문서앱형 한 줄 툴바입니다. 지금 기준으로 더 자연스럽고 덜 낯선 쪽을 골라주세요.</p>
+
+<div class="cards">
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-body">
+      <h3>A. 기능 우선형</h3>
+      <p>목록, 정렬, 폰트/크기, 굵게/색상을 바로 앞에 둔 구성</p>
+    </div>
+    <div class="mockup">
+      <div class="mockup-header">툴바 A</div>
+      <div class="mockup-body">
+        <div style="display:flex;flex-wrap:wrap;gap:8px;padding:12px;border:1px solid #d9e0da;border-radius:10px;background:#fff;">
+          <button class="mock-button">• 목록</button>
+          <button class="mock-button">1. 목록</button>
+          <div class="placeholder" style="width:1px;min-height:36px;background:#d9e0da;"></div>
+          <button class="mock-button">좌</button>
+          <button class="mock-button">중</button>
+          <button class="mock-button">우</button>
+          <div class="placeholder" style="width:1px;min-height:36px;background:#d9e0da;"></div>
+          <div class="mock-input" style="width:110px;">폰트</div>
+          <div class="mock-input" style="width:80px;">크기</div>
+          <div class="placeholder" style="width:1px;min-height:36px;background:#d9e0da;"></div>
+          <button class="mock-button"><strong>B</strong></button>
+          <button class="mock-button">A 색</button>
+          <button class="mock-button">배경</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-body">
+      <h3>B. 문서 익숙형</h3>
+      <p>폰트/크기와 굵게를 먼저 두고, 목록과 정렬을 뒤로 보내는 구성</p>
+    </div>
+    <div class="mockup">
+      <div class="mockup-header">툴바 B</div>
+      <div class="mockup-body">
+        <div style="display:flex;flex-wrap:wrap;gap:8px;padding:12px;border:1px solid #d9e0da;border-radius:10px;background:#fff;">
+          <div class="mock-input" style="width:110px;">폰트</div>
+          <div class="mock-input" style="width:80px;">크기</div>
+          <button class="mock-button"><strong>B</strong></button>
+          <button class="mock-button">A 색</button>
+          <button class="mock-button">배경</button>
+          <div class="placeholder" style="width:1px;min-height:36px;background:#d9e0da;"></div>
+          <button class="mock-button">• 목록</button>
+          <button class="mock-button">1. 목록</button>
+          <div class="placeholder" style="width:1px;min-height:36px;background:#d9e0da;"></div>
+          <button class="mock-button">좌</button>
+          <button class="mock-button">중</button>
+          <button class="mock-button">우</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
