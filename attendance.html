@@ -225,19 +225,17 @@
     padding: 18px;
     border: 1px dashed #aebccd;
     border-radius: 14px;
-    background: #f7fafd;
+    background: #ffffff;
   }
-  .placeholder-list {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-  }
+  .placeholder-list,
   .placeholder-months {
     display: grid;
     gap: 12px;
   }
-  .placeholder-week,
-  .placeholder-month {
+  .month-group-entries .placeholder-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .placeholder-week {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     gap: 12px;
@@ -245,6 +243,13 @@
     padding: 16px;
     border: 1px solid var(--line);
     border-radius: 12px;
+    background: #ffffff;
+    box-shadow: var(--shadow-sm);
+  }
+  .placeholder-month {
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
     background: #ffffff;
     box-shadow: var(--shadow-sm);
   }
@@ -344,7 +349,7 @@
     padding: 11px 14px;
     border: 1px solid var(--line);
     border-radius: 10px;
-    background: #f4f7fc;
+    background: #ffffff;
     cursor: pointer;
     font-family: inherit;
     font-size: 14px;
@@ -387,6 +392,10 @@
   .month-group:nth-child(4n+2) .month-group-name { color: #2a5fc1; }
   .month-group:nth-child(4n+3) .month-group-name { color: #b45309; }
   .month-group:nth-child(4n+4) .month-group-name { color: #7c3aed; }
+  .month-group:nth-child(4n+1) .month-group-count { background: #ccfbf1; color: #0d9488; }
+  .month-group:nth-child(4n+2) .month-group-count { background: #dbeafe; color: #1e40af; }
+  .month-group:nth-child(4n+3) .month-group-count { background: #fef3c7; color: #b45309; }
+  .month-group:nth-child(4n+4) .month-group-count { background: #ede9fe; color: #7c3aed; }
   .sr-only {
     position: absolute;
     width: 1px;
@@ -430,16 +439,12 @@
     .stats-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-    .placeholder-week,
-    .placeholder-month {
+    .month-group-entries .placeholder-list {
       grid-template-columns: 1fr;
     }
   }
   @media (max-width: 480px) {
     .stats-grid {
-      grid-template-columns: 1fr;
-    }
-    .placeholder-list {
       grid-template-columns: 1fr;
     }
   }

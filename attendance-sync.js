@@ -512,11 +512,9 @@
 
       return [
         '<article class="placeholder-month">',
-        '<div>',
-        '<div class="placeholder-title">', escapeHtml(formatMonthLabel(month.month)), '</div>',
-        '<div class="placeholder-copy">', escapeHtml(summary.join(' · ')), '</div>',
-        '</div>',
-        '<div class="placeholder-pill">', escapeHtml(formatAttendance(month.averageAttendance)), '</div>',
+        '<span class="stat-label">', escapeHtml(formatMonthLabel(month.month)), '</span>',
+        '<strong class="stat-value">', escapeHtml(formatAttendance(month.averageAttendance)), '</strong>',
+        '<p class="stat-meta">', escapeHtml(summary.join(' · ')), '</p>',
         '</article>'
       ].join('');
     }).join('');
@@ -542,22 +540,9 @@
     var presentMembers = members.filter(function (m) { return m && m.status === 'present'; });
     var absentMembers = members.filter(function (m) { return m && m.status !== 'present'; });
 
-    function groupSubLabel(member) {
-      if (!member.group) { return ''; }
-      if (member.group === 'middle') { return '중'; }
-      if (member.group === 'high') { return '고'; }
-      return member.group;
-    }
-
     function renderChips(list, statusClass) {
       return list.map(function (m) {
-        var sub = groupSubLabel(m);
-        return [
-          '<span class="roster-chip ', escapeHtml(statusClass), '">',
-          escapeHtml(m.name || '이름 없음'),
-          sub ? '<span class="roster-chip-sub">' + escapeHtml(sub) + '</span>' : '',
-          '</span>'
-        ].join('');
+        return '<span class="roster-chip ' + escapeHtml(statusClass) + '">' + escapeHtml(m.name || '이름 없음') + '</span>';
       }).join('');
     }
 
