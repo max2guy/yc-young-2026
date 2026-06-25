@@ -221,16 +221,13 @@
     color: var(--muted);
     font-size: 13px;
   }
-  .placeholder-panel {
-    padding: 18px;
-    border: 1px dashed #aebccd;
-    border-radius: 14px;
-    background: #ffffff;
-  }
   .placeholder-list,
   .placeholder-months {
     display: grid;
     gap: 12px;
+  }
+  .placeholder-months {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .month-group-entries .placeholder-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -434,7 +431,8 @@
     }
   }
   @media (max-width: 480px) {
-    .stats-grid {
+    .stats-grid,
+    .placeholder-months {
       grid-template-columns: 1fr;
     }
   }
