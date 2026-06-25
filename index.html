@@ -226,18 +226,23 @@
   }
   .recent-list {
     display: grid;
-    gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 380px));
+    gap: 12px;
+    justify-content: start;
+    align-items: start;
   }
   .recent-item {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     gap: 12px;
-    padding: 16px 18px;
+    min-height: 116px;
+    padding: 18px;
     border: 1px solid var(--line);
-    border-radius: 8px;
+    border-radius: 12px;
     background: #fff;
     cursor: pointer;
     position: relative;
+    box-shadow: 0 6px 14px rgba(19, 34, 49, 0.08);
   }
   .recent-item:hover {
     border-color: #9eb4cc;
@@ -350,6 +355,7 @@
     font-weight: 700;
   }
   .recent-empty {
+    grid-column: 1 / -1;
     padding: 20px 18px;
     border: 1px dashed var(--line);
     border-radius: 12px;
@@ -446,6 +452,9 @@
     }
     .content {
       padding: 20px 20px 42px;
+    }
+    .recent-list {
+      grid-template-columns: 1fr;
     }
   }
   @media (max-width: 720px) {
