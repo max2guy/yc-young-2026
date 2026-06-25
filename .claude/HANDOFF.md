@@ -2,7 +2,7 @@
 
 ## 현재 상태
 - 브랜치: main
-- 최근 커밋: (다음 커밋 예정 — 출결자 명단 기능 추가)
+- 최근 커밋: `74f0e1d` Add attendance roster section showing present/absent members from latest report
 - GitHub: https://github.com/max2guy/yc-young-2026
 - 배포: https://max2guy.github.io/yc-young-2026/ (GitHub Pages)
 
