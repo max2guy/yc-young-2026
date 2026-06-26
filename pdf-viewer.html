@@ -13,12 +13,8 @@
     --muted: #4e5f70;
     --line: #bcc7d3;
     --green: #163f6b;
-    --green-soft: #d4e1ef;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  /* position: fixed on body locks viewport size — prevents iOS address-bar
-     hide/show from causing layout reflows and scroll jumps */
   html { height: 100%; }
   body {
     position: fixed;
@@ -35,7 +31,7 @@
     z-index: 100;
     background: #fff;
     border-bottom: 1px solid var(--line);
-    box-shadow: 0 2px 8px rgba(19, 34, 49, 0.06);
+    box-shadow: 0 2px 8px rgba(19,34,49,0.06);
     padding-top: env(safe-area-inset-top);
   }
   .topbar-inner {
@@ -88,13 +84,32 @@
     flex-shrink: 0;
   }
 
-  /* Chrome/Edge 데스크탑: 네이티브 iframe */
-  .pdf-frame {
+  /* iframe + Google Docs Viewer 로딩 오버레이를 함께 담는 래퍼 */
+  #viewer-wrap {
     flex: 1;
-    width: 100%;
-    border: none;
-    display: block;
+    position: relative;
     min-height: 0;
+  }
+  .pdf-frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    transition: opacity 0.4s ease;
+  }
+  /* Google Docs Viewer 로딩 중 표시할 오버레이 */
+  #viewer-loading {
+    position: absolute;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: #525659;
+    color: #ccc;
+    font-size: 14px;
+    pointer-events: none;
+    z-index: 1;
   }
 
   /* 모바일 + Safari: PDF.js 캔버스 컨테이너 */
@@ -120,6 +135,7 @@
     color: #ccc;
     font-size: 14px;
   }
+
   .fallback {
     display: none;
     flex: 1;
@@ -156,7 +172,10 @@
   </div>
 </header>
 
-<iframe class="pdf-frame" id="pdf-frame" title="PDF 문서"></iframe>
+<div id="viewer-wrap">
+  <iframe class="pdf-frame" id="pdf-frame" title="PDF 문서"></iframe>
+  <div id="viewer-loading">불러오는 중…</div>
+</div>
 <div id="pdf-canvas-wrap"><div class="pdf-loading">불러오는 중…</div></div>
 <div class="fallback" id="fallback">
   <div>PDF를 표시할 수 없습니다.<br>아래 버튼으로 직접 여세요.</div>
@@ -177,13 +196,9 @@
 
   var ua = navigator.userAgent;
   var isMobile = /Android|iPhone|iPad|iPod/i.test(ua);
-  // Desktop Safari: has "Safari/" but NOT Chrome/Chromium — its native iframe PDF
-  // viewer shows only one page left-aligned, so we use PDF.js here too
   var isSafariDesktop = !isMobile && /Safari\//.test(ua) && !/Chrome\/|Chromium\/|CriOS\//.test(ua);
   var usePdfJs = isMobile || isSafariDesktop;
 
-  // Firebase Storage URLs have CORS restrictions for client-side fetch (PDF.js),
-  // so we fall back to Google Docs Viewer which fetches server-side
   var isExternalUrl = /firebasestorage\.googleapis\.com|firebasestorage\.app/.test(file);
 
   if (!file) {
@@ -193,6 +208,7 @@
   } else if (usePdfJs) {
     renderWithPdfJs(file);
   } else {
+    // 데스크탑 Chrome/Edge: 네이티브 iframe
     var frame = document.getElementById('pdf-frame');
     frame.src = file;
     frame.onerror = function () { showFallback(); };
@@ -200,20 +216,43 @@
 
   function showGoogleDocsViewer(url) {
     document.getElementById('pdf-canvas-wrap').style.display = 'none';
-    var frame = document.getElementById('pdf-frame');
-    frame.style.display = 'block';
+
+    var vwrap = document.getElementById('viewer-wrap');
+    vwrap.style.display = '';
+
+    var frame   = document.getElementById('pdf-frame');
+    var overlay = document.getElementById('viewer-loading');
+
+    // 로딩 오버레이 표시, iframe 투명하게
+    overlay.style.display = 'flex';
+    frame.style.opacity   = '0';
+
+    // Google Docs Viewer가 내부적으로 PDF를 배치하는 시간(~1s)을 기다린 후 페이드인
+    var revealed = false;
+    function reveal() {
+      if (revealed) return;
+      revealed = true;
+      setTimeout(function () {
+        frame.style.opacity = '1';
+        overlay.style.display = 'none';
+      }, 900);
+    }
+
+    // iframe load 이벤트 기준으로 reveal, 최대 12초 후 강제 표시
+    frame.onload = reveal;
+    setTimeout(reveal, 12000);
+
     frame.src = 'https://docs.google.com/viewer?url=' + encodeURIComponent(url) + '&embedded=true';
   }
 
   function renderWithPdfJs(url) {
-    document.getElementById('pdf-frame').style.display = 'none';
+    document.getElementById('viewer-wrap').style.display = 'none';
     var wrap = document.getElementById('pdf-canvas-wrap');
     wrap.style.display = 'block';
 
     pdfjsLib.GlobalWorkerOptions.workerSrc =
       'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-    // rAF ensures wrap has its final CSS dimensions before we measure
     requestAnimationFrame(function () {
       var containerW = wrap.clientWidth - 24;
       if (containerW < 100) containerW = window.innerWidth - 24;
@@ -243,13 +282,16 @@
 
         renderPage(1);
       }).catch(function () {
+        // CORS 실패 시 Google Docs Viewer로 전환
+        document.getElementById('viewer-wrap').style.display = '';
+        wrap.style.display = 'none';
         showGoogleDocsViewer(url);
       });
     });
   }
 
   function showFallback(msg) {
-    document.getElementById('pdf-frame').style.display = 'none';
+    document.getElementById('viewer-wrap').style.display = 'none';
     document.getElementById('pdf-canvas-wrap').style.display = 'none';
     var fb = document.getElementById('fallback');
     if (msg) fb.querySelector('div').textContent = msg;
