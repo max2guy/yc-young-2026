@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#1f436d">
 <meta name="description" content="연천장로교회 중고등부 출결 현황을 주간 및 월간 기준으로 확인합니다.">
 <meta property="og:type" content="website">
@@ -52,6 +52,7 @@
     background: #ffffff;
     border-bottom: 1px solid var(--line);
     box-shadow: 0 2px 8px rgba(19, 34, 49, 0.06);
+    padding-top: env(safe-area-inset-top);
   }
   .topbar-inner {
     display: flex;
@@ -59,7 +60,8 @@
     gap: 4px;
     max-width: var(--max-w);
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 max(20px, env(safe-area-inset-right));
+    padding-left: max(20px, env(safe-area-inset-left));
     height: 46px;
   }
   .topbar-brand {
@@ -74,6 +76,7 @@
     display: flex;
     align-items: center;
     gap: 2px;
+    flex: 1;
     overflow-x: auto;
     scrollbar-width: none;
   }
@@ -81,6 +84,7 @@
   .topbar-link {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     height: 32px;
     padding: 0 10px;
     border-radius: 6px;
@@ -94,6 +98,14 @@
   .topbar-link.active {
     background: var(--green-soft);
     color: var(--green);
+  }
+  @media (max-width: 480px) {
+    .topbar-brand { display: none; }
+    .topbar-link {
+      flex: 1;
+      font-size: 12px;
+      padding: 0 6px;
+    }
   }
 
   /* ── 페이지 래퍼 ── */
