@@ -214,7 +214,13 @@
       };
 
       renderPage(1);
-    }).catch(function () { showFallback(); });
+    }).catch(function () {
+      // CORS 등으로 PDF.js 실패 시 Google Docs Viewer로 폴백
+      wrap.style.display = 'none';
+      var frame = document.getElementById('pdf-frame');
+      frame.style.display = 'block';
+      frame.src = 'https://docs.google.com/viewer?url=' + encodeURIComponent(url) + '&embedded=true';
+    });
   }
 
   function showFallback(msg) {
