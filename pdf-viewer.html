@@ -147,17 +147,18 @@
   fallbackDl.href = file;
 
   var isAndroid = /Android/i.test(navigator.userAgent);
+  var isExternalUrl = /^https?:\/\//i.test(file);
 
   if (!file) {
     document.getElementById('fallback').style.display = 'flex';
     document.getElementById('fallback').querySelector('div').textContent = '불러올 파일이 지정되지 않았습니다.';
     document.getElementById('pdf-frame').style.display = 'none';
-  } else if (isAndroid) {
-    // Android Chrome은 iframe에서 PDF를 렌더링하지 않음 — 새 탭으로 직접 열기
+  } else if (isAndroid && isExternalUrl) {
+    // Android + 외부 URL(Firebase Storage 등): 새 탭으로 직접 열기
     document.getElementById('pdf-frame').style.display = 'none';
     var fb = document.getElementById('fallback');
     fb.style.display = 'flex';
-    fb.querySelector('div').textContent = 'Android에서는 PDF를 외부에서 열어 확인하세요.';
+    fb.querySelector('div').textContent = '아래 버튼을 눌러 PDF를 여세요.';
     fallbackDl.textContent = 'PDF 열기';
     fallbackDl.setAttribute('target', '_blank');
     fallbackDl.removeAttribute('download');
