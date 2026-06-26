@@ -83,12 +83,36 @@
     white-space: nowrap;
     flex-shrink: 0;
   }
+  /* 데스크탑: 네이티브 iframe */
   .pdf-frame {
     flex: 1;
     width: 100%;
     border: none;
     display: block;
     min-height: 0;
+  }
+  /* 모바일: PDF.js 캔버스 컨테이너 */
+  #pdf-canvas-wrap {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    background: #525659;
+    display: none;
+    padding: 12px 0;
+  }
+  #pdf-canvas-wrap canvas {
+    display: block;
+    margin: 0 auto 10px;
+    max-width: 100%;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+  }
+  .pdf-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 120px;
+    color: #ccc;
+    font-size: 14px;
   }
   .fallback {
     display: none;
@@ -115,7 +139,6 @@
     font-weight: 700;
     text-decoration: none;
   }
-  .error { display: flex; }
 </style>
 </head>
 <body>
@@ -126,43 +149,80 @@
     <a class="topbar-download" id="download-btn" href="#">다운로드</a>
   </div>
 </header>
+
 <iframe class="pdf-frame" id="pdf-frame" title="PDF 문서"></iframe>
+<div id="pdf-canvas-wrap"><div class="pdf-loading">불러오는 중…</div></div>
 <div class="fallback" id="fallback">
-  <div>이 기기에서는 PDF를 직접 표시할 수 없습니다.<br>아래 버튼으로 다운로드하세요.</div>
-  <a id="fallback-dl" href="#">PDF 다운로드</a>
+  <div>PDF를 표시할 수 없습니다.<br>아래 버튼으로 직접 여세요.</div>
+  <a id="fallback-dl" href="#" target="_blank">PDF 열기</a>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
   var params = new URLSearchParams(location.search);
-  var file = params.get('file') || '';
-  var title = params.get('title') || 'PDF 문서';
+  var file   = params.get('file')  || '';
+  var title  = params.get('title') || 'PDF 문서';
 
   document.title = title;
   document.getElementById('doc-title').textContent = title;
+  document.getElementById('download-btn').href = file;
+  document.getElementById('download-btn').setAttribute('download', '');
+  document.getElementById('fallback-dl').href = file;
 
-  var dlBtn = document.getElementById('download-btn');
-  dlBtn.href = file;
-  dlBtn.setAttribute('download', '');
-
-  var fallbackDl = document.getElementById('fallback-dl');
-  fallbackDl.href = file;
-
-  var isAndroid = /Android/i.test(navigator.userAgent);
-  var isExternalUrl = /^https?:\/\//i.test(file);
+  var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
   if (!file) {
-    document.getElementById('fallback').style.display = 'flex';
-    document.getElementById('fallback').querySelector('div').textContent = '불러올 파일이 지정되지 않았습니다.';
-    document.getElementById('pdf-frame').style.display = 'none';
+    showFallback('불러올 파일이 지정되지 않았습니다.');
+  } else if (isMobile) {
+    renderWithPdfJs(file);
   } else {
     var frame = document.getElementById('pdf-frame');
-    // Android + 외부 URL: Google Docs Viewer로 iframe 내 렌더링
-    frame.src = (isAndroid && isExternalUrl)
-      ? 'https://docs.google.com/viewer?url=' + encodeURIComponent(file) + '&embedded=true'
-      : file;
-    frame.onerror = function () {
-      frame.style.display = 'none';
-      document.getElementById('fallback').style.display = 'flex';
-    };
+    frame.src = file;
+    frame.onerror = function () { showFallback(); };
+  }
+
+  function renderWithPdfJs(url) {
+    document.getElementById('pdf-frame').style.display = 'none';
+    var wrap = document.getElementById('pdf-canvas-wrap');
+    wrap.style.display = 'block';
+
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+    pdfjsLib.getDocument(url).promise.then(function (pdf) {
+      wrap.innerHTML = '';
+      var dpr = window.devicePixelRatio || 1;
+      var containerW = wrap.clientWidth - 24;
+
+      var renderPage = function (num) {
+        pdf.getPage(num).then(function (page) {
+          var natural  = page.getViewport({ scale: 1 });
+          var scale    = (containerW / natural.width) * dpr;
+          var viewport = page.getViewport({ scale: scale });
+
+          var canvas   = document.createElement('canvas');
+          canvas.width  = viewport.width;
+          canvas.height = viewport.height;
+          canvas.style.width  = containerW + 'px';
+          canvas.style.height = Math.round(viewport.height / dpr) + 'px';
+          wrap.appendChild(canvas);
+
+          page.render({ canvasContext: canvas.getContext('2d'), viewport: viewport });
+
+          if (num < pdf.numPages) renderPage(num + 1);
+        });
+      };
+
+      renderPage(1);
+    }).catch(function () { showFallback(); });
+  }
+
+  function showFallback(msg) {
+    document.getElementById('pdf-frame').style.display = 'none';
+    document.getElementById('pdf-canvas-wrap').style.display = 'none';
+    var fb = document.getElementById('fallback');
+    if (msg) fb.querySelector('div').textContent = msg;
+    fb.style.display = 'flex';
   }
 </script>
 </body>
