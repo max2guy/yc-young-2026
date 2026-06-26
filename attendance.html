@@ -16,7 +16,7 @@
 <link rel="canonical" href="https://max2guy.github.io/yc-young-2026/attendance.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
 <title>연천장로교회 중고등부 출결현황</title>
 <style>
   :root {
@@ -27,12 +27,11 @@
     --green: #163f6b;
     --green-soft: #d4e1ef;
     --green-bright: linear-gradient(135deg, #2f5f95 0%, #163f6b 100%);
-    --sidebar: #ffffff;
     --nav-muted: #52667b;
     --card: #ffffff;
-    --shadow-lg: 0 16px 32px rgba(19, 34, 49, 0.1);
     --shadow-md: 0 12px 24px rgba(19, 34, 49, 0.08);
     --shadow-sm: 0 6px 14px rgba(19, 34, 49, 0.08);
+    --max-w: 860px;
   }
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
@@ -43,131 +42,109 @@
     color: var(--text);
     line-height: 1.55;
   }
-  a { color: inherit; }
-  .layout {
-    display: grid;
-    grid-template-columns: 188px minmax(0, 1fr);
-    min-height: 100vh;
-  }
-  .sidebar {
+  a { color: inherit; text-decoration: none; }
+
+  /* ── 탑바 ── */
+  .topbar {
     position: sticky;
     top: 0;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    padding: 18px 14px;
-    border-right: 1px solid var(--line);
-    background: var(--sidebar);
+    z-index: 100;
+    background: #ffffff;
+    border-bottom: 1px solid var(--line);
+    box-shadow: 0 2px 8px rgba(19, 34, 49, 0.06);
   }
-  .brand {
+  .topbar-inner {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 22px;
+    gap: 4px;
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 0 20px;
+    height: 46px;
   }
-  .brand-mark {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 34px;
-    height: 34px;
-    border-radius: 9px;
-    background: var(--green-bright);
-    box-shadow: 0 12px 24px rgba(22, 63, 107, 0.22);
-  }
-  .brand-title {
-    margin: 0;
-    font-size: 15px;
-    font-weight: 800;
-    line-height: 1.2;
-    color: var(--green);
-  }
-  .brand-subtitle {
-    margin-top: 2px;
-    font-size: 11px;
-    color: var(--muted);
-  }
-  .nav {
-    display: grid;
-    gap: 6px;
-  }
-  .nav-item {
-    display: flex;
-    align-items: center;
-    min-height: 38px;
-    padding: 9px 11px;
-    border-radius: 7px;
-    color: var(--nav-muted);
-    text-decoration: none;
+  .topbar-brand {
     font-size: 14px;
-    font-weight: 700;
-    transition: background-color 140ms ease, color 140ms ease;
+    font-weight: 800;
+    color: var(--green);
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-right: 8px;
   }
-  .nav-item:hover,
-  .nav-item.active {
+  .topbar-nav {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .topbar-nav::-webkit-scrollbar { display: none; }
+  .topbar-link {
+    display: inline-flex;
+    align-items: center;
+    height: 32px;
+    padding: 0 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--nav-muted);
+    white-space: nowrap;
+    transition: background-color 120ms ease, color 120ms ease;
+  }
+  .topbar-link:hover,
+  .topbar-link.active {
     background: var(--green-soft);
     color: var(--green);
   }
-  .sidebar-status {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    margin-top: auto;
-    padding: 14px 2px 4px;
-    border-top: 1px solid var(--line);
-    font-size: 10px;
-    color: var(--muted);
+
+  /* ── 페이지 래퍼 ── */
+  .page-wrap {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 24px 20px 56px;
   }
-  .sidebar-status-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    flex-shrink: 0;
-    background: linear-gradient(135deg, #22c97a, #0e9e55);
-  }
-  .content {
-    min-width: 0;
-    padding: 28px 28px 56px;
-  }
+
+  /* ── 히어로 ── */
   .hero {
-    padding: 30px 32px 28px;
-    border: none;
-    border-radius: 18px;
+    padding: 24px 28px 22px;
+    border-radius: 16px;
     background: linear-gradient(135deg, #2f5f95 0%, #163f6b 100%);
-    box-shadow: 0 16px 40px rgba(22, 63, 107, 0.28);
+    box-shadow: 0 12px 32px rgba(22, 63, 107, 0.24);
     position: relative;
     overflow: hidden;
+    margin-bottom: 18px;
   }
   .hero::after {
     content: '';
     position: absolute;
     right: -40px;
     top: -40px;
-    width: 200px;
-    height: 200px;
+    width: 180px;
+    height: 180px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.05);
     pointer-events: none;
   }
   .hero-label {
-    margin: 0 0 8px;
-    font-size: 12px;
+    margin: 0 0 6px;
+    font-size: 11px;
     font-weight: 700;
     color: rgba(255, 255, 255, 0.55);
     letter-spacing: 0.4px;
   }
   .hero h1 {
     margin: 0;
-    font-size: clamp(24px, 3.5vw, 36px);
+    font-size: clamp(22px, 3vw, 30px);
     line-height: 1.1;
     color: #ffffff;
   }
+
+  /* ── 섹션 ── */
   .section {
-    margin-top: 22px;
-    padding: 20px;
+    margin-top: 14px;
+    padding: 18px 20px;
     border: 1px solid var(--line);
     border-top: 3px solid var(--section-accent, var(--line));
-    border-radius: 18px;
+    border-radius: 14px;
     background: var(--card);
     box-shadow: var(--shadow-md);
   }
@@ -176,55 +153,54 @@
     align-items: flex-start;
     justify-content: space-between;
     gap: 12px;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
   }
   .section-title {
     margin: 0;
-    font-size: 22px;
+    font-size: 18px;
     font-weight: 800;
     color: var(--green);
   }
-  .section-copy {
-    margin: 4px 0 0;
-    color: var(--muted);
-    font-size: 14px;
-  }
+
+  /* ── 요약 지표 카드 ── */
   .stats-grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 14px;
+    gap: 12px;
   }
   .stat-card {
     min-width: 0;
-    padding: 18px;
+    padding: 14px 16px;
     border: 1px solid var(--line);
-    border-radius: 14px;
+    border-radius: 12px;
     background: #ffffff;
     box-shadow: var(--shadow-sm);
   }
   .stat-label {
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     color: #54708d;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 800;
   }
   .stat-value {
     display: block;
-    font-size: 28px;
+    font-size: 26px;
     line-height: 1.1;
     font-weight: 800;
     color: var(--green);
   }
   .stat-meta {
-    margin-top: 10px;
+    margin-top: 8px;
     color: var(--muted);
-    font-size: 13px;
+    font-size: 12px;
   }
+
+  /* ── 주간·월간 카드 공통 ── */
   .placeholder-list,
   .placeholder-months {
     display: grid;
-    gap: 12px;
+    gap: 10px;
   }
   .placeholder-months {
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -237,9 +213,9 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 10px 14px;
+    padding: 9px 13px;
     border: 1px solid var(--line);
-    border-radius: 10px;
+    border-radius: 9px;
     background: #ffffff;
     box-shadow: var(--shadow-sm);
   }
@@ -265,35 +241,37 @@
     flex-shrink: 0;
   }
   .placeholder-title {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 800;
     color: var(--text);
   }
   .placeholder-copy {
     margin-top: 4px;
-    font-size: 13px;
+    font-size: 12px;
     color: var(--muted);
   }
   .placeholder-pill {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 92px;
-    min-height: 36px;
-    padding: 0 12px;
+    min-width: 80px;
+    min-height: 32px;
+    padding: 0 10px;
     border-radius: 999px;
     background: var(--green-soft);
     color: var(--green);
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 800;
   }
+
+  /* ── 명단 ── */
   .roster-date-label {
-    font-size: 13px;
+    font-size: 12px;
     color: var(--muted);
     font-weight: 500;
   }
   .roster-group {
-    margin-bottom: 18px;
+    margin-bottom: 14px;
   }
   .roster-group:last-child {
     margin-bottom: 0;
@@ -302,32 +280,31 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
   .roster-group-label {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 800;
     color: var(--muted);
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
   .roster-group-count {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
     color: var(--green);
   }
   .roster-chips {
     display: flex;
     flex-wrap: wrap;
-    gap: 7px;
+    gap: 6px;
   }
   .roster-chip {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    padding: 5px 11px;
+    padding: 4px 10px;
     border-radius: 999px;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
     border: 1px solid transparent;
   }
@@ -341,11 +318,8 @@
     color: var(--muted);
     border-color: var(--line);
   }
-  .roster-chip-sub {
-    font-size: 11px;
-    font-weight: 500;
-    opacity: 0.7;
-  }
+
+  /* ── 월 그룹 ── */
   .month-group {
     margin-bottom: 10px;
   }
@@ -357,13 +331,13 @@
     align-items: center;
     gap: 10px;
     width: 100%;
-    padding: 11px 14px;
+    padding: 9px 13px;
     border: 1px solid var(--line);
-    border-radius: 10px;
+    border-radius: 9px;
     background: #ffffff;
     cursor: pointer;
     font-family: inherit;
-    font-size: 14px;
+    font-size: 13px;
     color: var(--text);
     transition: background-color 120ms ease;
   }
@@ -371,26 +345,24 @@
     background: var(--green-soft);
   }
   .month-group-name {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 800;
     color: var(--green);
   }
   .month-group-count {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
-    color: var(--muted);
-    background: var(--line);
-    padding: 2px 8px;
+    padding: 2px 7px;
     border-radius: 999px;
   }
   .month-group-toggle {
     margin-left: auto;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
     color: var(--muted);
   }
   .month-group-entries {
-    padding-top: 10px;
+    padding-top: 8px;
   }
   .month-group-entries[hidden] {
     display: none;
@@ -407,17 +379,8 @@
   .month-group:nth-child(4n+2) .month-group-count { background: #dbeafe; color: #1e40af; }
   .month-group:nth-child(4n+3) .month-group-count { background: #fef3c7; color: #b45309; }
   .month-group:nth-child(4n+4) .month-group-count { background: #ede9fe; color: #7c3aed; }
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
+
+  /* ── 섹션 색상 ── */
   #attendance-weekly-section  { --section-accent: #0d9488; }
   #attendance-roster-section  { --section-accent: #2a5fc1; }
   #attendance-summary-section { --section-accent: #d97706; }
@@ -437,139 +400,121 @@
   #attendance-stat-card-weeks .stat-label,
   #attendance-stat-card-weeks .stat-value          { color: #7c3aed; }
 
-  @media (max-width: 960px) {
-    .layout {
-      grid-template-columns: 1fr;
-    }
-    .sidebar {
-      display: none;
-    }
-    .content {
-      padding: 20px 16px 40px;
-    }
-    .stats-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
   }
-  @media (max-width: 480px) {
-    .stats-grid {
-      grid-template-columns: 1fr;
-    }
+
+  /* ── 반응형 ── */
+  @media (max-width: 600px) {
+    .topbar-inner { padding: 0 14px; }
+    .page-wrap { padding: 16px 14px 48px; }
+    .hero { padding: 18px 20px 16px; }
+    .section { padding: 14px 16px; }
+    .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 380px) {
+    .stats-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
-  <div class="layout">
-    <aside class="sidebar" aria-label="주요 탐색">
-      <div class="brand">
-        <div class="brand-mark" aria-hidden="true">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="1.5" width="5.5" height="5.5" rx="1.2" fill="white"/><rect x="9" y="1.5" width="5.5" height="5.5" rx="1.2" fill="white" opacity="0.5"/><rect x="1.5" y="9" width="5.5" height="5.5" rx="1.2" fill="white" opacity="0.5"/><rect x="9" y="9" width="5.5" height="5.5" rx="1.2" fill="white" opacity="0.2"/></svg>
-        </div>
-        <div class="brand-copy">
-          <div class="brand-title">연천장로교회</div>
-          <div class="brand-subtitle">중고등부</div>
-        </div>
-      </div>
-      <nav class="nav">
-        <a class="nav-item active" href="attendance.html" aria-current="page">출결현황</a>
-        <a class="nav-item" href="index.html#meetings-section">회의자료</a>
-        <a class="nav-item" href="index.html#retreat-section">수련회 계획</a>
-        <a class="nav-item" href="index.html#budget-section">예산 및 결산</a>
-        <a class="nav-item" href="index.html#reports-section">행사 보고서</a>
-        <a class="nav-item" href="index.html#archive-section">보관함</a>
-        <a class="nav-item" href="index.html#trash-section">휴지통</a>
-      </nav>
-      <div class="sidebar-status">
-        <div class="sidebar-status-dot" aria-hidden="true"></div>
-        <div>읽기 전용 · 출결 집계 대시보드</div>
-      </div>
-    </aside>
 
-    <main class="content">
-      <section class="hero">
-        <div class="hero-label">연천장로교회 중고등부</div>
-        <h1>출결현황</h1>
+  <!-- 탑바 -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a href="index.html" class="topbar-brand">연천장로교회 중고등부</a>
+      <nav class="topbar-nav">
+        <a class="topbar-link active" href="attendance.html">출결현황</a>
+        <a class="topbar-link" href="index.html#meetings-section">회의자료</a>
+        <a class="topbar-link" href="index.html#retreat-section">수련회 계획</a>
+        <a class="topbar-link" href="index.html#budget-section">예산 및 결산</a>
+        <a class="topbar-link" href="index.html#reports-section">행사 보고서</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 콘텐츠 -->
+  <div class="page-wrap">
+    <section class="hero">
+      <div class="hero-label">연천장로교회 중고등부</div>
+      <h1>출결현황</h1>
+    </section>
+
+    <div id="attendance-dashboard-root">
+      <section class="section" id="attendance-roster-section" aria-labelledby="attendance-roster-title">
+        <div class="section-head">
+          <h2 class="section-title" id="attendance-roster-title">출결자 명단</h2>
+          <span class="roster-date-label" id="attendance-roster-date"></span>
+        </div>
+        <div id="attendance-roster"></div>
       </section>
 
-      <div id="attendance-dashboard-root">
-        <section class="section" id="attendance-roster-section" aria-labelledby="attendance-roster-title">
-          <div class="section-head">
-            <h2 class="section-title" id="attendance-roster-title">출결자 명단</h2>
-            <span class="roster-date-label" id="attendance-roster-date"></span>
+      <section class="section" id="attendance-weekly-section" aria-labelledby="attendance-weekly-title">
+        <div class="section-head">
+          <h2 class="section-title" id="attendance-weekly-title">최근 주간 흐름</h2>
+        </div>
+        <div class="placeholder-panel">
+          <div class="placeholder-list" id="attendance-recent-weeks">
+            <article class="placeholder-week">
+              <div class="placeholder-info">
+                <div class="placeholder-title">최근 주간 데이터 대기 중</div>
+                <div class="placeholder-copy">보고서가 로드되면 날짜, 출석 수, 출석률이 채워집니다.</div>
+              </div>
+              <div class="placeholder-pill">읽기 전용</div>
+            </article>
           </div>
-          <div id="attendance-roster"></div>
-        </section>
+        </div>
+      </section>
 
-        <section class="section" id="attendance-weekly-section" aria-labelledby="attendance-weekly-title">
-          <div class="section-head">
-            <h2 class="section-title" id="attendance-weekly-title">최근 주간 흐름</h2>
-          </div>
-          <div class="placeholder-panel">
-            <div class="placeholder-list" id="attendance-recent-weeks">
-              <article class="placeholder-week">
-                <div>
-                  <div class="placeholder-title">최근 주간 데이터 대기 중</div>
-                  <div class="placeholder-copy">보고서가 로드되면 날짜, 출석 수, 출석률이 여기에 채워집니다.</div>
-                </div>
-                <div class="placeholder-pill">읽기 전용</div>
-              </article>
-              <article class="placeholder-week">
-                <div>
-                  <div class="placeholder-title">권한 또는 설정 확인 대기</div>
-                  <div class="placeholder-copy">설정이 비어 있거나 Firestore 읽기 권한이 없으면 안내 문구가 이 영역에 유지됩니다.</div>
-                </div>
-                <div class="placeholder-pill">준비 중</div>
-              </article>
+      <section class="section" id="attendance-summary-section" aria-labelledby="attendance-summary-title">
+        <div class="section-head">
+          <h2 class="section-title" id="attendance-summary-title">요약 지표</h2>
+        </div>
+        <div class="stats-grid" id="attendance-summary-cards">
+          <article class="stat-card" id="attendance-stat-card-latest">
+            <span class="stat-label">최근 출석</span>
+            <strong class="stat-value" id="attendance-stat-latest-value">--</strong>
+            <div class="stat-meta" id="attendance-stat-latest-meta">가장 최근 주간 보고서 대기 중</div>
+          </article>
+          <article class="stat-card" id="attendance-stat-card-rate">
+            <span class="stat-label">최근 출석률</span>
+            <strong class="stat-value" id="attendance-stat-rate-value">--</strong>
+            <div class="stat-meta" id="attendance-stat-rate-meta">총원 데이터 연결 전</div>
+          </article>
+          <article class="stat-card" id="attendance-stat-card-month-average">
+            <span class="stat-label">이번 달 평균</span>
+            <strong class="stat-value" id="attendance-stat-month-average-value">--</strong>
+            <div class="stat-meta" id="attendance-stat-month-average-meta">월간 집계 준비 중</div>
+          </article>
+          <article class="stat-card" id="attendance-stat-card-weeks">
+            <span class="stat-label">반영 주차</span>
+            <strong class="stat-value" id="attendance-stat-weeks-value">0</strong>
+            <div class="stat-meta" id="attendance-stat-weeks-meta">최근 주간 데이터가 표시됩니다</div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="attendance-monthly-section" aria-labelledby="attendance-monthly-title">
+        <div class="section-head">
+          <h2 class="section-title" id="attendance-monthly-title">월간 요약</h2>
+        </div>
+        <div class="placeholder-months" id="attendance-monthly-summary">
+          <article class="placeholder-month">
+            <div class="placeholder-info">
+              <div class="placeholder-title">월간 요약이 아직 없습니다</div>
+              <div class="placeholder-copy">최근 월 기준 평균 정보가 로드되면 표시됩니다.</div>
             </div>
-          </div>
-        </section>
-
-        <section class="section" id="attendance-summary-section" aria-labelledby="attendance-summary-title">
-          <div class="section-head">
-            <h2 class="section-title" id="attendance-summary-title">요약 지표</h2>
-          </div>
-          <div class="stats-grid" id="attendance-summary-cards">
-            <article class="stat-card" id="attendance-stat-card-latest">
-              <span class="stat-label">최근 출석</span>
-              <strong class="stat-value" id="attendance-stat-latest-value">--</strong>
-              <div class="stat-meta" id="attendance-stat-latest-meta">가장 최근 주간 보고서 대기 중</div>
-            </article>
-            <article class="stat-card" id="attendance-stat-card-rate">
-              <span class="stat-label">최근 출석률</span>
-              <strong class="stat-value" id="attendance-stat-rate-value">--</strong>
-              <div class="stat-meta" id="attendance-stat-rate-meta">총원 데이터 연결 전</div>
-            </article>
-            <article class="stat-card" id="attendance-stat-card-month-average">
-              <span class="stat-label">이번 달 평균</span>
-              <strong class="stat-value" id="attendance-stat-month-average-value">--</strong>
-              <div class="stat-meta" id="attendance-stat-month-average-meta">월간 집계 준비 중</div>
-            </article>
-            <article class="stat-card" id="attendance-stat-card-weeks">
-              <span class="stat-label">반영 주차</span>
-              <strong class="stat-value" id="attendance-stat-weeks-value">0</strong>
-              <div class="stat-meta" id="attendance-stat-weeks-meta">최근 주간 데이터가 표시됩니다</div>
-            </article>
-          </div>
-        </section>
-
-        <section class="section" id="attendance-monthly-section" aria-labelledby="attendance-monthly-title">
-          <div class="section-head">
-            <h2 class="section-title" id="attendance-monthly-title">월간 요약</h2>
-          </div>
-          <div class="placeholder-panel">
-            <div class="placeholder-months" id="attendance-monthly-summary">
-              <article class="placeholder-month">
-                <div>
-                  <div class="placeholder-title">월간 요약이 아직 없습니다</div>
-                  <div class="placeholder-copy">최근 월 기준 평균과 분포 정보가 로드되면 이 영역에 표시됩니다.</div>
-                </div>
-                <div class="placeholder-pill">월간 집계</div>
-              </article>
-            </div>
-          </div>
-        </section>
-      </div>
-    </main>
+            <div class="placeholder-pill">월간 집계</div>
+          </article>
+        </div>
+      </section>
+    </div>
   </div>
 
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -593,10 +538,6 @@
           loadingState.textContent = '출결 렌더러 연결 전입니다. 기본 플레이스홀더를 유지합니다.';
         }
         return;
-      }
-
-      if (loadingState) {
-        loadingState.textContent = '출결 데이터를 불러오는 중입니다.';
       }
 
       Promise.resolve(renderer({
