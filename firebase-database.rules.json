@@ -1,5 +1,9 @@
 {
   "rules": {
+    "uploads": {
+      ".read": true,
+      ".write": true
+    },
     "sportsMeeting2026": {
       ".read": true,
       "state": {

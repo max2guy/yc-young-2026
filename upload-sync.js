@@ -119,14 +119,18 @@
       },
       function () {
         task.snapshot.ref.getDownloadURL().then(function (url) {
-          db.ref(SECTIONS[section].rtdbPath).push({
+          return db.ref(SECTIONS[section].rtdbPath).push({
             title:       title,
             url:         url,
             storagePath: storagePath,
             date:        Date.now()
           });
+        }).then(function () {
           status.textContent = '완료!';
           setTimeout(closeUploadModal, 800);
+        }).catch(function (err) {
+          status.textContent = '저장 실패: ' + err.message;
+          btn.disabled = false;
         });
       }
     );
