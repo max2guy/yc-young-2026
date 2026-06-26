@@ -15,14 +15,17 @@
     --green: #163f6b;
     --green-soft: #d4e1ef;
   }
-  * { box-sizing: border-box; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
   body {
-    margin: 0;
     font-family: "Noto Sans KR", -apple-system, sans-serif;
     background: var(--bg);
     color: var(--text);
+    display: flex;
+    flex-direction: column;
   }
   .topbar {
+    flex-shrink: 0;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -80,72 +83,54 @@
     white-space: nowrap;
     flex-shrink: 0;
   }
-  .viewer {
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 20px 16px 56px;
-    padding-left: max(16px, env(safe-area-inset-left));
-    padding-right: max(16px, env(safe-area-inset-right));
-  }
-  .page-stack {
-    display: grid;
-    gap: 14px;
-  }
-  .page-card {
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 16px rgba(19, 34, 49, 0.1);
-    overflow: hidden;
-  }
-  .page-canvas {
-    display: block;
+  .pdf-frame {
+    flex: 1;
     width: 100%;
-    height: auto;
+    border: none;
+    display: block;
+    min-height: 0;
   }
-  .page-label {
-    padding: 8px 14px;
-    border-top: 1px solid var(--line);
-    background: #f8fafc;
-    color: var(--muted);
-    font-size: 12px;
-    font-weight: 700;
-  }
-  .status {
+  .fallback {
+    display: none;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+    padding: 40px 20px;
     text-align: center;
-    padding: 56px 20px;
     color: var(--muted);
     font-size: 14px;
-    line-height: 1.8;
+    line-height: 1.7;
   }
-  .progress-bar {
-    height: 3px;
-    background: var(--green-soft);
-    position: relative;
-    overflow: hidden;
-  }
-  .progress-fill {
-    height: 100%;
+  .fallback a {
+    display: inline-flex;
+    align-items: center;
+    height: 40px;
+    padding: 0 20px;
+    border-radius: 8px;
     background: var(--green);
-    width: 0%;
-    transition: width 200ms ease;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
   }
+  .error { display: flex; }
 </style>
 </head>
 <body>
 <header class="topbar">
-  <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
   <div class="topbar-inner">
     <a class="topbar-back" href="index.html">← 돌아가기</a>
     <div class="topbar-title" id="doc-title">문서 보기</div>
     <a class="topbar-download" id="download-btn" href="#">다운로드</a>
   </div>
 </header>
-<div class="viewer">
-  <div class="page-stack" id="page-stack">
-    <div class="status" id="status">문서를 불러오는 중입니다…</div>
-  </div>
+<iframe class="pdf-frame" id="pdf-frame" title="PDF 문서"></iframe>
+<div class="fallback" id="fallback">
+  <div>이 기기에서는 PDF를 직접 표시할 수 없습니다.<br>아래 버튼으로 다운로드하세요.</div>
+  <a id="fallback-dl" href="#">PDF 다운로드</a>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
   var params = new URLSearchParams(location.search);
   var file = params.get('file') || '';
@@ -153,64 +138,28 @@
 
   document.title = title;
   document.getElementById('doc-title').textContent = title;
+
   var dlBtn = document.getElementById('download-btn');
   dlBtn.href = file;
   dlBtn.setAttribute('download', '');
 
-  var statusEl = document.getElementById('status');
-  var stack = document.getElementById('page-stack');
-  var progressFill = document.getElementById('progress');
+  var fallbackDl = document.getElementById('fallback-dl');
+  fallbackDl.href = file;
+  fallbackDl.setAttribute('download', '');
 
   if (!file) {
-    statusEl.textContent = '불러올 파일이 지정되지 않았습니다.';
+    document.getElementById('fallback').style.display = 'flex';
+    document.getElementById('fallback').querySelector('div').textContent = '불러올 파일이 지정되지 않았습니다.';
+    document.getElementById('pdf-frame').style.display = 'none';
   } else {
-    pdfjsLib.GlobalWorkerOptions.workerSrc =
-      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    var frame = document.getElementById('pdf-frame');
+    frame.src = file;
 
-    pdfjsLib.getDocument(file).promise.then(function (pdf) {
-      statusEl.remove();
-      var total = pdf.numPages;
-      var rendered = 0;
-
-      function renderPage(num) {
-        return pdf.getPage(num).then(function (page) {
-          var scale = window.devicePixelRatio >= 2 ? 2.0 : 1.5;
-          var viewport = page.getViewport({ scale: scale });
-
-          var card = document.createElement('div');
-          card.className = 'page-card';
-
-          var canvas = document.createElement('canvas');
-          canvas.className = 'page-canvas';
-          canvas.width = viewport.width;
-          canvas.height = viewport.height;
-
-          var label = document.createElement('div');
-          label.className = 'page-label';
-          label.textContent = num + ' / ' + total;
-
-          card.appendChild(canvas);
-          card.appendChild(label);
-          stack.appendChild(card);
-
-          return page.render({ canvasContext: canvas.getContext('2d'), viewport: viewport }).promise.then(function () {
-            rendered++;
-            progressFill.style.width = Math.round((rendered / total) * 100) + '%';
-            if (rendered === total) {
-              progressFill.style.opacity = '0';
-            }
-          });
-        });
-      }
-
-      (function loop(n) {
-        if (n > total) return;
-        renderPage(n).then(function () { loop(n + 1); });
-      })(1);
-
-    }).catch(function (err) {
-      statusEl.innerHTML = '문서를 불러오지 못했습니다.<br><small>' + err.message + '</small>';
-    });
+    // iOS Safari는 iframe PDF를 지원하지 않을 수 있음 — 로드 실패 시 fallback
+    frame.onerror = function () {
+      frame.style.display = 'none';
+      document.getElementById('fallback').style.display = 'flex';
+    };
   }
 </script>
 </body>
