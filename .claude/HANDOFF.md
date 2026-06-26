@@ -1,90 +1,73 @@
-# yc-young-2026 — Codex Handoff (v2026-06-25c)
+# yc-young-2026 — Codex Handoff (v1.5.0)
 
 ## 현재 상태
-- 브랜치: main
-- 최근 커밋: `74f0e1d` Add attendance roster section showing present/absent members from latest report
-- GitHub: https://github.com/max2guy/yc-young-2026
-- 배포: https://max2guy.github.io/yc-young-2026/ (GitHub Pages)
-
----
+- 최신 커밋: `4d3d5e6 Fix desktop topbar: right-align nav links`
+- 브랜치: main (GitHub Pages 배포)
+- Firebase Storage 규칙: CLI로 배포 완료 (`allow read, write: if true` → `uploads/**`)
 
 ## 방금 수정한 내용
 
-### 카드 레이아웃 수평 행 전환 + 전 디바이스 공간 최적화 (2026-06-25)
+### 1. Firebase Storage 규칙 배포 (브라우저 UI → CLI로 전환)
+- 문제: Firebase Console CodeMirror 에디터에서 Angular 변경 감지가 안 되어 규칙 게시 실패
+- 해결: `storage.rules` 파일 생성, `firebase.json`에 storage 설정 추가, `firebase deploy --only storage`로 배포
+- 파일: `storage.rules` (신규), `firebase.json` (storage 항목 추가)
 
-**문제:** 주간/월간 카드가 수직 스택(날짜→숫자→메타) 구조라 카드 오른쪽 절반이 항상 비어 있었음. 폰트·패딩 줄이기로는 해결 불가.
+### 2. attendance.html 데스크탑 topbar 우측 정렬
+- 문제: 데스크탑에서 nav 링크들이 좌측으로 몰림
+- 해결: `@media (min-width: 481px)` 에서 `.topbar-nav { justify-content: flex-end; }` 추가
+- 파일: `attendance.html` (CSS 미디어쿼리 추가)
 
-**해결 (파일별 변경사항):**
-
-- **`attendance.html`**
-  - `.placeholder-week/.placeholder-month`: `display: flex; align-items: center`로 수평 행 레이아웃 전환
-  - `.placeholder-info` (flex:1), `.placeholder-date`, `.placeholder-meta`, `.placeholder-count` (우측 숫자, clamp) 클래스 추가
-  - `.placeholder-months`: `repeat(auto-fit, minmax(180px, 1fr))` — 중단점 없이 자동 리플로우
-  - `.month-group-entries .placeholder-list`: `repeat(auto-fit, minmax(200px, 1fr))`
-  - 480px 미디어 쿼리: 불필요한 카드 오버라이드 제거, `stats-grid: 1fr`만 유지
-
-- **`attendance-sync.js`**
-  - `renderWeeklyCards`: `stat-label/stat-value/stat-meta` → `placeholder-info/date/meta/count` 구조로 변경
-  - `renderMonthlyCards`: 동일하게 수평 행 구조 변경
-
-### 출결자 명단 섹션 추가 (2026-06-25)
-
-**문제:** 출결 대시보드에 가장 최근 보고서의 출석자/결석자 명단이 없었음
-
-**해결 (파일별 변경사항):**
-
-- **`attendance.html`**
-  - 불필요한 설명 텍스트 4개 제거 (hero `<p>`, `section-copy` 단락 3개)
-  - `#attendance-roster-section` 섹션 추가 (주간/월간 섹션 사이)
-  - `.roster-*` CSS 클래스 추가 (chip, group, label 등)
-  - inline script에 `roster`, `rosterDate` 컨테이너 전달 추가
-
-- **`index.html`**
-  - 불필요한 설명 텍스트 8개 제거 (`section-copy`, hero `<p>`)
-
-- **`attendance-sync.js`**
-  - `toAttendanceEntry()`: `members` 배열 반환값에 추가
-  - `renderRosterSection(container, dateEl, latestEntry)` 함수 추가
-    - `status === 'present'` 기준 출석/결석 분리
-    - `group === 'middle'` → "중", `group === 'high'` → "고" 서브 레이블
-    - `.roster-chip.present` / `.roster-chip.absent` chip 렌더
-  - `renderAttendanceDashboard()`: 성공 시 `renderRosterSection` 호출 추가
-  - `window.AttendanceSync`에 `renderRosterSection` export 추가
-
----
+## 이전에 완료한 작업 목록
+- `attendance.html` topbar "보관함" 링크 추가, "수련회 계획" → "계획서" 수정
+- `attendance.html` 모바일 nav overflow 수정 (`flex: 1` 제거)
+- `meeting-editor.html` "메인으로" → "← 돌아가기" 수정
+- `pdf-viewer.html` 전면 재작성: PDF.js 캔버스 → `<iframe>` 네이티브 렌더러
+- `index.html` 카드 "수련회 비교 분석" → "2026 중고등부 계획서", `pdf-viewer.html` 링크 수정
+- `index.html` 카드 "여름계획서안" → "2026 여름 수련회 계획서"
+- `index.html` nav "수련회 계획" → "계획서" 수정
+- `index.html` 데스크탑 topbar 우측 정렬 (`justify-content: flex-end`)
+- Firebase Storage 버킷 생성 (yc-young-2026-sync.firebasestorage.app, US-EAST1)
+- Firebase Blaze 플랜 업그레이드
+- `upload-sync.js` 신규 생성: 파일 업로드/삭제 기능 (PIN: SHA-256 해시 보관)
+- `index.html` 업로드 UI 추가: 계획서·행사 보고서·예산 및 결산 섹션
 
 ## 프로젝트 개요
-
-- **스택:** 순수 HTML/CSS/JS, Firebase Web SDK (compat v10.12.2), GitHub Pages 배포
-- **데이터 소스:**
-  - `ministry-report-v2` Firestore (출결 대시보드용, 읽기 공개)
-  - `yc-young-2026` Firebase Realtime Database (회의자료 편집기용)
-- **인증 없음:** 공개 링크 접근, Firestore 규칙 `allow read: if true` 적용 완료
-
-## Firestore 데이터 구조
-```
-reports/{reportId}
-  └── departments.middleHigh
-        ├── attendance: number
-        └── members[]: { id, name, status: "present"|"absent", group?: "middle"|"high", role?, phone? }
-```
+- **플랫폼**: Static GitHub Pages (HTML/CSS/JS)
+- **배포**: `https://max2guy.github.io/yc-young-2026/`
+- **Firebase 프로젝트**: `yc-young-2026-sync`
+- **데이터베이스**: Firebase Realtime Database (회의자료 + 업로드 메타데이터)
+- **스토리지**: Firebase Storage (`uploads/plans`, `uploads/reports`, `uploads/budget`)
+- **인증**: 없음 (업로드 누구나, 삭제만 PIN 006291 → SHA-256 해시)
 
 ## 주요 파일
-- `index.html`: 홈 페이지 — 사이드바 + 모든 섹션 (출결현황 포함)
-- `attendance.html`: 출결 대시보드 전용 페이지 (주간/명단/월간)
-- `attendance-sync.js`: Firestore 읽기, 집계, 렌더 헬퍼 (roster 포함)
-- `attendance-config.js`: Firebase 설정 (ministry-report-v2, 값 채워짐)
-- `meeting-editor.html`: 회의자료 편집기 (contenteditable 기반)
-- `sync-config.js`: 회의자료용 Realtime Database 설정
+| 파일 | 역할 |
+|---|---|
+| `index.html` | 메인 페이지 — 회의자료, 계획서, 보고서, 예산 섹션 + 업로드 UI |
+| `attendance.html` | 출결현황 페이지 |
+| `pdf-viewer.html` | PDF 뷰어 — `?file=URL&title=제목` 파라미터 |
+| `upload-sync.js` | Firebase Storage/RTDB 파일 업로드·삭제 로직 |
+| `storage.rules` | Firebase Storage 보안 규칙 |
+| `firebase.json` | Firebase 배포 설정 (database + storage) |
+| `firebase-database.rules.json` | RTDB 보안 규칙 |
+| `sync-config.js` | Firebase 설정값 (SPORTS_SYNC_CONFIG.firebase) |
 
 ## 다음으로 할 수 있는 작업
-- 명단 섹션 다크모드 스타일 검토 (현재 light 계열 색상 하드코딩)
-- 명단 그룹 정렬 — 중학부/고등부 각각 섹션 분리 (현재 출석/결석만 구분)
-- 출석률 변화 추이 차트 (월간 섹션 하위)
-- 주간 카드 클릭 시 해당 주 상세 명단 표시 (드릴다운)
+- 업로드 기능 실제 테스트 (브라우저에서 `+ 파일 추가` 클릭)
+- 모바일 iOS에서 PDF 뷰어 fallback 동작 확인
+- `attendance.html` 데스크탑 뷰 topbar 정렬 Preview에서 확인
+- 업로드된 파일 삭제 PIN 기능 테스트
 
 ## 빌드 & 배포
 ```bash
-# GitHub main 브랜치 push시 GitHub Pages 자동 반영
-git push origin main
+# Firebase Storage 규칙 배포
+cd "/Users/kimwoojung/Documents/New project/yc-young-2026"
+firebase deploy --only storage
+
+# RTDB 규칙 배포
+firebase deploy --only database
+
+# GitHub Pages 배포 (git push로 자동)
+git add .
+git commit -m "feat: ..."
+git push
 ```

@@ -75,7 +75,7 @@
   .topbar-nav {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-evenly;
     gap: 2px;
     flex: 1;
     overflow-x: auto;
@@ -489,14 +489,15 @@
 
   /* ── 파일 업로드 ── */
   .upload-add-btn {
-    display: flex; align-items: center; justify-content: center;
-    gap: 6px; width: 100%; padding: 14px; margin-top: 10px;
-    border: 2px dashed var(--line); border-radius: 12px;
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 30px; height: 30px; flex-shrink: 0;
+    border: 1.5px solid var(--line); border-radius: 50%;
     background: transparent; color: var(--muted);
-    font-size: 14px; font-family: inherit; font-weight: 700; cursor: pointer;
-    transition: border-color 140ms, color 140ms;
+    font-size: 20px; font-weight: 300; line-height: 1;
+    font-family: inherit; cursor: pointer;
+    transition: border-color 140ms, color 140ms, background 140ms;
   }
-  .upload-add-btn:hover { border-color: var(--section-accent); color: var(--section-accent); }
+  .upload-add-btn:hover { border-color: var(--section-accent); color: var(--section-accent); background: color-mix(in srgb, var(--section-accent) 8%, transparent); }
 
   .uploaded-card { position: relative; }
   .upload-delete-btn {
@@ -599,6 +600,7 @@
       <section class="section" id="retreat-section">
         <div class="section-head">
           <h2 class="section-title">계획서</h2>
+          <button class="upload-add-btn" data-upload-section="retreat" title="파일 추가">+</button>
         </div>
 
         <div class="resource-grid">
@@ -624,12 +626,12 @@
           </a>
         </div>
         <div class="resource-grid" id="upload-cards-retreat"></div>
-        <button class="upload-add-btn" data-upload-section="retreat">+ 파일 추가</button>
       </section>
 
       <section class="section" id="budget-section">
         <div class="section-head">
           <h2 class="section-title">예산 및 결산</h2>
+          <button class="upload-add-btn" data-upload-section="budget" title="파일 추가">+</button>
         </div>
 
         <div class="resource-grid">
@@ -640,12 +642,12 @@
           </a>
         </div>
         <div class="resource-grid" id="upload-cards-budget"></div>
-        <button class="upload-add-btn" data-upload-section="budget">+ 파일 추가</button>
       </section>
 
       <section class="section" id="reports-section">
         <div class="section-head">
           <h2 class="section-title">행사 보고서</h2>
+          <button class="upload-add-btn" data-upload-section="reports" title="파일 추가">+</button>
         </div>
 
         <div class="resource-grid">
@@ -656,7 +658,6 @@
           </a>
         </div>
         <div class="resource-grid" id="upload-cards-reports"></div>
-        <button class="upload-add-btn" data-upload-section="reports">+ 파일 추가</button>
       </section>
 
       <section class="section" id="archive-section">
