@@ -16,18 +16,22 @@
     --green-soft: #d4e1ef;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; }
+
+  /* position: fixed on body locks viewport size — prevents iOS address-bar
+     hide/show from causing layout reflows and scroll jumps */
+  html { height: 100%; }
   body {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
     font-family: "Noto Sans KR", -apple-system, sans-serif;
     background: var(--bg);
     color: var(--text);
     display: flex;
     flex-direction: column;
   }
+
   .topbar {
     flex-shrink: 0;
-    position: sticky;
-    top: 0;
     z-index: 100;
     background: #fff;
     border-bottom: 1px solid var(--line);
@@ -83,7 +87,8 @@
     white-space: nowrap;
     flex-shrink: 0;
   }
-  /* 데스크탑: 네이티브 iframe */
+
+  /* Chrome/Edge 데스크탑: 네이티브 iframe */
   .pdf-frame {
     flex: 1;
     width: 100%;
@@ -91,7 +96,8 @@
     display: block;
     min-height: 0;
   }
-  /* 모바일: PDF.js 캔버스 컨테이너 */
+
+  /* 모바일 + Safari: PDF.js 캔버스 컨테이너 */
   #pdf-canvas-wrap {
     flex: 1;
     overflow-y: auto;
@@ -169,14 +175,22 @@
   document.getElementById('download-btn').setAttribute('download', '');
   document.getElementById('fallback-dl').href = file;
 
-  var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  var ua = navigator.userAgent;
+  var isMobile = /Android|iPhone|iPad|iPod/i.test(ua);
+  // Desktop Safari: has "Safari/" but NOT Chrome/Chromium — its native iframe PDF
+  // viewer shows only one page left-aligned, so we use PDF.js here too
+  var isSafariDesktop = !isMobile && /Safari\//.test(ua) && !/Chrome\/|Chromium\/|CriOS\//.test(ua);
+  var usePdfJs = isMobile || isSafariDesktop;
+
+  // Firebase Storage URLs have CORS restrictions for client-side fetch (PDF.js),
+  // so we fall back to Google Docs Viewer which fetches server-side
   var isExternalUrl = /firebasestorage\.googleapis\.com|firebasestorage\.app/.test(file);
 
   if (!file) {
     showFallback('불러올 파일이 지정되지 않았습니다.');
-  } else if (isMobile && isExternalUrl) {
+  } else if (usePdfJs && isExternalUrl) {
     showGoogleDocsViewer(file);
-  } else if (isMobile) {
+  } else if (usePdfJs) {
     renderWithPdfJs(file);
   } else {
     var frame = document.getElementById('pdf-frame');
@@ -199,33 +213,38 @@
     pdfjsLib.GlobalWorkerOptions.workerSrc =
       'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-    pdfjsLib.getDocument(url).promise.then(function (pdf) {
-      wrap.innerHTML = '';
-      var dpr = window.devicePixelRatio || 1;
+    // rAF ensures wrap has its final CSS dimensions before we measure
+    requestAnimationFrame(function () {
       var containerW = wrap.clientWidth - 24;
+      if (containerW < 100) containerW = window.innerWidth - 24;
 
-      var renderPage = function (num) {
-        pdf.getPage(num).then(function (page) {
-          var natural  = page.getViewport({ scale: 1 });
-          var scale    = (containerW / natural.width) * dpr;
-          var viewport = page.getViewport({ scale: scale });
+      pdfjsLib.getDocument(url).promise.then(function (pdf) {
+        wrap.innerHTML = '';
+        var dpr = window.devicePixelRatio || 1;
 
-          var canvas   = document.createElement('canvas');
-          canvas.width  = viewport.width;
-          canvas.height = viewport.height;
-          canvas.style.width  = containerW + 'px';
-          canvas.style.height = Math.round(viewport.height / dpr) + 'px';
-          wrap.appendChild(canvas);
+        var renderPage = function (num) {
+          pdf.getPage(num).then(function (page) {
+            var natural  = page.getViewport({ scale: 1 });
+            var scale    = (containerW / natural.width) * dpr;
+            var viewport = page.getViewport({ scale: scale });
 
-          page.render({ canvasContext: canvas.getContext('2d'), viewport: viewport });
+            var canvas   = document.createElement('canvas');
+            canvas.width  = viewport.width;
+            canvas.height = viewport.height;
+            canvas.style.width  = containerW + 'px';
+            canvas.style.height = Math.round(viewport.height / dpr) + 'px';
+            wrap.appendChild(canvas);
 
-          if (num < pdf.numPages) renderPage(num + 1);
-        });
-      };
+            page.render({ canvasContext: canvas.getContext('2d'), viewport: viewport });
 
-      renderPage(1);
-    }).catch(function () {
-      showGoogleDocsViewer(url);
+            if (num < pdf.numPages) renderPage(num + 1);
+          });
+        };
+
+        renderPage(1);
+      }).catch(function () {
+        showGoogleDocsViewer(url);
+      });
     });
   }
 
