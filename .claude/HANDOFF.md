@@ -1,11 +1,19 @@
-# yc-young-2026 — Codex Handoff (v1.6.0)
+# yc-young-2026 — Codex Handoff (v1.7.0)
 
 ## 현재 상태
-- 최신 커밋: (이 파일 커밋 직후 `git log -1`로 확인) — "feat: 학생 명단 독립 페이지(roster.html) 완성" 계열 커밋들
+- 최신 커밋: (이 파일 커밋 직후 `git log -1`로 확인) — "fix: attendance.html 모바일 뒤로가기 버튼 추가" 계열 커밋
 - 브랜치: main (GitHub Pages 배포)
 - 학생 명단 기능이 `attendance.html` 내부 섹션에서 독립 페이지 `roster.html`로 완전히 분리됨
 
 ## 방금 수정한 내용
+
+### `attendance.html` 모바일 "돌아가기" 버튼 추가
+- 문제: `attendance.html`의 topbar는 `.topbar-brand`(교회명 로고, `index.html`로 링크)가 유일한 "메인으로 돌아가기" 수단이었는데, `@media (max-width: 480px)`에서 `.topbar-brand { display: none; }`로 완전히 숨겨져 있어 모바일에서 뒤로 갈 방법이 없었음.
+- 해결: `.topbar-brand` 링크 내부를 `<span class="topbar-brand-full">`(전체 교회명, 데스크탑용)과 `<span class="topbar-brand-short">`(`← 돌아가기`, 모바일용)로 분리. 기본은 `-full` 표시/`-short` 숨김, `max-width: 480px`에서 반대로 전환. 로고 자리(같은 위치)에서 데스크탑은 교회명, 모바일은 뒤로가기 버튼이 항상 보이도록 처리(사용자가 "로고 자리에 항상 노출" 옵션 선택).
+- 검증: Chrome MCP로 `http://localhost:3457/attendance.html`을 390px 너비로 확인 → "← 돌아가기" 버튼 노출, 클릭 시 `index.html`로 정상 이동 확인. `getComputedStyle`로 `.topbar-brand-full`/`-short` 전환 로직도 확인.
+- 다른 페이지(`index.html`)에도 동일한 `.topbar-brand { display: none; }` 규칙이 있으나, `index.html`은 메인 페이지 자체라 "뒤로가기"가 필요 없으므로 수정하지 않음.
+
+### 학생 명단 독립 페이지 분리 + 필드 확장 (이전 세션)
 
 ### 학생 명단 독립 페이지 분리 + 필드 확장
 - 문제: 이전 세션에서 학생 명단을 `attendance.html` 안에 임시로 넣었으나(중1~고3, 이름만 관리), 사용자가 "별도 페이지로 분리 + 전화번호/생일/학교/주소 등 추가"를 요청함. 또한 네비게이션 링크는 추가하지 말라고 명시적으로 요청함(자주 안 보는 페이지라서).
