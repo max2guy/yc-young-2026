@@ -64,28 +64,28 @@
     padding-left: max(20px, env(safe-area-inset-left));
     height: 46px;
   }
-  .topbar-brand {
+  .topbar-back {
     display: inline-flex;
-    align-items: center;
-    font-size: 14px;
-    font-weight: 800;
-    color: var(--green);
-    white-space: nowrap;
-    flex-shrink: 0;
-    margin-right: 8px;
-  }
-  .topbar-brand-short {
-    display: none;
     align-items: center;
     height: 30px;
     padding: 0 10px;
     border-radius: 7px;
     border: 1px solid var(--line);
     background: #fff;
+    color: var(--text);
     font-size: 12px;
     font-weight: 700;
-    color: var(--text);
     white-space: nowrap;
+    flex-shrink: 0;
+    margin-right: 8px;
+  }
+  .topbar-brand {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--green);
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-right: 8px;
   }
   .topbar-nav {
     display: flex;
@@ -118,8 +118,7 @@
     .topbar-nav { justify-content: space-evenly; }
   }
   @media (max-width: 480px) {
-    .topbar-brand-full { display: none; }
-    .topbar-brand-short { display: inline-flex; }
+    .topbar-brand { display: none; }
     .topbar-link {
       font-size: 12px;
       padding: 0 8px;
@@ -458,10 +457,8 @@
   <!-- 탑바 -->
   <header class="topbar">
     <div class="topbar-inner">
-      <a href="index.html" class="topbar-brand">
-        <span class="topbar-brand-full">연천장로교회 중고등부</span>
-        <span class="topbar-brand-short">← 돌아가기</span>
-      </a>
+      <a href="index.html" class="topbar-back">← 돌아가기</a>
+      <span class="topbar-brand">연천장로교회 중고등부</span>
       <nav class="topbar-nav">
         <a class="topbar-link active" href="attendance.html">출결현황</a>
         <a class="topbar-link" href="index.html#meetings-section">회의자료</a>
