@@ -1,5 +1,9 @@
 {
   "rules": {
+    "members": {
+      ".read": true,
+      ".write": true
+    },
     "uploads": {
       ".read": true,
       ".write": true
