@@ -108,6 +108,12 @@
     font-weight: 800;
     color: #7c3aed;
   }
+  #roster-total-count {
+    margin-left: 4px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--muted);
+  }
 
   .roster-grid {
     display: grid;
@@ -316,7 +322,7 @@
     </section>
 
     <section class="section" aria-labelledby="roster-title">
-      <h2 class="section-title" id="roster-title">학년별 명단</h2>
+      <h2 class="section-title" id="roster-title">학년별 명단<span id="roster-total-count"></span></h2>
       <div id="roster-root"></div>
     </section>
   </div>

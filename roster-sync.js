@@ -7,6 +7,7 @@
 
   var db;
   var editing = null; // { grade, key } or null when adding
+  var gradeCounts = {};
 
   function init() {
     var cfg = window.SPORTS_SYNC_CONFIG.firebase;
@@ -81,7 +82,19 @@
 
       if (count === 0) chips.innerHTML = '<span class="roster-empty">없음</span>';
       if (cnt) cnt.textContent = count + '명';
+
+      gradeCounts[grade] = count;
+      updateTotalCount();
     });
+  }
+
+  function updateTotalCount() {
+    var el = document.getElementById('roster-total-count');
+    if (!el) return;
+    var total = GRADE_KEYS.reduce(function (sum, g) {
+      return sum + (gradeCounts[g] || 0);
+    }, 0);
+    el.textContent = '(총 ' + total + '명)';
   }
 
   function buildChip(grade, key, data) {
