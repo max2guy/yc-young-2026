@@ -6,7 +6,7 @@
       path: 'meetingDocuments',
       badge: '회의자료',
       skip: function (item) { return !!item.deletedAt; },
-      href: function (id) { return 'meeting-editor.html?id=' + id; },
+      href: function (id) { return 'meeting-editor.html?id=' + encodeURIComponent(id); },
       ts: function (item) { return item.updatedAt || 0; }
     },
     {
