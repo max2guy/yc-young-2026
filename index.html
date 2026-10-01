@@ -578,21 +578,15 @@
         <div class="section-head">
           <h2 class="section-title">통합 검색</h2>
         </div>
-        <input
-          type="search"
-          id="unified-search-input"
-          class="unified-search-input"
-          placeholder="회의자료, 계획서, 보고서, 예산 검색"
-          autocomplete="off"
-        >
-        <div id="unified-search-results" class="unified-search-results" hidden></div>
+        <input type="search" id="unified-search-input" class="unified-search-input" placeholder="회의자료, 계획서, 보고서, 예산 검색" autocomplete="off" aria-label="통합 검색">
+        <div id="unified-search-results" class="unified-search-results" aria-live="polite" hidden></div>
       </section>
 
       <section class="section" id="updates-section">
         <div class="section-head">
           <h2 class="section-title">최근 업데이트</h2>
         </div>
-        <div id="updates-feed" class="updates-feed">
+        <div id="updates-feed" class="updates-feed" aria-live="polite">
           <div class="recent-empty">불러오는 중입니다.</div>
         </div>
       </section>
