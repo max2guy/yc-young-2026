@@ -22,8 +22,8 @@
 
 ### 범위
 
-- 포함: `uploads/plans`, `uploads/reports`, `uploads/budget` (RTDB, 각 항목 `{title, url, storagePath, date}`), `sportsMeeting2026`의 회의자료 문서(`{title, updatedAt}`).
-- 제외: `members/*`(학생 명단 — 전화번호·생일·주소 등 미성년자 개인정보 포함, PRODUCT.md Accessibility & Inclusion 항목에 따라 완전 제외로 확정).
+- 포함: `uploads/plans`, `uploads/reports`, `uploads/budget` (RTDB, 각 항목 `{title, url, storagePath, date}`), `meetingDocuments/{id}`(일반 회의자료, `{title, updatedAt, deletedAt?}` — `deletedAt`이 있는 휴지통 항목은 제외).
+- 제외: `members/*`(학생 명단 — 전화번호·생일·주소 등 미성년자 개인정보 포함, PRODUCT.md Accessibility & Inclusion 항목에 따라 완전 제외로 확정), `sportsMeeting2026`(체육대회 회의자료는 단일 공유 편집 문서이며 제목 필드가 없어 검색 리스트 구조에 맞지 않음 — index.html:858-1215 확인 결과 정정).
 
 ### 동작
 
@@ -40,7 +40,7 @@
 
 ### 데이터
 
-- 통합 검색과 동일한 4개 소스에서 `date`(uploads) 또는 `updatedAt`(sportsMeeting2026) 기준 내림차순 정렬 후 상위 5건만 추린다.
+- 통합 검색과 동일한 4개 소스에서 `date`(uploads) 또는 `updatedAt`(meetingDocuments) 기준 내림차순 정렬 후 상위 5건만 추린다.
 - 5건 미만이면 있는 만큼만 표시하고, 빈 상태 메시지는 띄우지 않는다(데이터가 적은 것은 오류가 아니다).
 
 ### UI
