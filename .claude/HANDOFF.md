@@ -1,13 +1,25 @@
-# yc-young-2026 — Codex Handoff (v1.8.0)
+# yc-young-2026 — Codex Handoff (v1.9.0)
 
 ## 현재 상태
-- 최신 커밋: `aa69a64` — "fix: attendance.html 데스크탑에서도 뒤로가기 버튼 명시적으로 노출" (`git log -1`로 재확인 권장)
-- 브랜치: main (GitHub Pages 배포), 원격과 동기화 완료(push 완료)
-- 학생 명단 기능이 `attendance.html` 내부 섹션에서 독립 페이지 `roster.html`로 완전히 분리됨
+- 브랜치: `feature/unified-search-updates` (아직 main 미병합, GitHub Pages는 main 기준이라 이번 작업은 아직 배포 안 됨)
+- 최신 커밋: `e2260cc` — "style: 통합 검색/업데이트 피드 CSS 추가" (`git log -1`로 재확인 권장)
+- 학생 명단 기능이 `attendance.html` 내부 섹션에서 독립 페이지 `roster.html`로 완전히 분리됨 (이전 세션 작업, 변경 없음)
 
 ## 방금 수정한 내용 (최신순)
 
-### 1. `attendance.html` 뒤로가기 버튼 — 데스크탑에서도 명시적으로 노출
+### 0. 통합 검색 + 업데이트 피드 추가 (`feature/unified-search-updates` 브랜치, Task 1~5 완료)
+- 배경: 회의자료/계획서/보고서/예산이 섹션별로 나뉘어 있어 원하는 문서를 찾으려면 여러 섹션을 뒤져야 하는 문제. `docs/superpowers/specs/2026-10-01-site-redesign-unified-search-design.md` 스펙, `docs/superpowers/plans/2026-10-01-unified-search-and-updates.md` 구현 계획 참고.
+- `index.html` 히어로 타이틀 바로 아래, 기존 "출결현황" 섹션 위에 `#search-section`(통합 검색 input + 결과 영역)과 `#updates-section`(최근 업데이트 피드, 상위 5건)을 새로 삽입.
+- 신규 파일 `assets/home-search.js`: `meetingDocuments`, `uploads/plans`, `uploads/reports`, `uploads/budget` 4개 RTDB 경로를 한 번에 읽어 클라이언트 메모리에 제목 기준 통합 인덱스 생성. 검색은 제목 부분 문자열 매칭 실시간 필터링(디바운스 ~150ms), 업데이트 피드는 `date`/`updatedAt` 기준 내림차순 상위 5건.
+- 접근성 보강: `#unified-search-input`에 `aria-label="통합 검색"`, `#unified-search-results`/`#updates-feed`에 `aria-live="polite"` 추가(코드 품질 리뷰에서 지적된 2건 수정 완료).
+- CSS는 기존 DESIGN.md 토큰(`--line`, `--green`, `--text`, `--muted`, `accent-update`)만 재사용, 새 변수 없음.
+- **학생 명단(`members/*`)과 `sportsMeeting2026`(체육대회 단일 편집 문서, 제목 필드 없음)은 검색/피드에서 완전히 제외** — PRODUCT.md Accessibility & Inclusion 결정 및 스펙 2절에 따름. 코드 리뷰에서 `members` 네트워크 요청이 섞이지 않는지 명시적으로 확인함.
+- 삭제 PIN 로직, `firebase-database.rules.json`/`storage.rules`, `members` 스키마는 이번 변경으로 전혀 손대지 않음(diff로 확인).
+- 로컬 수동 검증 완료: 섹션 위치/순서, 피드 최신순 정렬, 검색 필터링/빈 상태, 검색어 삭제 시 결과 숨김, `members` 요청 없음, 모바일 375px 가로 스크롤 없음 — 7개 항목 모두 통과.
+- **다음 라운드(별도 계획, 이번 범위 아님)**: `assets/tokens.css` + `assets/components.css`로 9개 페이지 디자인(네이비 `#163f6b` + 오프화이트 `#f3efe8`) 통일 — 설계는 `DESIGN.md`(2026-10-01)에 이미 확정, 아직 미착수.
+- **미병합 상태 주의**: 이 브랜치는 아직 main에 머지되지 않았음. 다음 작업자는 `git branch --show-current`로 현재 브랜치를 반드시 확인할 것.
+
+### 1. `attendance.html` 뒤로가기 버튼 — 데스크탑에서도 명시적으로 노출 (이전 세션, 변경 없음)
 - 문제: 직전 수정(모바일 전용 "← 돌아가기" 텍스트 전환)까지는 데스크탑에서 여전히 교회명 로고 텍스트만 있고, 그게 클릭 가능한 뒤로가기 링크라는 게 시각적으로 드러나지 않았음. 사용자가 스크린샷으로 데스크탑 화면을 보여주며 "여기에도 돌아가기 버튼 필요"라고 요청.
 - 해결: `.topbar-brand-full`/`.topbar-brand-short` span 전환 방식을 걷어내고, `roster.html`/`pdf-viewer.html`과 동일한 `.topbar-back` 버튼(테두리 있는 pill 스타일 `← 돌아가기`)을 로고 앞에 항상 노출되는 별도 요소로 추가. 교회명(`.topbar-brand`)은 이제 링크가 아닌 장식용 `<span>`으로 변경(내비게이션 기능은 `.topbar-back`이 전담).
 - 모바일(`max-width: 480px`)에서는 기존처럼 `.topbar-brand`(교회명)만 숨기고 `.topbar-back` 버튼은 계속 노출.
@@ -27,7 +39,7 @@
 
 ### 4. 학생 명단 독립 페이지 분리 + 필드 확장 (이전 세션에서 완료, 이번 세션 초입에 이어받음)
 - **`roster.html`**: 독립 페이지. 상단 네비게이션 없음(뒤로가기 버튼만), `index.html`의 "학생 명단" 카드에서만 진입 가능. 2열 그리드(중학교/고등학교), 학년별 블록(중1~중3, 고1~고3), "+" 버튼으로 추가.
-- **`roster-sync.js`**: RTDB `members/{학년}/{pushId}: { name, phone, birthday, school, address }` CRUD. 칩 UI(이름만 표시) → 클릭 시 상세 펼침(전화/생일/학교/주소, 빈 값은 "-") → "수정"/"삭제" 버튼. 모달 하나로 추가/수정 겸용(학년 select + 5개 필드). 학년을 바꿔 저장하면 기존 학년 경로 삭제 후 새 학년 경로에 추가. 추가/수정은 자유, 삭제만 PIN 해시(`b6c7470ca0e1b2126ca179990624575fd44cc6506bfc544022970fe83b74ebdf`, PIN 006291)로 보호.
+- **`roster-sync.js`**: RTDB `members/{학년}/{pushId}: { name, phone, birthday, school, address }` CRUD. 칩 UI(이름만 표시) → 클릭 시 상세 펼침(전화/생일/학교/주소, 빈 값은 "-") → "수정"/"삭제" 버튼. 모달 하나로 추가/수정 겸용(학년 select + 5개 필드). 학년을 바꿔 저장하면 기존 학년 경로 삭제 후 새 학년 경로에 추가. 추가/수정은 자유, 삭제만 PIN 해시(`b6c7470ca0e1b2126ca179990624575fd44cc6506bfc544022970fe83b74ebdf`, PIN은 비공개·해시로만 보호)로 보호.
 - **삭제 `members-sync.js`**: roster-sync.js로 완전히 대체됨.
 - **`attendance.html`**: 임시로 넣었던 `#members-section` 및 관련 CSS/스크립트 전부 제거, 출결 대시보드만 남음.
 - **`index.html`**: "학생 명단" 카드 `href`를 `attendance.html#members-section` → `roster.html`로 변경.
@@ -52,12 +64,13 @@
 - **Firebase 프로젝트**: `yc-young-2026-sync`
 - **데이터베이스**: Firebase Realtime Database — `sportsMeeting2026`(회의자료), `uploads`(업로드 메타데이터), `members`(학생 명단, 스키마리스)
 - **스토리지**: Firebase Storage (`uploads/plans`, `uploads/reports`, `uploads/budget`), CORS `origin: *` 적용됨(로컬 gcloud CLI로 설정)
-- **인증**: 없음. 추가/수정은 누구나, 삭제만 PIN 006291 → SHA-256 해시로 보호(업로드/학생명단 공통)
+- **인증**: 없음. 추가/수정은 누구나, 삭제만 PIN(비공개) → SHA-256 해시로 보호(업로드/학생명단 공통)
 
 ## 주요 파일
 | 파일 | 역할 |
 |---|---|
-| `index.html` | 메인 페이지 — 회의자료, 계획서, 보고서, 예산, 출결현황(대시보드+학생명단 카드) 섹션 |
+| `index.html` | 메인 페이지 — 통합 검색/업데이트 피드, 회의자료, 계획서, 보고서, 예산, 출결현황(대시보드+학생명단 카드) 섹션 |
+| `assets/home-search.js` | 통합 검색 + 업데이트 피드 로직. `meetingDocuments`/`uploads/{plans,reports,budget}` 4개 RTDB 경로 구독, `members`/`sportsMeeting2026`은 미참조 |
 | `attendance.html` | 출결 대시보드 페이지. topbar에 `.topbar-back`(항상 노출 뒤로가기) + `.topbar-brand`(장식용, 모바일에서 숨김) |
 | `roster.html` | 학생 명단 독립 페이지 (네비 링크 없음, index.html 카드로만 진입). 제목에 전체 인원 수 자동 표시 |
 | `roster-sync.js` | 학생 명단 RTDB CRUD 로직 + 학년별/전체 인원 카운트 갱신 |

@@ -251,6 +251,96 @@
     font-size: 13px;
     font-weight: 700;
   }
+  .unified-search-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: inherit;
+    box-sizing: border-box;
+  }
+  .unified-search-input:focus {
+    outline: none;
+    border-color: var(--green);
+  }
+  .unified-search-results {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .search-result-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fff;
+  }
+  .search-result-item:hover {
+    border-color: #9eb4cc;
+  }
+  .search-result-badge {
+    flex-shrink: 0;
+    font-size: 11px;
+    font-weight: 800;
+    color: #fff;
+    background: var(--green);
+    border-radius: 6px;
+    padding: 3px 8px;
+    white-space: nowrap;
+  }
+  .search-result-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .updates-feed {
+    display: flex;
+    flex-direction: column;
+  }
+  .update-feed-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 2px;
+    border-bottom: 1px solid var(--line);
+  }
+  .update-feed-item:last-child {
+    border-bottom: none;
+  }
+  .update-dot {
+    flex-shrink: 0;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #c98a2c;
+  }
+  .update-title {
+    flex: 1;
+    min-width: 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .update-feed-badge {
+    flex-shrink: 0;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .update-time {
+    flex-shrink: 0;
+    font-size: 12px;
+    color: var(--muted);
+  }
   .recent-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 380px));
@@ -574,6 +664,23 @@
         <div class="hero-meta">2026</div>
       </section>
 
+      <section class="section" id="search-section">
+        <div class="section-head">
+          <h2 class="section-title">통합 검색</h2>
+        </div>
+        <input type="search" id="unified-search-input" class="unified-search-input" placeholder="회의자료, 계획서, 보고서, 예산 검색" autocomplete="off" aria-label="통합 검색">
+        <div id="unified-search-results" class="unified-search-results" aria-live="polite" hidden></div>
+      </section>
+
+      <section class="section" id="updates-section">
+        <div class="section-head">
+          <h2 class="section-title">최근 업데이트</h2>
+        </div>
+        <div id="updates-feed" class="updates-feed" aria-live="polite">
+          <div class="recent-empty">불러오는 중입니다.</div>
+        </div>
+      </section>
+
       <section class="section" id="attendance-section">
         <div class="section-head">
           <h2 class="section-title">출결현황</h2>
@@ -739,6 +846,7 @@
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
   <script src="sync-config.js"></script>
   <script src="upload-sync.js"></script>
+  <script src="assets/home-search.js"></script>
   <script>
     const recentList = document.getElementById('recent-list');
     const trashList = document.getElementById('trash-list');
